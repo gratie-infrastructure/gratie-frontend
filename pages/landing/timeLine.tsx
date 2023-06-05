@@ -6,18 +6,11 @@ export default function TimeLine(){
     return(
         <>
             <Typography
-        variant="h4"
         noWrap
-        sx={{
-          fontSize:'60px',
-          flexGrow: 1,
-          fontFamily: 'Book antique',
-          color: '#fff',
-          textAlign:"justify",
-          mb:6,
-          mt:18
-        }}
+        variant="h2"
+        className="core-values head-text"
       >Time Line</Typography>
+      <br/>
         <Container sx={{width:'90%'}}>
         <Grid container spacing={1} sx={{margin:'auto'}}>
         <Grid item xs={12} md={6}>
@@ -27,7 +20,7 @@ export default function TimeLine(){
         <Typography
               variant="h6"
               sx={{
-                fontSize:'30px',
+                fontSize:'26px',
                 fontFamily: 'Book antique',
                 color: 'inherit',
                 textAlign:"justify"
@@ -45,7 +38,7 @@ export default function TimeLine(){
         <Typography
               variant="h6"
               sx={{
-                fontSize:'30px',
+                fontSize:'26px',
                 fontFamily: 'Book antique',
                 color: 'inherit',
                 textAlign:"justify"
@@ -56,19 +49,19 @@ export default function TimeLine(){
                 <li>Implementation of seperate service provider dashboard</li>
                 </ul></Typography>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <img alt='not gotten' src='/images/NewNFT.png' />
+        <Grid item xs={12} md={5} ml={2}>
+          <img alt='not gotten' style={{paddingLeft: '50px'}} src='/images/NewNFT.png' />
         </Grid>
         </Grid>
-        <Grid container spacing={1} sx={{margin:'auto'}}>
+        <Grid container spacing={1} sx={{margin:'auto', mt:5}}>
         <Grid item xs={12} md={6}>
-          <img alt='not gotten' src="/images/userIcon.png" />
+          <img alt='not gotten' src="/images/UserIcon.png" />
         </Grid>
         <Grid item xs={12} md={6}>
         <Typography
               variant="h6"
               sx={{
-                fontSize:'30px',
+                fontSize:'26px',
                 fontFamily: 'Book antique',
                 color: 'inherit',
                 textAlign:"justify"
@@ -85,7 +78,7 @@ export default function TimeLine(){
         <Typography
               variant="h6"
               sx={{
-                fontSize:'30px',
+                fontSize:'26px',
                 fontFamily: 'Book antique',
                 color: 'inherit',
                 textAlign:"justify"
@@ -97,7 +90,7 @@ export default function TimeLine(){
                 </ul></Typography>
         </Grid>
         <Grid item xs={12} md={6}>
-          <img alt='PiggySaver' src='/images/PiggySaver.png' />
+          <img alt='PiggySaver' style={{paddingLeft: '50px'}} src='/images/PiggySaver.png' />
         </Grid>
         </Grid>
         </Container>

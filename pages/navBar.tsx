@@ -7,17 +7,14 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 
 import ToggleButtonNotEmpty from './toggleMenu';
+import Link from 'next/link';
 
-import ConnectWallet from "../src/views/WalletView/connectWallet";
 
-const pages = ['Use Case', 'Pricing', 'Community'];
+const pages = [{page: 'Use Case', link: '#useCase'}, {page: 'Pricing', link: '#price'}, {page: 'Community', link: '#community'}];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
@@ -45,13 +42,15 @@ function ResponsiveAppBar() {
 
   return (
     <div style={{flexGrow: 1}}>
-      <AppBar position="fixed"  style={{ background: '#000', boxShadow: 'none', alignItems: 'center'}}>
+      <AppBar className="navbar">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Box sx={{ display:'flex' ,margin:'auto', mt:2 }}>
               <Box  sx={{ display:'flex', margin:'auto', pr:3}}>
-              <img width={70} height={70} style={{marginTop:'10px', marginRight:'-10px'}} alt='logo' src='/images/Favicon.png' />
-              <img width={105} height={95} alt='logo' src='/images/Logo.png' />
+                <Link style={{ display:'flex'}} href='/'>
+                  <img width={70} height={70} alt='logo' src='/images/Favicon.png' className='logo-icon'/>
+                  <img width={105} height={95} alt='logo' src='/images/Logo.png' />
+                </Link>
               </Box>
               <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                 <IconButton
@@ -83,21 +82,23 @@ function ResponsiveAppBar() {
                   }}
                 >
                   {pages.map((page) => (
-                    <MenuItem key={page} onClick={handleCloseNavMenu} sx={{pr:10}}>
-                      <Typography textAlign="center">{page}</Typography>
+                    <MenuItem key={page.link} onClick={handleCloseNavMenu} sx={{pr:10}}>
+                      <Typography textAlign="center">{page.page}</Typography>
                     </MenuItem>
                   ))}
                 </Menu>
               </Box>
               <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                 {pages.map((page) => (
+                  <Link href={page.link} className="navbar-link">
                   <Button
-                    key={page}
+                    key={page.link}
                     onClick={handleCloseNavMenu}
-                    sx={{ my: 2, color: 'white', display: 'block', paddingX:2, fontSize:'20px' }}
+                    sx={{ my: 2, color: 'white', display: 'block', paddingX:2, fontSize:'20px', mt:3 }}
                   >
-                    {page}
+                    {page.page}
                   </Button>
+                  </Link>
                 ))}
               </Box>
               <Box sx={{ display:'flex' ,margin:'auto', paddingX: 2, pr:10  }}>

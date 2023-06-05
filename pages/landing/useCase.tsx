@@ -3,17 +3,11 @@ import Typography from '@mui/material/Typography';
 
 export default function UseCase(){
     return(
-        <Grid container spacing={1} sx={{ mt: 18 }}>
+        <Grid container spacing={1} sx={{ mt: 18, mb: 18 }}>
             <Typography
-              variant="h4"
               noWrap
-              sx={{
-                fontSize:'60px',
-                flexGrow: 1,
-                fontFamily: 'Book antique',
-                color: '#fff',
-                textAlign:"justify"
-              }}
+              variant="h2"
+              className="core-values head-text"
             >Use Case</Typography>
             <br/>
             <Grid container spacing={2} sx={{ mt: 5}}>
@@ -46,12 +40,18 @@ export default function UseCase(){
             </Grid>
             <Grid container spacing={2} sx={{ mt: 8}}>
               <Grid item xs={12} md={6} className='grid-img'>
-                <img style={{marginLeft:'150px' }} alt="reward" src="/images/userIcon.png" />
+                <img style={{marginLeft:'150px' }} alt="reward" src="/images/UserIcon.png" />
               </Grid>
               <Grid item xs={12} md={6} className="grid-part">
               <Typography
-              variant="h5"
-              
+               variant="h5"
+               sx={{
+                 fontSize:'40px',
+                 flexGrow: 1,
+                 fontFamily: 'Book antique',
+                 color: '#00FF01',
+                 textAlign:"justify"
+               }}
             >Maintaining healthy ecosystem</Typography>
             <br/>
             <Typography

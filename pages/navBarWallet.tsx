@@ -1,67 +1,52 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
+import { AppBar, Box, Link, Stack, TextField, Toolbar, Typography } from '@mui/material';
+import React, { useState } from 'react';
 
-import ToggleButtonNotEmpty from './toggleMenu';
+import AccountInfo from "@/src/components/AccountInfo";
+import DisconnectButton from '@/src/components/DisconnectButton';
+import type { NextPage } from 'next';
+import { styled } from '@mui/material/styles';
+import { useWallet } from '@solana/wallet-adapter-react';
+import dynamic from 'next/dynamic';
 
-import ConnectWallet from "../src/views/WalletView/connectWallet";
+// const Offset = styled('div')(
+//     // @ts-ignore
+//     ({ theme }) => theme.mixins.toolbar,
+// );
 
+const ConnectButtonDynamic = dynamic(() => import('@/src/components/ConnectButton'), { ssr: false });
 
-function NavBarWallet() {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+const Home: NextPage = () => {
+    const { publicKey } = useWallet();
+    const [memoText, setMemoText] = useState('');
+    return (
+        <>
+              <AppBar className="navbar"> 
+                <Toolbar>
+                  <Box sx={{ display:'flex', margin:'auto'}}>
+                    <Link style={{ display:'flex'}} href='/'>
+                      <img width={70} height={70} alt='logo' src='/images/Favicon.png' className='logo-icon'/>
+                      <img width={105} height={95} alt='logo' src='/images/Logo.png' />
+                    </Link>
+                  </Box>
+                    {/* {publicKey ? (
+                        <div className='top-wallet-section'>
+                          <AccountInfo publicKey={publicKey} />
+                          <DisconnectButton color="error" variant="outlined">
+                            Disconnect
+                          </DisconnectButton>
+                        </div>
+                    ) : (
+                      <div className='top-wallet-section'>
+                        <ConnectButtonDynamic color="inherit" variant="outlined">
+                            Connect
+                        </ConnectButtonDynamic>
+                      </div>
+                    )} */}
+                </Toolbar>
+            </AppBar>
+            {/* <Offset /> */}
+        </>
+    );
+};
 
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
-
-  const [visibleWallet, setVisibleWallet] = React.useState(false);
-
-  React.useEffect(() => setVisibleWallet(true));
-
-  return (
-    <div style={{flexGrow: 1}}>
-      <AppBar position="fixed"  style={{ background: '#000', boxShadow: 'none', alignItems: 'center'}}>
-        <Container maxWidth="xl">
-          <Toolbar disableGutters>
-            <Box sx={{ display:'flex' ,margin:'auto', mt:4 }} className='navbarContainer'>
-              <Box  sx={{ display:'flex', margin:'auto'}} className='navbarLogos'>
-              <img className='logo' alt='logo' src='/images/Favicon.png' />
-              <img className='logo-text' alt='logo' src='/images/Logo.png' />
-              </Box>
-              <Box sx={{ flexGrow: 0, display: { xs: 'flex', md: 'flex' } }}>
-                {visibleWallet ? <ConnectWallet/> : null}
-              </Box>
-              
-            </Box>
-            
-          </Toolbar>
-        </Container>
-      </AppBar>
-    </div>
-  );
-}
-export default NavBarWallet;
+export default Home;
