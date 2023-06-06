@@ -5,11 +5,9 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
-import Token from "./token";
+import RequestNft from "./request-nft";
+import ClaimToken from "./claim-token";
 import Profile from "./profile";
-import Users from "./users";
-import Subscription from "./subscription";
-import ListUsers from "./list";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -44,8 +42,8 @@ function a11yProps(index: number) {
   };
 }
 
-export default function CompanyTab(props: any) {
-  const [value, setValue] = React.useState(props.showProfile ? 4 : 0);
+export default function userTab(props: any) {
+  const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -72,52 +70,36 @@ export default function CompanyTab(props: any) {
           >
             <Tab
               style={{ marginRight: "54px" }}
-              className={value == 0 || 4 ? "selected-tab" : "non-selected-tab"}
-              label="Subscription"
+              className={value == 1 ? "selected-tab" : "non-selected-tab"}
+              label="Request NFT"
               {...a11yProps(0)}
             />
             <Tab
               style={{ marginRight: "54px" }}
-              className={value == 1 ? "selected-tab" : "non-selected-tab"}
-              label="Profile"
+              className={value == 2 ? "selected-tab" : "non-selected-tab"}
+              label="Claim Token"
               {...a11yProps(1)}
             />
             <Tab
-              style={{ marginRight: "54px" }}
-              className={value == 2 ? "selected-tab" : "non-selected-tab"}
-              label="User"
-              {...a11yProps(2)}
-            />
-            <Tab
               className={value == 3 ? "selected-tab" : "non-selected-tab"}
-              label="Issue reward"
-              {...a11yProps(3)}
+              label="Profile"
+              {...a11yProps(2)}
             />
           </Tabs>
         </Box>
         <Grid item xs={12}>
           <TabPanel value={value} index={0}>
-            {<Subscription handleClickTab={handleClickTab} />}
+            {<RequestNft/>}
           </TabPanel>
         </Grid>
         <Grid item xs={12}>
           <TabPanel value={value} index={1}>
-            {<Profile/>}
+            {<ClaimToken/>}
           </TabPanel>
         </Grid>
         <Grid item xs={12}>
           <TabPanel value={value} index={2}>
-            {<Users/>}
-          </TabPanel>
-        </Grid>
-        <Grid item xs={12}>
-          <TabPanel value={value} index={3}>
-            {<Token/>}
-          </TabPanel>
-        </Grid>
-        <Grid item xs={12}>
-          <TabPanel value={value} index={4}>
-            {<ListUsers/>}
+            {<Profile/>}
           </TabPanel>
         </Grid>
       </Box>
