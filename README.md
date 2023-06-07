@@ -13,7 +13,7 @@ pnpm dev
 ```
 
 
-# Gratie Solana Frontend
+# Gratie Frontend
 
 ## ROADMAP
 
