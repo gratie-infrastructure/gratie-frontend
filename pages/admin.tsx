@@ -10,7 +10,7 @@ import AdminView from '@/src/components/admin/index';
 
 import SolanaTest from '@/src/components/solana-test';
 import Head from 'next/head';
-import NavBarWallet from './navBarWallet';
+import NavBarWallet from './navBarNFT';
 
 
 
