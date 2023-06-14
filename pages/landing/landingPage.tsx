@@ -15,13 +15,10 @@ export default function LandingPage(){
         <Container sx={{width:'90%', fontFamily: 'Book antique', pb:18}}>
           <Reward />
           <Chip />
-          <Container id="core">
-            <CoreValue />
-          </Container>
-          <Container id="working">
-            <Working />
-          </Container>
-          <Container id="useCase">
+          <CoreValue />
+          <Working />
+
+          {/* <Container id="useCase">
             <UseCase />
           </Container>
           <Container id="price">
@@ -38,7 +35,7 @@ export default function LandingPage(){
           </Container>
           <Container sx={{mb:'50px', mt:'25px'}}>
             <div className='line-end'/>
-          </Container>
+          </Container> */}
         </Container>
     );
 }
