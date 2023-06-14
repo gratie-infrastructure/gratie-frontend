@@ -217,6 +217,19 @@ p{
 .sm-green-btn:hover{
   background: transparent;
 }
+.navbar-green-btn{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 9.03671px 27.1101px;
+  gap: 7.53px;
+  width: 177.22px;
+  height: 47.07px;
+  background: #32D94B;
+  border-radius: 70.7876px;
+  border: 1px solid #32D94B;
+}
 .landing-tab{
   background: rgba(101, 226, 101, 0.3);
   border-radius: 50px;

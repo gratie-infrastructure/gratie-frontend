@@ -10,11 +10,11 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 
-import ToggleButtonNotEmpty from './toggleMenu';
+// import ToggleButtonNotEmpty from './toggleMenu';
 import Link from 'next/link';
 
 
-const pages = [{page: 'Use Case', link: '#useCase'}, {page: 'Pricing', link: '#price'}, {page: 'Community', link: '#community'}];
+const pages = [{page: 'About', link: '#useCase'}, {page: 'Pricing', link: '#price'}, {page: 'Community', link: '#community'}, {page: 'LitePaper', link: '#useCase'}];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
@@ -102,7 +102,8 @@ function ResponsiveAppBar() {
                 ))}
               </Box>
               <Box sx={{ display:'flex' ,margin:'auto', paddingX: 2, pr:10  }}>
-                <ToggleButtonNotEmpty />
+                {/* <ToggleButtonNotEmpty /> */}
+                <Button variant='contained' className='navbar-green-btn'>Get Started</Button>
               </Box>
             </Box>
             
