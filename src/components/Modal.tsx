@@ -42,7 +42,8 @@ export default function ModalBox(props: any) {
             <div className='Metamask-list'>
               <div className='Metamask-left'>
                 <div className='Metamask-icon'>
-                  <img src={Fox} alt='' />
+                  {/* Commanding to run yarn build, please fix this issue as soon as possible */}
+                  {/* <img src={Fox} alt='' /> */}
                 </div>
                 <div className='Metamask-content'>
                 <Typography id="modal-modal-title" style={{color: '#fff'}} variant="h6" component="h6">
@@ -64,7 +65,9 @@ export default function ModalBox(props: any) {
             <div className='Metamask-list'>
               <div className='Metamask-left'>
                 <div className='Metamask-icon'>
-                  <img src={WalletConnect} alt='' />
+                  {/* Commanding to run yarn build, please fix this issue as soon as possible */}
+
+                  {/* <img src={WalletConnect} alt='' /> */}
                 </div>
                 <div className='Metamask-content'>
                 <Typography id="modal-modal-title" style={{color: '#fff'}} variant="h6" component="h6">
