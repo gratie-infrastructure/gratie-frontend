@@ -2,21 +2,22 @@ import { AppBar, Box, Link, Stack, TextField, Toolbar, Typography } from '@mui/m
 import React, { useState } from 'react';
 
 import AccountInfo from "@/src/components/AccountInfo";
-import DisconnectButton from '@/src/components/DisconnectButton';
+
 import type { NextPage } from 'next';
 import { styled } from '@mui/material/styles';
-import { useWallet } from '@solana/wallet-adapter-react';
+
 import dynamic from 'next/dynamic';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 // const Offset = styled('div')(
 //     // @ts-ignore
 //     ({ theme }) => theme.mixins.toolbar,
 // );
 
-const ConnectButtonDynamic = dynamic(() => import('@/src/components/ConnectButton'), { ssr: false });
+// const ConnectButtonDynamic = dynamic(() => import('@/src/components/ConnectButton'), { ssr: false });
 
 const Home: NextPage = () => {
-    const { publicKey } = useWallet();
+    // const { publicKey } = useWallet();
     const [memoText, setMemoText] = useState('');
     return (
         <>
@@ -28,6 +29,9 @@ const Home: NextPage = () => {
                       <img width={105} height={95} alt='logo' src='/images/Logo.png' />
                     </Link>
                   </Box>
+                  <div className='flex w-full justify-end'>
+                  <ConnectButton />
+                  </div>
                     {/* {publicKey ? (
                         <div className='top-wallet-section'>
                           <AccountInfo publicKey={publicKey} />

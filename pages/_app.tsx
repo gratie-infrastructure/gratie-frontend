@@ -5,79 +5,85 @@ import '@/styles/landingPage.css'
 import '@/styles/company.css'
 import '@/styles/formPage.css'
 
-
 import { ThemeProvider } from '@mui/material/styles';
-
 import localFont from 'next/font/local'
 const myFont = localFont({ src: './../fonts/BookAntiquaFont.ttf' })
-
-import theme from '../src/theme';
-
-// import type { AppProps } from 'next/app'
-
-
-import '@solana/wallet-adapter-react-ui/styles.css';
-import '../styles/globals.css';
-
-import { ConnectionConfig, clusterApiUrl } from '@solana/web3.js';
-import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
-
-import type { AppProps } from 'next/app';
+import theming from '../src/theme.js';
 import { SnackbarProvider, useSnackbar } from 'notistack';
-import { WalletAdapterNetwork, WalletError } from '@solana/wallet-adapter-base';
-import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import { createTheme } from '@mui/material';
-import { ReactNode, useCallback, useMemo } from 'react';
-import { PRODUCTION } from '@/src/config';
+import { ReactNode, useCallback } from 'react';
+import { AppProps } from 'next/app';
+import '@rainbow-me/rainbowkit/styles.css';
 
-const CLUSTER = WalletAdapterNetwork.Devnet;
-const CONNECTION_CONFIG: ConnectionConfig = { commitment: 'processed' };
-// const ENDPOINT = /*#__PURE__*/ clusterApiUrl(CLUSTER);
-const ENDPOINT = PRODUCTION ? 'https://api.devnet.solana.com' : 'http://localhost:8899';
+import {
+  darkTheme,
+  getDefaultWallets,
+  RainbowKitProvider,
+} from '@rainbow-me/rainbowkit';
+import { configureChains, createConfig, WagmiConfig } from 'wagmi';
+import { mainnet, polygon, optimism, arbitrum,polygonMumbai } from 'wagmi/chains';
+import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { publicProvider } from 'wagmi/providers/public';
+import { ChainId, ThirdwebProvider, ThirdwebSDKProvider } from '@thirdweb-dev/react'
 
-// const theme = /*#__PURE__*/ createTheme();
+
+const { chains, publicClient } = configureChains(
+  [mainnet, polygon, optimism, arbitrum,polygonMumbai],
+  [
+    publicProvider()
+  ]
+);
+
+const { connectors } = getDefaultWallets({
+  appName: 'My RainbowKit App',
+  projectId: 'YOUR_PROJECT_ID',
+  chains
+});
+
+const wagmiConfig = createConfig({
+  autoConnect: true,
+  connectors,
+  publicClient
+})
+
+const theme = createTheme();
+
+
 
 function App({ children }: { children: ReactNode }) {
   const { enqueueSnackbar } = useSnackbar();
   const handleWalletError = useCallback(
-    (e: WalletError) => {
+    (e:any) => {
       enqueueSnackbar(`${e.name}: ${e.message}`, { variant: 'error' });
     },
     [enqueueSnackbar],
   );
-  const adapters = useMemo(
-    () =>
-      typeof window === 'undefined'
-        ? [] // No wallet adapters when server-side rendering.
-        : [
-          /**
-           * Note that you don't have to include the SolanaMobileWalletAdapter here;
-           * It will be added automatically when this app is running in a compatible mobile context.
-           */
-        ],
-    [],
-  );
+
   return (
     <main className={myFont.className}>
-      <ThemeProvider theme={theme}>
-        <ConnectionProvider config={CONNECTION_CONFIG} endpoint={ENDPOINT}>
-          <WalletProvider autoConnect={true} onError={handleWalletError} wallets={adapters}>
-            <WalletModalProvider>{children}</WalletModalProvider>
-          </WalletProvider>
-        </ConnectionProvider>
+      <ThemeProvider theme={theming}>
+        {children}
       </ThemeProvider>
-    </main>)
+    </main>
+  );
 }
 
 function GratieDApp({ Component, pageProps }: AppProps) {
   return (
+    <WagmiConfig config={wagmiConfig}>
+      <RainbowKitProvider coolMode theme={darkTheme()} chains={chains}>
+    <ThirdwebProvider
+    activeChain="mumbai"
+  >
     <SnackbarProvider autoHideDuration={10000}>
       <App>
         <Component {...pageProps} />
       </App>
     </SnackbarProvider>
+    </ThirdwebProvider>
+    </RainbowKitProvider>
+    </WagmiConfig>
   );
 }
 
 export default GratieDApp;
-
