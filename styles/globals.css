@@ -301,3 +301,41 @@ p{
   background: #000000;
   border-radius: 27.3085px;
 }
+.community-text{
+  display: flex;
+  align-items: center;
+}
+.community-down{
+  justify-content: end;
+}
+.timer-section{
+  display: flex;
+  align-items: center;
+}
+.timer-wrap{
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.timer{
+  width: 111px;
+  height: 123px;
+  background: rgba(14, 25, 3, 0.62);
+  border-radius: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20px;
+}
+.community-bg{
+  background: url(/images/Discordicon.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top center;
+}
+.timer-bg{
+  background: url(/images/Discordicon.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top center;
+}
