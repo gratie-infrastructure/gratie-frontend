@@ -9,6 +9,7 @@ import TimeLine from './timeLine';
 import Community from './community';
 import Team from './team';
 import LightPaper from './lightPaper';
+import { url } from 'inspector';
 
 export default function LandingPage(){
     return(
@@ -18,25 +19,8 @@ export default function LandingPage(){
           <CoreValue />
           <Working />
           <UseCase />
-
-          {/* <Container id="useCase">
-            
-          </Container>
-          <Container id="price">
-            <Pricing />
-          </Container>
-          <Container id="timeLine" sx={{mt: 20,mb:20}}>
-            <TimeLine />
-          </Container>
-          <Container id="community">
-            <Community />
-          </Container>
-          <Container id="white">
-            <LightPaper />
-          </Container>
-          <Container sx={{mb:'50px', mt:'25px'}}>
-            <div className='line-end'/>
-          </Container> */}
+          <Pricing/>
+          <TimeLine />
         </Container>
     );
 }
