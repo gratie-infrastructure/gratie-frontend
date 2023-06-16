@@ -17,9 +17,10 @@ export default function LandingPage(){
           <Chip />
           <CoreValue />
           <Working />
+          <UseCase />
 
           {/* <Container id="useCase">
-            <UseCase />
+            
           </Container>
           <Container id="price">
             <Pricing />

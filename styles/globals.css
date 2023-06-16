@@ -283,3 +283,21 @@ p{
 .landing-tab .css-gen84r-MuiTabs-indicator{
   display: none;
 }
+.section-link{
+  color: #54CD0A;
+  text-decoration: underline;
+  font-size: 24px;
+  font-weight: 500;
+}
+.section-link:hover{
+  color: #fff;
+}
+.small-tittel{
+  font-size: 28px !important;
+  color: #fff;
+}
+.grid-card{
+  width: 100%;
+  background: #000000;
+  border-radius: 27.3085px;
+}
