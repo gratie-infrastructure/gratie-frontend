@@ -9,7 +9,7 @@ import NavBar from './navBar'
 import AdminView from '@/src/components/admin/index';
 
 import Head from 'next/head';
-import NavBarWallet from './navBarWallet';
+import NavBarWallet from './navBarNFT';
 
 
 

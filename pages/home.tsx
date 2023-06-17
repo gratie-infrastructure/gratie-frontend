@@ -1,13 +1,10 @@
-import Head from 'next/head'
+import * as React from "react";
+import Head from "next/head";
+import Container from "@mui/material/Container";
 
-import NavBarWallet from './navBarWallet'
-import * as React from 'react';
+import NavBarWallet from "./navBarWallet";
 
-import Container from '@mui/material/Container';
-import { Box, Button, Grid } from '@mui/material';
-import Link from 'next/link';
-
-import HomeContent from '@/src/components/home/index'
+import HomeContent from "@/src/components/home/index";
 
 export default function Home() {
   return (
@@ -18,12 +15,12 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <NavBarWallet/>
+      <NavBarWallet />
       <React.Fragment>
         <Container component="main" maxWidth="md">
           <HomeContent />
         </Container>
       </React.Fragment>
     </>
-  )
+  );
 }

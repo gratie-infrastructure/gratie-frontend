@@ -60,7 +60,7 @@ export default function List(props: any) {
     address: "0xB3D73A5b58DdCa4338e3dEB418d384D5d3dEeBa8",
     abi: USDC_abi,
     functionName: "allowance",
-    args: [address, GRATIE_CONTRACT_ADDRESS],
+    args:[address,GRATIE_CONTRACT_ADDRESS]
   });
   console.log("allowance data:", Number(allowance));
 
