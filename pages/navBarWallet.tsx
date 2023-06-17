@@ -1,5 +1,4 @@
-import { AppBar, Box, Link, Stack, TextField, Toolbar, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 import AccountInfo from "@/src/components/AccountInfo";
 
@@ -8,6 +7,8 @@ import { styled } from '@mui/material/styles';
 
 import dynamic from 'next/dynamic';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { AppBar, Link, Toolbar } from "@mui/material";
+import { Box } from "@mui/system";
 
 // const Offset = styled('div')(
 //     // @ts-ignore

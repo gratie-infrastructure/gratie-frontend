@@ -26,7 +26,7 @@ export default function CompanyForm(props:any){
 // import Loading from '../Loading';
 // import ModalBox from '../Modal';
 
-// // import '@/styles/form.css';
+ 
 
 // interface Values {
 //   email: string;
