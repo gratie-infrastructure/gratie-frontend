@@ -1,15 +1,14 @@
 import { Chip, CircularProgress, Link, Typography } from '@mui/material';
-import { PublicKey } from '@solana/web3.js';
 import { Suspense, useMemo } from 'react';
 
 import AccountBalance from './AccountBalance';
 
 type Props = Readonly<{
-    publicKey: PublicKey;
+    publicKey: null;
 }>;
 
 export default function AccountInfo({ publicKey }: Props) {
-    const publicKeyBase58String = useMemo(() => publicKey?.toBase58(), [publicKey]);
+    const publicKeyBase58String = useMemo(() => publicKey, [publicKey]);
     return (
         <>
             <Chip
@@ -19,7 +18,7 @@ export default function AccountInfo({ publicKey }: Props) {
                     <Suspense
                         fallback={<CircularProgress color="inherit" size={18} sx={{ verticalAlign: 'middle' }} />}
                     >
-                        <AccountBalance publicKey={publicKey} />
+                        <AccountBalance />
                     </Suspense>
                 }
             />
@@ -31,7 +30,7 @@ export default function AccountInfo({ publicKey }: Props) {
                     target="_blank"
                     underline="none"
                 >
-                    <code>{publicKeyBase58String.slice(0, 8)}</code>
+                    <code>{}</code>
                 </Link>
             </Typography>
         </>

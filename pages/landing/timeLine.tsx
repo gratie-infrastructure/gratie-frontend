@@ -2,98 +2,92 @@ import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import { Container } from '@mui/system';
 
-export default function TimeLine(){
-    return(
-        <>
-            <Typography
-        noWrap
-        variant="h2"
-        className="core-values head-text"
-      >Time Line</Typography>
-      <br/>
-        <Container sx={{width:'90%'}}>
-        <Grid container spacing={1} sx={{margin:'auto'}}>
-        <Grid item xs={12} md={6}>
-          <img alt='not gotten' src='/images/bulb.png' />
-        </Grid>
-        <Grid item xs={12} md={6}>
-        <Typography
-              variant="h6"
-              sx={{
-                fontSize:'26px',
-                fontFamily: 'Book antique',
-                color: 'inherit',
-                textAlign:"justify"
-              }}><ul>
-                <li>Ideation and planning of Gratie</li>
-                <li>Initial Consumer research</li>
-                <li>MVP soft launch</li>
-                <li>Beta user launch</li>
-                <li>Participation in hackathon</li>
-                </ul></Typography>
-        </Grid>
-        </Grid>
-        <Grid container spacing={1} sx={{margin:'auto', mt:5}}>
-        <Grid item xs={12} md={6}>
-        <Typography
-              variant="h6"
-              sx={{
-                fontSize:'26px',
-                fontFamily: 'Book antique',
-                color: 'inherit',
-                textAlign:"justify"
-              }}><ul>
-                <li>Consumer feedback based on beta launch and changes</li>
-                <li>Integrating web3auth for service providers ease of onboarding</li>
-                <li>Launch of NFTs</li>
-                <li>Implementation of seperate service provider dashboard</li>
-                </ul></Typography>
-        </Grid>
-        <Grid item xs={12} md={5} ml={2}>
-          <img alt='not gotten' style={{paddingLeft: '50px'}} src='/images/NewNFT.png' />
-        </Grid>
-        </Grid>
-        <Grid container spacing={1} sx={{margin:'auto', mt:5}}>
-        <Grid item xs={12} md={6}>
-          <img alt='not gotten' src="/images/UserIcon.png" />
-        </Grid>
-        <Grid item xs={12} md={6}>
-        <Typography
-              variant="h6"
-              sx={{
-                fontSize:'26px',
-                fontFamily: 'Book antique',
-                color: 'inherit',
-                textAlign:"justify"
-              }}><ul>
-                <li>Onboarding first 250 clients</li>
-                <li>Collaborating with utility companies for token</li>
-                <li>Introduction stripe payments</li>
-                <li>One click token public sale</li>
-                </ul></Typography>
-        </Grid>
-        </Grid>
-        <Grid container spacing={1} sx={{margin:'auto', mt:5}}>
-        <Grid item xs={12} md={6}>
-        <Typography
-              variant="h6"
-              sx={{
-                fontSize:'26px',
-                fontFamily: 'Book antique',
-                color: 'inherit',
-                textAlign:"justify"
-              }}><ul>
-                <li>Introducing enterprise token staking</li>
-                <li>Integrating web3auth for service providers ease of onboarding</li>
-                <li>Launch of NFTs</li>
-                <li>Implementation of seperate service provider dashboard</li>
-                </ul></Typography>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <img alt='PiggySaver' style={{paddingLeft: '50px'}} src='/images/PiggySaver.png' />
-        </Grid>
-        </Grid>
-        </Container>
-        </>
-    );
+export default function TimeLine() {
+  return (
+    <Grid container spacing={1} sx={{ margin: 'auto' }}className='timer-bg'>
+      <Typography variant="h1" gutterBottom style={{ textAlign: 'center', width: '100%', fontFamily: 'ClashDisplay-Variable', fontWeight: '600', fontSize: '42px', marginBottom: '40px', marginTop: '40px' }}>
+        AIRDROP
+      </Typography>
+      <div className='timer-section'>
+        <div className='silgle-timer'>
+          <div className='timer-wrap'>
+            <div className='timer'>
+              <Typography variant="h4" gutterBottom style={{ fontSize: '74px', fontWeight: '600', marginBottom: '0px' }}>
+                0
+              </Typography>
+            </div>
+            <div className='timer'>
+              <Typography variant="h4" gutterBottom style={{ fontSize: '74px', fontWeight: '600', marginBottom: '0px' }}>
+                4
+              </Typography>
+            </div>
+          </div>
+          <Typography variant="h6" gutterBottom style={{ display: 'block', width: '100%', textAlign: 'center' }}>
+            Days
+          </Typography>
+        </div>
+        <Typography variant="h4" gutterBottom style={{ fontSize: '74px', fontWeight: '600', marginRight: '20px', marginBottom: '75px' }}>
+          :
+        </Typography>
+        <div className='silgle-timer'>
+          <div className='timer-wrap'>
+            <div className='timer'>
+              <Typography variant="h4" gutterBottom style={{ fontSize: '74px', fontWeight: '600', marginBottom: '0px' }}>
+                1
+              </Typography>
+            </div>
+            <div className='timer'>
+              <Typography variant="h4" gutterBottom style={{ fontSize: '74px', fontWeight: '600', marginBottom: '0px' }}>
+                2
+              </Typography>
+            </div>
+          </div>
+          <Typography variant="h6" gutterBottom style={{ display: 'block', width: '100%', textAlign: 'center' }}>
+            Hours
+          </Typography>
+        </div>
+        <Typography variant="h4" gutterBottom style={{ fontSize: '74px', fontWeight: '600', marginRight: '20px', marginBottom: '75px' }}>
+          :
+        </Typography>
+        <div className='silgle-timer'>
+          <div className='timer-wrap'>
+            <div className='timer'>
+              <Typography variant="h4" gutterBottom style={{ fontSize: '74px', fontWeight: '600', marginBottom: '0px' }}>
+                1
+              </Typography>
+            </div>
+            <div className='timer'>
+              <Typography variant="h4" gutterBottom style={{ fontSize: '74px', fontWeight: '600', marginBottom: '0px' }}>
+                7
+              </Typography>
+            </div>
+
+          </div>
+          <Typography variant="h6" gutterBottom style={{ display: 'block', width: '100%', textAlign: 'center' }}>
+            Minutes
+          </Typography>
+        </div>
+        <Typography variant="h4" gutterBottom style={{ fontSize: '74px', fontWeight: '600', marginRight: '20px', marginBottom: '75px' }}>
+          :
+        </Typography>
+        <div className='silgle-timer'>
+          <div className='timer-wrap'>
+            <div className='timer'>
+              <Typography variant="h4" gutterBottom style={{ fontSize: '74px', fontWeight: '600', marginBottom: '0px' }}>
+                3
+              </Typography>
+            </div>
+            <div className='timer'>
+              <Typography variant="h4" gutterBottom style={{ fontSize: '74px', fontWeight: '600', marginBottom: '0px' }}>
+                0
+              </Typography>
+            </div>
+          </div>
+          <Typography variant="h6" gutterBottom style={{ display: 'block', width: '100%', textAlign: 'center' }}>
+            Seconds
+          </Typography>
+        </div>
+      </div>
+    </Grid>
+  );
 }
