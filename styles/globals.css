@@ -75,13 +75,15 @@ body {
 body {
   /* font-family: 'Book antique' !important; */
   color: #fff;
-  background: linear-gradient(
+  /* background: linear-gradient(
       to bottom,
       transparent,
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
-    ;
+    ; */
+
+    background: #0E1803;
 }
 
 h1 {

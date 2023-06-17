@@ -20,7 +20,6 @@ export default function LandingPage(){
           <Working />
           <UseCase />
           <Pricing/>
-          <TimeLine />
         </Container>
     );
 }

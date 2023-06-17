@@ -9,8 +9,8 @@ export default function Working(){
         <Typography variant="h1" gutterBottom style={{ textAlign: 'center', width: '100%', fontFamily: 'ClashDisplay-Variable', fontWeight: '600', fontSize: '42px', marginBottom: '40px', marginTop: '40px' }}>
       Our Roadmap
       </Typography>
-      <div className='image-container'>
-        <img alt="rewardBox" src='/images/roadmap.png' style={{maxWidth: '100%'}} className='image'/>
+      <div className='image-container' style = {{marginLeft: '32px'}}>
+        <img alt="rewardBox" src='/images/road-map.png' style={{maxWidth: '100%'}} className='image'/>
       </div>
         </Box>
       

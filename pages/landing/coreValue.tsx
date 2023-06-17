@@ -10,7 +10,7 @@ export default function CoreValue(){
             Process
             </Typography>
             <div className='image-container'>
-              <img alt="rewardBox" src='/images/Process-img.png' className='image'/>
+              <img alt="rewardBox" src='/images/process.png' className='image'/>
             </div>
           </Box>
         </Grid>

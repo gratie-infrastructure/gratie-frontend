@@ -11,7 +11,7 @@ export default function Reward(){
           <Grid item xs={12} md={6} className="reward-heading" style={{padding: '0px'}}>     
             <Typography
               variant="body2"
-              style={{maxWidth: '566px'}}
+              style={{maxWidth: '520px'}}
               sx={{
                 fontSize:'38px',
                 fontFamily: 'ClashDisplay-Semibold',
@@ -23,12 +23,12 @@ export default function Reward(){
               <br/>
               <br/>
                 <Link href="/home" passHref>
-                  <Button variant='contained' className='sm-green-btn'>Try for Free</Button>
+                  <Button variant='contained' className='sm-green-btn' style={{width: '136px', height: '36px' }}>Try for Free</Button>
                 </Link>
                 </Grid>
             <Grid item xs={12} sm={12} md={6}>
                 <div className='image-container'>
-                  <img alt="rewardBox" src='/images/Reward box.png' className='image'/>
+                  <img alt="rewardBox" src='/images/reward-picture.png' className='image'/>
                 </div>
             </Grid>
             

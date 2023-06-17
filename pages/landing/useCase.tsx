@@ -11,15 +11,15 @@ export default function UseCase() {
     <Grid container spacing={1} sx={{ mt: 18, mb: 18 }}>
       <Box display={'flex'} alignItems={'start'} justifyContent={'space-between'} width={'100%'}>
         <Typography variant="h5" className='small-tittel' gutterBottom>
-          Find out more about <br />buying NFT
+          Find out more about buying NFT
         </Typography>
-        <Link href="#" className='section-link'>See all</Link>
+        {/* <Link href="#" className='section-link'>See all</Link> */}
       </Box>
       <Grid container spacing={2} sx={{ mt: 5 }}>
         <Grid item xs={12} md={4}>
           <Card style={{backgroundColor: 'transparent'}}>
             <CardContent className='grid-card'>
-              <img width={'100%'} src='/images/landing-card-01.png' alt='' />
+              <img width={'100%'} src='/images/Paradise-NFT.png' alt='' />
               <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} width={'100%'} padding={'0px 15px'}>
                 <div className='card-titel' style={{width: '100%', display: 'flex', alignItems: 'center', flexWrap: 'wrap'}}>
                   <Typography variant="h6" className='card-tittel' gutterBottom style={{color: '#fff',display: 'block', width: '100%'}}>
@@ -40,7 +40,7 @@ export default function UseCase() {
         <Grid item xs={12} md={4}>
           <Card style={{backgroundColor: 'transparent'}}>
             <CardContent className='grid-card'>
-              <img width={'100%'} src='/images/landing-card-02.png' alt='' />
+              <img width={'100%'} src='/images/Bantam-NFT.png' alt='' />
               <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} width={'100%'} padding={'0px 15px'}>
                 <div className='card-titel' style={{width: '100%', display: 'flex', alignItems: 'center', flexWrap: 'wrap'}}>
                   <Typography variant="h6" className='card-tittel' gutterBottom style={{color: '#fff',display: 'block', width: '100%'}}>
@@ -61,7 +61,7 @@ export default function UseCase() {
         <Grid item xs={12} md={4}>
           <Card style={{backgroundColor: 'transparent'}}>
             <CardContent className='grid-card'>
-              <img width={'100%'} src='/images/landing-card-03.png' alt='' />
+              <img width={'100%'} src='/images/Cosmos-NFT.png' alt='' />
               <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} width={'100%'} padding={'0px 15px'}>
                 <div className='card-titel' style={{width: '100%', display: 'flex', alignItems: 'center', flexWrap: 'wrap'}}>
                   <Typography variant="h6" className='card-tittel' gutterBottom style={{color: '#fff',display: 'block', width: '100%'}}>
@@ -82,7 +82,7 @@ export default function UseCase() {
         <Grid item xs={12} md={4}>
           <Card style={{backgroundColor: 'transparent'}}>
             <CardContent className='grid-card'>
-              <img width={'100%'} src='/images/landing-card-04.png' alt='' />
+              <img width={'100%'} src='/images/Fractal-NFT.png' alt='' />
               <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} width={'100%'} padding={'0px 15px'}>
                 <div className='card-titel' style={{width: '100%', display: 'flex', alignItems: 'center', flexWrap: 'wrap'}}>
                   <Typography variant="h6" className='card-tittel' gutterBottom style={{color: '#fff',display: 'block', width: '100%'}}>
@@ -103,7 +103,7 @@ export default function UseCase() {
         <Grid item xs={12} md={4}>
           <Card style={{backgroundColor: 'transparent'}}>
             <CardContent className='grid-card'>
-              <img width={'100%'} src='/images/landing-card-05.png' alt='' />
+              <img width={'100%'} src='/images/Mini-NFT.png' alt='' />
               <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} width={'100%'} padding={'0px 15px'}>
                 <div className='card-titel' style={{width: '100%', display: 'flex', alignItems: 'center', flexWrap: 'wrap'}}>
                   <Typography variant="h6" className='card-tittel' gutterBottom style={{color: '#fff',display: 'block', width: '100%'}}>
@@ -124,7 +124,7 @@ export default function UseCase() {
         <Grid item xs={12} md={4}>
           <Card style={{backgroundColor: 'transparent'}}>
             <CardContent className='grid-card'>
-              <img width={'100%'} src='/images/landing-card-06.png' alt='' />
+              <img width={'100%'} src='/images/Optical-NFT.png' alt='' />
               <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} width={'100%'} padding={'0px 15px'}>
                 <div className='card-titel' style={{width: '100%', display: 'flex', alignItems: 'center', flexWrap: 'wrap'}}>
                   <Typography variant="h6" className='card-tittel' gutterBottom style={{color: '#fff',display: 'block', width: '100%'}}>
