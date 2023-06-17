@@ -6,9 +6,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { checkAdmin, connectToGratieSolanaContract } from '@/src/gratie_solana_contract/gratie_solana_contract';
-import { verifyCompanyLicense } from '@/src/gratie_solana_contract/gratie_solana_company';
-import { useWallet } from '@solana/wallet-adapter-react';
+// import { checkAdmin, connectToGratieSolanaContract } from '@/src/gratie_solana_contract/gratie_solana_contract';
+// import { verifyCompanyLicense } from '@/src/gratie_solana_contract/gratie_solana_company';
+// import { useWallet } from '@solana/wallet-adapter-react';
 import Link from 'next/link';
 import { Button } from '@mui/material';
 
