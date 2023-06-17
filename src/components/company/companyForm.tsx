@@ -14,7 +14,7 @@ import { useState } from 'react'
 
 import { connectToGratieSolanaContract } from '@/src/gratie_solana_contract/gratie_solana_contract';
 import { createCompanyLicense, CreateCompanyLicenseForm } from '@/src/gratie_solana_contract/gratie_solana_company';
-import { useWallet } from '@solana/wallet-adapter-react';
+
 
 import UploadFile from '@/src/components/uploadFileS3';
 import { uploadMetaDataToS3 } from '@/src/utils/uploadMetaDataToS3';
@@ -37,7 +37,7 @@ declare const window: Window &
 
 export default function CompanyForm(props: any) {
 
-  const wallet = useWallet();
+ 
 
   const [openMsg, setOpenMsg] = React.useState(false);
   const [openLoading, setOpenLoading] = React.useState(false);
@@ -105,10 +105,10 @@ export default function CompanyForm(props: any) {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!wallet) {
-      console.log("Please connect to wallet");
-      return false;
-    }
+    // if (!wallet) {
+    //   console.log("Please connect to wallet");
+    //   return false;
+    // }
     if (logoUrl === '') {
       confirm("Please upload the logo before proceed");
       console.log("Please upload the logo before proceed");
@@ -135,16 +135,15 @@ export default function CompanyForm(props: any) {
       //   const licenses = await program.account.companyLicense.all();
       //   console.log(licenses);
 
-      const publicKey = (wallet as any).publicKey;
-      const company = await createCompanyLicense(program, publicKey, formVal);
-      console.log("company", company)
+      // const company = await createCompanyLicense(program, publicKey, formVal);
+      // console.log("company", company)
 
       // adding company license to metaplex (only works on devnet not localnet)
 
-      if (PRODUCTION) {
-        console.log('adding company license to metaplex');
-        await addCompanyLicenseToMetaplex(program, publicKey, company.name);
-      }
+      // if (PRODUCTION) {
+      //   console.log('adding company license to metaplex');
+      //   await addCompanyLicenseToMetaplex(program, publicKey, company.name);
+      // }
 
       setModalTitle('Thanks for Submitting your details, Gratie Admin will be verified soon')
       setOpenMsg(true);

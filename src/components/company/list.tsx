@@ -18,6 +18,7 @@ import {
 } from "wagmi";
 import { GRATIE_CONTRACT_ADDRESS, GRATIE_ABI } from "../../../constants/Gratie";
 import { SIGNATURE } from "@/constants/Signature";
+import { ethers } from "ethers";
 export default function List(props: any) {
   const [openMsg, setOpenMsg] = React.useState(false);
   const [openLoading, setOpenLoading] = React.useState(false);
@@ -68,7 +69,7 @@ export default function List(props: any) {
     address: "0xB3D73A5b58DdCa4338e3dEB418d384D5d3dEeBa8",
     abi: USDC_abi,
     functionName: "approve",
-    args: [address, 1],
+    args: [GRATIE_CONTRACT_ADDRESS, ethers.utils.parseUnits("1", 6)],
   });
   const { isLoading, isSuccess: aprroveSuccess } = useWaitForTransaction({
     hash: aprovedata?.hash,
@@ -87,7 +88,7 @@ export default function List(props: any) {
 
   const payment = {
     method: USDC_POLYGON_ADDRESS,
-    amount: 1,
+    amount: ethers.utils.parseUnits("1", 6),
   };
 
   const signature = SIGNATURE;
