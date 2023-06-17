@@ -28,7 +28,10 @@ export default function List(props: any) {
   const [email, setEmail] = React.useState("");
   const [file, setFile] = React.useState<any>();
   const [tokenUrl, setTokenUrl] = React.useState<any>();
+  const fileInputRef: any = React.useRef(null);
+
   const { mutateAsync: upload } = useStorageUpload();
+
   const uploafdToIpfs = async () => {
     const uploadurl = await upload({
       data: [file],
@@ -61,7 +64,7 @@ export default function List(props: any) {
     address: "0xB3D73A5b58DdCa4338e3dEB418d384D5d3dEeBa8",
     abi: USDC_abi,
     functionName: "allowance",
-    args:[address,GRATIE_CONTRACT_ADDRESS]
+    args: [address, GRATIE_CONTRACT_ADDRESS],
   });
   console.log("allowance data:", Number(allowance));
 
@@ -108,6 +111,16 @@ export default function List(props: any) {
   if (registerSucces) {
     console.log("successfully Registered!");
   }
+
+  const handleUpload = () => {
+    fileInputRef.current.click();
+  };
+
+  const uploadFile = (e: any) => {
+    if (e.target.files) {
+      setFile(e.target.files[0]);
+    }
+  };
 
   return (
     <div className="">
@@ -170,14 +183,107 @@ export default function List(props: any) {
                   </div>
                   <div className="buy-form">
                     <Typography variant="subtitle2">Upload Logo</Typography>
-                    <input
-                      type="file"
-                      onChange={(e) => {
-                        if (e.target.files) {
-                          setFile(e.target.files[0]);
-                        }
-                      }}
-                    />
+
+                    <div onClick={handleUpload}>
+                      <svg
+                        width="77"
+                        height="77"
+                        viewBox="0 0 77 77"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <g filter="url(#filter0_i_596_745)">
+                          <rect
+                            width="76.2857"
+                            height="76.2857"
+                            rx="38.1429"
+                            fill="#030302"
+                            fill-opacity="0.2"
+                          />
+                          <path
+                            d="M27 44.1429V45.8572C27 46.7665 27.3612 47.6386 28.0042 48.2815C28.6472 48.9245 29.5193 49.2857 30.4286 49.2857H45.8571C46.7665 49.2857 47.6385 48.9245 48.2815 48.2815C48.9245 47.6386 49.2857 46.7665 49.2857 45.8572V44.1429"
+                            stroke="#15D648"
+                            stroke-width="1.71429"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M33 33L38.1429 27L43.2857 33"
+                            stroke="#15D648"
+                            stroke-width="1.71429"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M38.1428 27V42.4286"
+                            stroke="#15D648"
+                            stroke-width="1.71429"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <rect
+                            x="0.5"
+                            y="0.5"
+                            width="75.2857"
+                            height="75.2857"
+                            rx="37.6429"
+                            stroke="#00FF01"
+                          />
+                        </g>
+                        <defs>
+                          <filter
+                            id="filter0_i_596_745"
+                            x="0"
+                            y="0"
+                            width="78.2856"
+                            height="80.2857"
+                            filterUnits="userSpaceOnUse"
+                            color-interpolation-filters="sRGB"
+                          >
+                            <feFlood
+                              flood-opacity="0"
+                              result="BackgroundImageFix"
+                            />
+                            <feBlend
+                              mode="normal"
+                              in="SourceGraphic"
+                              in2="BackgroundImageFix"
+                              result="shape"
+                            />
+                            <feColorMatrix
+                              in="SourceAlpha"
+                              type="matrix"
+                              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                              result="hardAlpha"
+                            />
+                            <feOffset dx="2" dy="4" />
+                            <feGaussianBlur stdDeviation="5" />
+                            <feComposite
+                              in2="hardAlpha"
+                              operator="arithmetic"
+                              k2="-1"
+                              k3="1"
+                            />
+                            <feColorMatrix
+                              type="matrix"
+                              values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0"
+                            />
+                            <feBlend
+                              mode="normal"
+                              in2="shape"
+                              result="effect1_innerShadow_596_745"
+                            />
+                          </filter>
+                        </defs>
+                      </svg>
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        className="w-20 text-black"
+                        onChange={uploadFile}
+                      />
+                    </div>
+
                     <Button onClick={uploafdToIpfs} variant="contained">
                       upload
                     </Button>
@@ -188,7 +294,8 @@ export default function List(props: any) {
                       Paradise
                     </Typography>
                   </div>
-                  <div className="center-btn">
+
+                  <div className="center-btn ">
                     <Button
                       onClick={() => {
                         if (Number(allowance) === 0) approve?.();
@@ -197,9 +304,9 @@ export default function List(props: any) {
                     >
                       Approve
                     </Button>
-                  </div>
-                  <div className="center-btn">
+
                     <Button
+                      className="pl-5"
                       onClick={() => registerBusinesswrite?.()}
                       variant="contained"
                     >
