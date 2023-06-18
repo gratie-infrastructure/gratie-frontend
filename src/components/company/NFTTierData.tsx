@@ -47,4 +47,6 @@ export const NFTTier1=
     platformfee:"0.5% of total value"
     };
 
- 
+    export default function testAsset() {
+
+    }
