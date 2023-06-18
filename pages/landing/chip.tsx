@@ -4,6 +4,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import { publicimg } from "./assets";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -119,9 +120,9 @@ export default function Chip() {
         <TabPanel value={value} index={1}>
           <Grid container spacing={2} style={{ alignItems: "center" }}>
             <Grid item xs={5}>
-              <img
+            <img
                 alt="rewardBox"
-                src="/images/gift-box-landing.png"
+                src="/images/public.png"
                 className="image"
               />
             </Grid>
@@ -146,7 +147,7 @@ export default function Chip() {
             <Grid item xs={5}>
               <img
                 alt="rewardBox"
-                src="/images/gift-box-landing.png"
+                src="/images/tab3.png"
                 className="image"
               />
             </Grid>
@@ -169,7 +170,7 @@ export default function Chip() {
             <Grid item xs={5}>
               <img
                 alt="rewardBox"
-                src="/images/gift-box-landing.png"
+                src="/images/NewNFT.png"
                 className="image"
               />
             </Grid>
