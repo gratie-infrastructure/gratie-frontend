@@ -6,19 +6,23 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import { nft1, nft2 } from './assets';
+import { useState } from 'react';
 
 export default function UseCase() {
+  const [isFlipped, setIsFlipped] = useState(false);
   return (
     <Grid container spacing={1} sx={{ mt: 18, mb: 18 }}>
       <Box display={'flex'} alignItems={'start'} justifyContent={'space-between'} width={'100%'}>
         <Typography variant="h5" className='small-tittel' gutterBottom>
           Find out more about buying NFT
         </Typography>
-        {/* <Link href="#" className='section-link'>See all</Link> */}
+        <Typography variant="h5" style={{ color: "#32D94B", cursor: "pointer" }} gutterBottom onClick={() => setIsFlipped(!isFlipped)}>
+  {isFlipped ? "see less" : "see all"}
+</Typography>
       </Box>
       <Grid container spacing={2} sx={{ mt: 5 }}>
-        <Grid item xs={12} md={4}>
-          <Card style={{backgroundColor: 'transparent'}}>
+        <Grid item xs={12} md={4}  >
+          <Card style={{backgroundColor: 'transparent'}} >
             <CardContent className='grid-card'>
             <img width={'100%'} src='/images/Mini-NFT.png'/>
               <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} width={'100%'} padding={'0px 15px'}>

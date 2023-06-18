@@ -1,4 +1,4 @@
-export const GRATIE_CONTRACT_ADDRESS: `0x${string}` | undefined="0xBb30A4009115EAD9D2262b56272467E92ABE750c"
+export const GRATIE_CONTRACT_ADDRESS: `0x${string}` | undefined="0x1EcF9EbcB4eBEFD0AE5d20b07952C32ee8e5fD6e"
 export const GRATIE_ABI=[
 	{
 		"inputs": [],

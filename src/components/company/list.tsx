@@ -5,7 +5,7 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
-import { CardContent } from "@mui/material";
+import { Alert, CardContent } from "@mui/material";
 import { USDC_POLYGON_ADDRESS, USDC_abi } from "../../../constants/USDC";
 import ModalBox from "../Modal";
 import Loading from "../Loading";
@@ -19,7 +19,9 @@ import {
 import { GRATIE_CONTRACT_ADDRESS, GRATIE_ABI } from "../../../constants/Gratie";
 import { SIGNATURE } from "@/constants/Signature";
 import { ethers } from "ethers";
+import { Toast, useToast } from "@chakra-ui/toast";
 export default function List(props: any) {
+  const toast = useToast()
   const [openMsg, setOpenMsg] = React.useState(false);
   const [openLoading, setOpenLoading] = React.useState(false);
   const [modalTitle, setModalTitle] = React.useState("");
@@ -28,6 +30,7 @@ export default function List(props: any) {
   const [email, setEmail] = React.useState("");
   const [file, setFile] = React.useState<any>();
   const [tokenUrl, setTokenUrl] = React.useState<any>();
+  const [metadataurl, setMetadataUrl] = React.useState<any>();
   const fileInputRef: any = React.useRef(null);
 
   const { mutateAsync: upload } = useStorageUpload();
@@ -43,8 +46,25 @@ export default function List(props: any) {
     setTokenUrl(uploadurl);
     console.log("Upload Url:", uploadurl);
   };
+  const metadata:any={
+    "tierID":props.data.tierID,
+    "name": name,
+    "email":email,
+  "image": tokenUrl
+  }
 
-  console.log("tier data:",props.data)
+const uploadmetadata = async () => {
+    const uploadurl = await upload({
+      data: [metadata],
+      options: {
+        uploadWithGatewayUrl: true,
+        uploadWithoutDirectory: true,
+      },
+    });
+    setMetadataUrl(uploadurl);
+    console.log("metadata Url:", uploadurl);
+  };
+  console.log("tier data:",props.data.tierID)
   const nameHandler = (e: any) => {
     setName(e.target.value);
   };
@@ -62,7 +82,7 @@ export default function List(props: any) {
   const { address, isConnected, isDisconnected } = useAccount();
   console.log("user address:", address);
   const { data: allowance } = useContractRead({
-    address: "0xB3D73A5b58DdCa4338e3dEB418d384D5d3dEeBa8",
+    address: USDC_POLYGON_ADDRESS,
     abi: USDC_abi,
     functionName: "allowance",
     args: [address, GRATIE_CONTRACT_ADDRESS],
@@ -70,29 +90,47 @@ export default function List(props: any) {
   console.log("allowance data:", Number(allowance));
 
   const { data: aprovedata, write: approve } = useContractWrite({
-    address: "0xB3D73A5b58DdCa4338e3dEB418d384D5d3dEeBa8",
+    address: USDC_POLYGON_ADDRESS,
     abi: USDC_abi,
     functionName: "approve",
-    args: [GRATIE_CONTRACT_ADDRESS, ethers.utils.parseUnits("1", 6)],
+    args: [GRATIE_CONTRACT_ADDRESS, ethers.utils.parseUnits(props.data.nftprice.toString(), 18)],
   });
-  const { isLoading, isSuccess: aprroveSuccess } = useWaitForTransaction({
+  const { isLoading, isSuccess: aprroveSuccess,error:approveError } = useWaitForTransaction({
     hash: aprovedata?.hash,
   });
   // console.log(aprovedata?.hash);
   if (aprroveSuccess) {
-    console.log("successfully approved!");
+    console.log("successfully Approved !");
+    toast({
+      title: "successfully Approved!",
+      status:'success',
+      isClosable: true,
+    })
   }
+  if (approveError) {
+    console.log("error occured",approveError.message);
+   
+    toast({
+      title: "There was an error!",
+      status:'error',
+      isClosable: true,
+    })
+  }
+
+  
   console.log(name, email, tokenUrl);
   const businessData = {
     name: name,
     email: email,
-    nftMetadataURI: tokenUrl,
-    businessNftTier: 1,
+    nftMetadataURI: metadataurl,
+    businessNftTier: props.data.tierID,
   };
 
   const payment = {
     method: USDC_POLYGON_ADDRESS,
-    amount: ethers.utils.parseUnits("1", 6),
+    amount: ethers.utils.parseUnits(props.data.nftprice.toString(), 18),
+    tierID:props.data.tierID,
+    address:address
   };
 
   const signature = SIGNATURE;
@@ -105,14 +143,26 @@ export default function List(props: any) {
       args: [businessData, ["Service Provider"], ["abc"], payment, signature],
     }
   );
-  const { isSuccess: registerSucces } = useWaitForTransaction({
+  const { isSuccess: registerSucces,error:registerError } = useWaitForTransaction({
     hash: registerdata?.hash,
   });
   console.log("Registering the business hash", registerdata?.hash);
   if (registerSucces) {
     console.log("successfully Registered!");
+    toast({
+      title: "Successfully Registered!",
+      status:'success',
+      isClosable: true,
+    })
   }
-
+  if (registerError) {
+    console.log("error occured",registerError.message);
+    toast({
+      title: "There was an error!",
+      status:'error',
+      isClosable: true,
+    })
+  }
   const handleUpload = () => {
     fileInputRef.current.click();
   };
@@ -312,6 +362,13 @@ export default function List(props: any) {
                       variant="contained"
                     >
                       Mint
+                    </Button>
+                    <Button
+                      className="pl-5"
+                      onClick={() => uploadmetadata?.()}
+                      variant="contained"
+                    >
+                      metadata
                     </Button>
                   </div>
                 </Box>
