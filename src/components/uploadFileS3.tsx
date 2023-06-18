@@ -1,4 +1,3 @@
-import { Akord } from '@akord/akord-js'
 import type { NextPage } from 'next'
 import Button from '@mui/material/Button';
 import Head from 'next/head'

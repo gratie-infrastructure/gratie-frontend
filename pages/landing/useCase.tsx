@@ -1,89 +1,153 @@
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Link from '@mui/material/Link';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import { nft1, nft2 } from './assets';
+import { useState } from 'react';
 
-export default function UseCase(){
-    return(
-        <Grid container spacing={1} sx={{ mt: 18, mb: 18 }}>
-            <Typography
-              noWrap
-              variant="h2"
-              className="core-values head-text"
-            >Use Case</Typography>
-            <br/>
-            <Grid container spacing={2} sx={{ mt: 5}}>
-              <Grid item xs={12} md={6} className='grid-img'>
-                <img style={{marginLeft:'150px' }} alt="reward" src="/images/Gift box.png" />
-              </Grid>
-              <Grid item xs={12} md={6} className="grid-part" sx={{ml:3}}>
-              <Typography
-              variant="h5"
-              sx={{
-                fontSize:'40px',
-                flexGrow: 1,
-                fontFamily: 'Book antique',
-                color: '#00FF01',
-                textAlign:"justify"
-              }}
-            >Reward Incentivization</Typography>
-            <br/>
-            <Typography
-              variant="h6"
-              sx={{
-                fontSize:'30px',
-                fontFamily: 'Book antique',
-                color: 'inherit',
-                textAlign:"justify"
-              }}>
-                Decentralized infrastructure where enterprise can create reward incentivization using cryptocurrency which will keep the service providers loyal and motivated to stay within the enterprise.
-              </Typography>
-              </Grid>
-            </Grid>
-            <Grid container spacing={2} sx={{ mt: 8}}>
-              <Grid item xs={12} md={6} className='grid-img'>
-                <img style={{marginLeft:'150px' }} alt="reward" src="/images/UserIcon.png" />
-              </Grid>
-              <Grid item xs={12} md={6} className="grid-part">
-              <Typography
-               variant="h5"
-               sx={{
-                 fontSize:'40px',
-                 flexGrow: 1,
-                 fontFamily: 'Book antique',
-                 color: '#00FF01',
-                 textAlign:"justify"
-               }}
-            >Maintaining healthy ecosystem</Typography>
-            <br/>
-            <Typography
-              variant="h6"
-              sx={{
-                fontSize:'30px'
-              }}>
-                Retaining service providers is difficult for shared economy businesses , where they tend to find loopholes to eliminate platform fees. By using our infrastructure enterprises can reward back to the service providers and maintain a healthy ecosystem.
-              </Typography>
-              </Grid>
-            </Grid>
-            <Grid container spacing={2} sx={{ mt: 5}}>
-              <Grid item xs={12} md={6} className='grid-img'>
-                <img style={{marginLeft:'150px' }} width={250} alt="reward" src="/images/Crypto machine.png" />
-              </Grid>
-              <Grid item xs={12} md={6} className="grid-part">
-              <Typography
-              variant="h5"
-              sx={{
-                fontSize:'40px',
-              }}
-            >In depth consumer analysis</Typography>
-            <br/>
-            <Typography
-              variant="h6"
-              sx={{
-                fontSize:'30px',
-              }}>
-                Enterprises can list their rewarding token to open markets where new consumers can invest and trade. Collaborating with co-relating services to use rewarded tokens.
-              </Typography>
-              </Grid>
-            </Grid>
-            </Grid>
-    );
+export default function UseCase() {
+  const [isFlipped, setIsFlipped] = useState(false);
+  return (
+    <Grid container spacing={1} sx={{ mt: 18, mb: 18 }}>
+      <Box display={'flex'} alignItems={'start'} justifyContent={'space-between'} width={'100%'}>
+        <Typography variant="h5" className='small-tittel' gutterBottom>
+          Find out more about buying NFT
+        </Typography>
+        <Typography variant="h5" style={{ color: "#32D94B", cursor: "pointer" }} gutterBottom onClick={() => setIsFlipped(!isFlipped)}>
+  {isFlipped ? "see less" : "see all"}
+</Typography>
+      </Box>
+      <Grid container spacing={2} sx={{ mt: 5 }}>
+        <Grid item xs={12} md={4}  >
+          <Card style={{backgroundColor: 'transparent'}} >
+            <CardContent className='grid-card'>
+            <img width={'100%'} src='/images/Mini-NFT.png'/>
+              <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} width={'100%'} padding={'0px 15px'}>
+                <div className='card-titel' style={{width: '100%', display: 'flex', alignItems: 'center', flexWrap: 'wrap'}}>
+                  <Typography variant="h6" className='card-tittel' gutterBottom style={{color: '#fff',display: 'block', width: '100%'}}>
+                  MINI
+                  </Typography>
+                  <Typography  variant="button" display="block" gutterBottom className='sub-tittel' style={{color: '#fff',display: 'block', width: '100%'}}>
+                  Free
+                  </Typography>
+                </div>
+                <div className='card-btn' style={{width: '100%', display: 'flex', alignItems: 'center'}}>
+                  <Button variant="contained" className='sm-green-btn' style={{height: '40px', maxWidth: '140px', float: 'right'}}>Buy</Button>
+                </div>
+                
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Card style={{backgroundColor: 'transparent'}}>
+            <CardContent className='grid-card'>
+            <img width={'94%'} src='/images/nft2.jpg' alt='' />
+              <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} width={'100%'} padding={'0px 15px'}>
+                <div className='card-titel' style={{width: '100%', display: 'flex', alignItems: 'center', flexWrap: 'wrap',marginTop:"50px"}}>
+                  <Typography variant="h6" className='card-tittel' gutterBottom style={{color: '#fff',display: 'block', width: '100%'}}>
+                  BANTAM
+                  </Typography>
+                  <Typography  variant="button" display="block" gutterBottom className='sub-tittel' style={{color: '#fff',display: 'block', width: '100%'}}>
+                  19
+                  </Typography>
+                </div>
+                <div className='card-btn' style={{width: '100%', display: 'flex', alignItems: 'center'}}>
+                  <Button variant="contained" className='sm-green-btn' style={{height: '40px', maxWidth: '140px', float: 'right'}}>Buy</Button>
+                </div>
+                
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Card style={{backgroundColor: 'transparent'}}>
+            <CardContent className='grid-card'>
+              <img width={'100%'} src='/images/Fractal-NFT.png' alt='' />
+              <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} width={'100%'} padding={'0px 15px'}>
+                <div className='card-titel' style={{width: '100%', display: 'flex', alignItems: 'center', flexWrap: 'wrap'}}>
+                  <Typography variant="h6" className='card-tittel' gutterBottom style={{color: '#fff',display: 'block', width: '100%'}}>
+                  FRACTAL
+                  </Typography>
+                  <Typography  variant="button" display="block" gutterBottom className='sub-tittel' style={{color: '#fff',display: 'block', width: '100%'}}>
+                  49
+                  </Typography>
+                </div>
+                <div className='card-btn' style={{width: '100%', display: 'flex', alignItems: 'center'}}>
+                  <Button variant="contained" className='sm-green-btn' style={{height: '40px', maxWidth: '140px', float: 'right'}}>Buy</Button>
+                </div>
+                
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Card style={{backgroundColor: 'transparent'}}>
+            <CardContent className='grid-card'>
+              <img width={'100%'} src='/images/Optical-NFT.png' alt='' />
+              <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} width={'100%'} padding={'0px 15px'}>
+                <div className='card-titel' style={{width: '100%', display: 'flex', alignItems: 'center', flexWrap: 'wrap'}}>
+                  <Typography variant="h6" className='card-tittel' gutterBottom style={{color: '#fff',display: 'block', width: '100%'}}>
+                  OPTICAL
+                  </Typography>
+                  <Typography  variant="button" display="block" gutterBottom className='sub-tittel' style={{color: '#fff',display: 'block', width: '100%'}}>
+                  199
+                  </Typography>
+                </div>
+                <div className='card-btn' style={{width: '100%', display: 'flex', alignItems: 'center'}}>
+                  <Button variant="contained" className='sm-green-btn' style={{height: '40px', maxWidth: '140px', float: 'right'}}>Buy</Button>
+                </div>
+                
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Card style={{backgroundColor: 'transparent'}}>
+            <CardContent className='grid-card'>
+              <img width={'100%'} src='/images/Paradise-NFT.png' alt='' />
+              <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} width={'100%'} padding={'0px 15px'}>
+                <div className='card-titel' style={{width: '100%', display: 'flex', alignItems: 'center', flexWrap: 'wrap'}}>
+                  <Typography variant="h6" className='card-tittel' gutterBottom style={{color: '#fff',display: 'block', width: '100%'}}>
+                  PARADISE
+                  </Typography>
+                  <Typography  variant="button" display="block" gutterBottom className='sub-tittel' style={{color: '#fff',display: 'block', width: '100%'}}>
+                  999
+                  </Typography>
+                </div>
+                <div className='card-btn' style={{width: '100%', display: 'flex', alignItems: 'center'}}>
+                  <Button variant="contained" className='sm-green-btn' style={{height: '40px', maxWidth: '140px', float: 'right'}}>Buy</Button>
+                </div>
+                
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Card style={{backgroundColor: 'transparent'}}>
+            <CardContent className='grid-card'>
+              <img width={'100%'} src='/images/Cosmos-NFT.png' alt='' />
+              <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} width={'100%'} padding={'0px 15px'}>
+                <div className='card-titel' style={{width: '100%', display: 'flex', alignItems: 'center', flexWrap: 'wrap'}}>
+                  <Typography variant="h6" className='card-tittel' gutterBottom style={{color: '#fff',display: 'block', width: '100%'}}>
+                  COSMOS
+                  </Typography>
+                  <Typography  variant="button" display="block" gutterBottom className='sub-tittel' style={{color: '#fff',display: 'block', width: '100%'}}>
+                  2999
+                  </Typography>
+                </div>
+                <div className='card-btn' style={{width: '100%', display: 'flex', alignItems: 'center'}}>
+                  <Button variant="contained" className='sm-green-btn' style={{height: '40px', maxWidth: '140px', float: 'right'}}>Buy</Button>
+                </div>
+                
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    </Grid>
+  );
 }
