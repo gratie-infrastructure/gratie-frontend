@@ -6,13 +6,7 @@ import { completeprofile, process, processCircle } from './assets';
 import { useState } from 'react';
 
 export default function CoreValue(){
-  const [showSVG, setShowSVG] = useState(false);
-
-  const handleAnimationEnd = (event:any) => {
-    if (event.animationName === "circle-animation" && event.target.style.boxShadow !== "none") {
-      setShowSVG(true);
-    }
-  };
+  
     return(
         <Grid container spacing={10} sx={{ mt: 8 }} item xs={12} className='w-100%'>
        
@@ -21,7 +15,7 @@ export default function CoreValue(){
             </Typography>
             <div className='w-100% relative'>
               {process}
-              <div className='circle-animation'onAnimationEnd={handleAnimationEnd} style={{position:'absolute',top:"1605px",left:"140px",display:"inline-block",width:"fit-content",borderRadius:"100px" }}> 
+              <div className='circle-animation'  style={{position:'absolute',top:"1605px",left:"140px",display:"inline-block",width:"fit-content",borderRadius:"100px" }}> 
                <svg
     width="189"
     height="189"
@@ -116,7 +110,7 @@ export default function CoreValue(){
         <stop offset="0.988395" stop-color="#6DF06E" />
       </radialGradient>
     </defs>
-    <p className=' z-20 font-bold text-white absolute bottom-52'>Hello</p>
+    <image  href='/images/Step-01.png' x="45" y="50" width="100" height="80" />
     </svg></div>
               <div className='circle-animation' style={{position:'absolute',top:"1605px",left:"395px",display:"inline-block",width:"fit-content",borderRadius:"100px"}}>  <svg
     width="189"
@@ -212,6 +206,7 @@ export default function CoreValue(){
         <stop offset="0.988395" stop-color="#6DF06E" />
       </radialGradient>
     </defs>
+    <image  href='/images/Step-02.png' x="45" y="50" width="100" height="80" />
   </svg></div>
               <div className='circle-animation' style={{position:'absolute',top:"1605px",left:"645px",display:"inline-block",width:"fit-content",borderRadius:"100px"}}>  <svg
     width="189"
@@ -307,6 +302,8 @@ export default function CoreValue(){
         <stop offset="0.988395" stop-color="#6DF06E" />
       </radialGradient>
     </defs>
+
+    <image  href='/images/Step-03.png' x="45" y="50" width="100" height="80" />
   </svg></div>
               <div className='circle-animation' style={{position:'absolute',top:"1605px",left:"900px",display:"inline-block",width:"fit-content",borderRadius:"100px"}}>  <svg
     width="189"
@@ -402,6 +399,7 @@ export default function CoreValue(){
         <stop offset="0.988395" stop-color="#6DF06E" />
       </radialGradient>
     </defs>
+    <image  href='/images/Step-04.png' x="45" y="50" width="100" height="80" />
   </svg></div>
               <div className='circle-animation' style={{position:'absolute',top:"1605px",left:"1150px",display:"inline-block",width:"fit-content",borderRadius:"100px"}}>  <svg
     width="189"
@@ -497,6 +495,7 @@ export default function CoreValue(){
         <stop offset="0.988395" stop-color="#6DF06E" />
       </radialGradient>
     </defs>
+    <image  href='/images/Step-05.png' x="45" y="50" width="100" height="80" />
   </svg></div>
             </div>
           
