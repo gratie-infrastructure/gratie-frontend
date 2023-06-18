@@ -350,3 +350,70 @@
 .nft-price{
     margin-top: 20px;
 }
+
+@keyframes circle-animation {
+    0% {
+      box-shadow: none;
+    }
+    12.5% {
+      box-shadow: 0px 0px 47.4427px 9.03671px #32D94B, inset -7.03775px 17.8014px 19.8713px #000000, inset 9.52167px -9.52167px 52.9902px -7.45174px rgba(223, 223, 223, 0.28);
+    }
+    25% {
+      box-shadow: none;
+    }
+    37.5% {
+      box-shadow: 0px 0px 47.4427px 9.03671px #32D94B, inset -7.03775px 17.8014px 19.8713px #000000, inset 9.52167px -9.52167px 52.9902px -7.45174px rgba(223, 223, 223, 0.28);
+    }
+    50% {
+      box-shadow: none;
+    }
+    62.5% {
+      box-shadow: 0px 0px 47.4427px 9.03671px #32D94B, inset -7.03775px 17.8014px 19.8713px #000000, inset 9.52167px -9.52167px 52.9902px -7.45174px rgba(223, 223, 223, 0.28);
+    }
+    75% {
+      box-shadow: none;
+    }
+    87.5% {
+      box-shadow: 0px 0px 47.4427px 9.03671px #32D94B, inset -7.03775px 17.8014px 19.8713px #000000, inset 9.52167px -9.52167px 52.9902px -7.45174px rgba(223, 223, 223, 0.28);
+    }
+    100% {
+      box-shadow: none;
+    }
+  }
+  
+  .circle-animation {
+ 
+    animation: circle-animation 24s infinite;
+
+  }
+  
+  @keyframes sequential-animation {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+
+  
+  .circle-animation:nth-child(1) {
+    animation-delay: 0s;
+  }
+  
+.circle-animation:nth-child(2) {
+    animation-delay: 24s;
+  }
+  
+.circle-animation:nth-child(3) {
+    animation-delay: 48s;
+  }
+ .circle-animation:nth-child(4) {
+    animation-delay: 72s;
+  }
+  
+.circle-animation:nth-child(5) {
+    animation-delay: 96s;
+  }
+  
