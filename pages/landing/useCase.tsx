@@ -20,9 +20,9 @@ export default function UseCase() {
         <Grid item xs={12} md={4}>
           <Card style={{backgroundColor: 'transparent'}}>
             <CardContent className='grid-card'>
-              {nft1}
+            <img width={'100%'} src='/images/Mini-NFT.png'/>
               <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} width={'100%'} padding={'0px 15px'}>
-                <div className='card-titel' style={{width: '100%', display: 'flex', alignItems: 'center', flexWrap: 'wrap',marginTop:"-50px"}}>
+                <div className='card-titel' style={{width: '100%', display: 'flex', alignItems: 'center', flexWrap: 'wrap'}}>
                   <Typography variant="h6" className='card-tittel' gutterBottom style={{color: '#fff',display: 'block', width: '100%'}}>
                   MINI
                   </Typography>
@@ -41,9 +41,9 @@ export default function UseCase() {
         <Grid item xs={12} md={4}>
           <Card style={{backgroundColor: 'transparent'}}>
             <CardContent className='grid-card'>
-              {nft2}
+            <img width={'94%'} src='/images/nft2.jpg' alt='' />
               <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} width={'100%'} padding={'0px 15px'}>
-                <div className='card-titel' style={{width: '100%', display: 'flex', alignItems: 'center', flexWrap: 'wrap',marginTop:"-50px"}}>
+                <div className='card-titel' style={{width: '100%', display: 'flex', alignItems: 'center', flexWrap: 'wrap',marginTop:"50px"}}>
                   <Typography variant="h6" className='card-tittel' gutterBottom style={{color: '#fff',display: 'block', width: '100%'}}>
                   BANTAM
                   </Typography>
