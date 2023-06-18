@@ -299,7 +299,7 @@ p{
   color: #fff;
 }
 .grid-card{
-  width: 100%;
+  width: fit-content;
   background: #000000;
   border-radius: 27.3085px;
 }

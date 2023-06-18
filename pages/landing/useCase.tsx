@@ -5,6 +5,7 @@ import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
+import { nft1, nft2 } from './assets';
 
 export default function UseCase() {
   return (
@@ -19,9 +20,9 @@ export default function UseCase() {
         <Grid item xs={12} md={4}>
           <Card style={{backgroundColor: 'transparent'}}>
             <CardContent className='grid-card'>
-              <img width={'100%'} src='/images/Mini-NFT.png' alt='' />
+              {nft1}
               <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} width={'100%'} padding={'0px 15px'}>
-                <div className='card-titel' style={{width: '100%', display: 'flex', alignItems: 'center', flexWrap: 'wrap'}}>
+                <div className='card-titel' style={{width: '100%', display: 'flex', alignItems: 'center', flexWrap: 'wrap',marginTop:"-50px"}}>
                   <Typography variant="h6" className='card-tittel' gutterBottom style={{color: '#fff',display: 'block', width: '100%'}}>
                   MINI
                   </Typography>
@@ -40,9 +41,9 @@ export default function UseCase() {
         <Grid item xs={12} md={4}>
           <Card style={{backgroundColor: 'transparent'}}>
             <CardContent className='grid-card'>
-              <img width={'100%'} src='/images/Bantam-NFT.png' alt='' />
+              {nft2}
               <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} width={'100%'} padding={'0px 15px'}>
-                <div className='card-titel' style={{width: '100%', display: 'flex', alignItems: 'center', flexWrap: 'wrap'}}>
+                <div className='card-titel' style={{width: '100%', display: 'flex', alignItems: 'center', flexWrap: 'wrap',marginTop:"-50px"}}>
                   <Typography variant="h6" className='card-tittel' gutterBottom style={{color: '#fff',display: 'block', width: '100%'}}>
                   BANTAM
                   </Typography>

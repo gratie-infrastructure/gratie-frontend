@@ -14,7 +14,7 @@ import {
   useAccount,
   useContractRead,
   useContractWrite,
-  useWaitForTransaction,
+  useWaitForTransaction
 } from "wagmi";
 import { GRATIE_CONTRACT_ADDRESS, GRATIE_ABI } from "../../../constants/Gratie";
 import { SIGNATURE } from "@/constants/Signature";
