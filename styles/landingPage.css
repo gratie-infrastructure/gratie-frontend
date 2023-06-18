@@ -352,49 +352,27 @@
 }
 
 @keyframes circle-animation {
-    0% {
-      box-shadow: none;
-    }
-    12.5% {
-      box-shadow: 0px 0px 47.4427px 9.03671px #32D94B, inset -7.03775px 17.8014px 19.8713px #000000, inset 9.52167px -9.52167px 52.9902px -7.45174px rgba(223, 223, 223, 0.28);
-    }
-    25% {
-      box-shadow: none;
-    }
-    37.5% {
-      box-shadow: 0px 0px 47.4427px 9.03671px #32D94B, inset -7.03775px 17.8014px 19.8713px #000000, inset 9.52167px -9.52167px 52.9902px -7.45174px rgba(223, 223, 223, 0.28);
-    }
-    50% {
-      box-shadow: none;
-    }
-    62.5% {
-      box-shadow: 0px 0px 47.4427px 9.03671px #32D94B, inset -7.03775px 17.8014px 19.8713px #000000, inset 9.52167px -9.52167px 52.9902px -7.45174px rgba(223, 223, 223, 0.28);
-    }
-    75% {
-      box-shadow: none;
-    }
-    87.5% {
-      box-shadow: 0px 0px 47.4427px 9.03671px #32D94B, inset -7.03775px 17.8014px 19.8713px #000000, inset 9.52167px -9.52167px 52.9902px -7.45174px rgba(223, 223, 223, 0.28);
-    }
-    100% {
-      box-shadow: none;
-    }
+    0%
+ {
+    box-shadow: 0px 0px 47.4427px 9.03671px #32D94B, inset -7.03775px 17.8014px 19.8713px #000000, inset 9.52167px -9.52167px 52.9902px -7.45174px rgba(223, 223, 223, 0.28);
+  }
+  
+  22.502%,
+  100% {
+    /* box-shadow: 0px 0px 47.4427px 9.03671px #32D94B, inset -7.03775px 17.8014px 19.8713px #000000, inset 9.52167px -9.52167px 52.9902px -7.45174px rgba(223, 223, 223, 0.28); */
+    box-shadow: none;
+  }
+  
+
   }
   
   .circle-animation {
  
-    animation: circle-animation 24s infinite;
-
+    animation: circle-animation 10s infinite;
+    
   }
   
-  @keyframes sequential-animation {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
+  
   
 
   
@@ -403,17 +381,82 @@
   }
   
 .circle-animation:nth-child(2) {
-    animation-delay: 24s;
+    animation-delay: 2s;
   }
   
 .circle-animation:nth-child(3) {
-    animation-delay: 48s;
+    animation-delay: 4s;
   }
  .circle-animation:nth-child(4) {
-    animation-delay: 72s;
+    animation-delay: 6s;
   }
   
 .circle-animation:nth-child(5) {
-    animation-delay: 96s;
+    animation-delay: 8s;
   }
   
+  .modalContainer-1 {
+    
+    background-color: rgba(55, 160, 51, 0.31);; /* Dark tone background color */
+    backdrop-filter: blur(10px); /* Background blur effect */
+    z-index: 100; 
+    display: flex;
+    justify-content: space-between;
+    border-radius: 13.094px;
+    padding-right: 5px;/* Ensure the modal appears above other elements */
+    /* Additional styles for the modal */
+  }
+  .modalContainer-2 {
+    
+    background-color: rgba(55, 160, 51, 0.31);; /* Dark tone background color */
+    backdrop-filter: blur(10px); /* Background blur effect */
+    z-index: 100; 
+    display: flex;
+    justify-content: space-between;
+    border-radius: 13.094px;
+    padding-right: 5px;/* Ensure the modal appears above other elements */
+    /* Additional styles for the modal */
+  }
+  .modalContainer-3 {
+    
+    background-color: rgba(55, 160, 51, 0.31);; /* Dark tone background color */
+    backdrop-filter: blur(10px); /* Background blur effect */
+    z-index: 100; 
+    display: flex;
+    justify-content: space-between;
+    border-radius: 13.094px;
+    padding-right: 5px;/* Ensure the modal appears above other elements */
+    /* Additional styles for the modal */
+  }
+  .modalContainer-4 {
+    
+    background-color: rgba(55, 160, 51, 0.31);; /* Dark tone background color */
+    backdrop-filter: blur(10px); /* Background blur effect */
+    z-index: 100; 
+    display: flex;
+    justify-content: space-between;
+    border-radius: 13.094px;
+    padding-right: 5px;/* Ensure the modal appears above other elements */
+    /* Additional styles for the modal */
+  }
+  .modalContainer-5 {
+    
+    background-color: rgba(55, 160, 51, 0.31);; /* Dark tone background color */
+    backdrop-filter: blur(10px); /* Background blur effect */
+    z-index: 100; 
+    display: flex;
+    justify-content: space-between;
+    border-radius: 13.094px;
+    padding-right: 5px;/* Ensure the modal appears above other elements */
+    /* Additional styles for the modal */
+  }
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Dark tone background color */
+    backdrop-filter: blur(5px); /* Background blur effect */
+    z-index: 50; /* Ensure the overlay appears above other elements */
+  }
