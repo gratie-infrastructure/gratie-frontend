@@ -44,6 +44,7 @@ export default function List(props: any) {
     console.log("Upload Url:", uploadurl);
   };
 
+  console.log("tier data:",props.data)
   const nameHandler = (e: any) => {
     setName(e.target.value);
   };
@@ -291,7 +292,7 @@ export default function List(props: any) {
                   <div className="buy-form">
                     <Typography variant="subtitle2">NFT Tier</Typography>
                     <Typography variant="subtitle2" className="sub-buy-nft">
-                      Paradise
+                      {props.data.name}
                     </Typography>
                   </div>
 

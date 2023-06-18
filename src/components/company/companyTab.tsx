@@ -47,6 +47,13 @@ function a11yProps(index: number) {
 export default function CompanyTab(props: any) {
   const [value, setValue] = React.useState(props.showProfile ? 4 : 0);
 
+  const [data, setData] = React.useState();
+
+  const handleDataFromChild1 = (childData:any) => {
+   
+    setData(childData);
+  };
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -97,7 +104,7 @@ export default function CompanyTab(props: any) {
         </Box>
         <Grid item xs={12}>
           <TabPanel value={value} index={0}>
-            {<Subscription handleClickTab={handleClickTab} />}
+            {<Subscription  onData={handleDataFromChild1} handleClickTab={handleClickTab} />}
           </TabPanel>
         </Grid>
         <Grid item xs={12}>
@@ -117,7 +124,7 @@ export default function CompanyTab(props: any) {
         </Grid>
         <Grid item xs={12}>
           <TabPanel value={value} index={4}>
-            {<ListUsers/>}
+            {<ListUsers data={data} />}
           </TabPanel>
         </Grid>
       </Box>

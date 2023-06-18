@@ -21,14 +21,14 @@ import {
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
-import { mainnet, polygon, optimism, arbitrum,polygonMumbai,filecoinCalibration } from 'wagmi/chains';
+import {polygonMumbai,filecoinCalibration,goerli } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import { ChainId, ThirdwebProvider, ThirdwebSDKProvider } from '@thirdweb-dev/react'
 
 
 const { chains, publicClient } = configureChains(
-  [mainnet, polygonMumbai, filecoinCalibration],
+  [goerli , filecoinCalibration],
   [
     publicProvider()
   ]
