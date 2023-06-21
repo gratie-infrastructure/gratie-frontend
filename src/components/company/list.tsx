@@ -20,6 +20,7 @@ import { GRATIE_CONTRACT_ADDRESS, GRATIE_ABI } from "../../../constants/Gratie";
 import { SIGNATURE } from "@/constants/Signature";
 import { ethers } from "ethers";
 import { Toast, useToast } from "@chakra-ui/toast";
+import { Payment } from "@mui/icons-material";
 export default function List(props: any) {
   const toast = useToast()
   const [openMsg, setOpenMsg] = React.useState(false);
@@ -31,6 +32,7 @@ export default function List(props: any) {
   const [file, setFile] = React.useState<any>();
   const [tokenUrl, setTokenUrl] = React.useState<any>();
   const [metadataurl, setMetadataUrl] = React.useState<any>();
+  const [signature,setSignature]=React.useState<any>("")
   const fileInputRef: any = React.useRef(null);
 
   const { mutateAsync: upload } = useStorageUpload();
@@ -44,6 +46,15 @@ export default function List(props: any) {
       },
     });
     setTokenUrl(uploadurl);
+    if(uploadurl){
+      toast({
+        title: "successfully uploaded!",
+        status:'success',
+        position: 'bottom-right',
+        isClosable: true,
+      })
+    }
+    
     console.log("Upload Url:", uploadurl);
   };
   const metadata:any={
@@ -62,6 +73,14 @@ const uploadmetadata = async () => {
       },
     });
     setMetadataUrl(uploadurl);
+    if(uploadurl){
+      toast({
+        title: "metadata recieved!",
+        status:'success',
+        position: 'bottom-right',
+        isClosable: true,
+      })
+    }
     console.log("metadata Url:", uploadurl);
   };
   console.log("tier data:",props.data.tierID)
@@ -104,6 +123,7 @@ const uploadmetadata = async () => {
     toast({
       title: "successfully Approved!",
       status:'success',
+      position: 'bottom-right',
       isClosable: true,
     })
   }
@@ -113,6 +133,7 @@ const uploadmetadata = async () => {
     toast({
       title: "There was an error!",
       status:'error',
+      position: 'bottom-right',
       isClosable: true,
     })
   }
@@ -133,14 +154,24 @@ const uploadmetadata = async () => {
     address:address
   };
 
-  const signature = SIGNATURE;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payment)
+};
+fetch('https://c23f-2406-7400-54-a33a-6451-6422-97b0-1c35.in.ngrok.io/api/v1/org/nft/purchase', requestOptions)
+    .then(response => response.json())
+    .then(data => console.log("signature:",data.purchaseSignature));
+
+    console.log("signature:",signature);
+
 
   const { data: registerdata, write: registerBusinesswrite } = useContractWrite(
     {
       address: GRATIE_CONTRACT_ADDRESS,
       abi: GRATIE_ABI,
       functionName: "registerBusiness",
-      args: [businessData, ["Service Provider"], ["abc"], payment, signature],
+      args: [businessData, ["Service Provider"], [metadataurl], payment, signature],
     }
   );
   const { isSuccess: registerSucces,error:registerError } = useWaitForTransaction({
@@ -152,6 +183,7 @@ const uploadmetadata = async () => {
     toast({
       title: "Successfully Registered!",
       status:'success',
+      position: 'bottom-right',
       isClosable: true,
     })
   }
@@ -160,6 +192,7 @@ const uploadmetadata = async () => {
     toast({
       title: "There was an error!",
       status:'error',
+      position: 'bottom-right',
       isClosable: true,
     })
   }
@@ -346,7 +379,7 @@ const uploadmetadata = async () => {
                     </Typography>
                   </div>
 
-                  <div className="center-btn ">
+                  <div style={{display:"flex",gap:"15px"}}>
                     <Button
                       onClick={() => {
                         if (Number(allowance) === 0) approve?.();
