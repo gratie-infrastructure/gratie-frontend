@@ -18,7 +18,7 @@ import {
 } from "wagmi";
 import { GRATIE_CONTRACT_ADDRESS, GRATIE_ABI } from "../../../constants/Gratie";
 import { SIGNATURE } from "@/constants/Signature";
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 
 import { Payment } from "@mui/icons-material";
 import { toast } from "react-toastify";
@@ -35,7 +35,7 @@ export default function List(props: any) {
   const [metadataurl, setMetadataUrl] = React.useState<any>();
   const [signature,setSignature]=React.useState<any>("")
   const fileInputRef: any = React.useRef(null);
-
+  const [metadataupload ,setmetadataUpload]=React.useState<any>(false);
   const { mutateAsync: upload } = useStorageUpload();
 
   const uploafdToIpfs = async () => {
@@ -48,7 +48,7 @@ export default function List(props: any) {
     });
     setTokenUrl(uploadurl);
     if(uploadurl){
-      toast.success('🦄 Wow so easy!', {
+      toast.success('🦄 Uploaded to IPFS', {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -58,6 +58,7 @@ export default function List(props: any) {
         progress: undefined,
         theme: "light",
         });
+        setmetadataUpload(true);
     }
     
     console.log("Upload Url:", uploadurl);
@@ -79,7 +80,7 @@ const uploadmetadata = async () => {
     });
     setMetadataUrl(uploadurl);
     if(uploadurl){
-      toast.success('🦄 Wow so easy!', {
+      toast.success('🦄 Recieved metadata URL', {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -121,7 +122,7 @@ const uploadmetadata = async () => {
     address: USDC_POLYGON_ADDRESS,
     abi: USDC_abi,
     functionName: "approve",
-    args: [GRATIE_CONTRACT_ADDRESS, ethers.utils.parseUnits(props.data.nftprice.toString(), 18)],
+    args: [GRATIE_CONTRACT_ADDRESS, ethers.utils.parseUnits(props.data.nftprice.toString(), 6)],
   });
   const { isLoading, isSuccess: aprroveSuccess,error:approveError } = useWaitForTransaction({
     hash: aprovedata?.hash,
@@ -129,11 +130,30 @@ const uploadmetadata = async () => {
   // console.log(aprovedata?.hash);
   if (aprroveSuccess) {
     console.log("successfully Approved !");
-  
+    toast.success('🦄 successfully Approved', {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      });
+      
   }
   if (approveError) {
     console.log("error occured",approveError.message);
-   
+    toast.error('There was an error in approval!', {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      });
   
   }
 
@@ -148,21 +168,21 @@ const uploadmetadata = async () => {
 
   const payment = {
     method: USDC_POLYGON_ADDRESS,
-    amount: ethers.utils.parseUnits(props.data.nftprice.toString(), 18),
+    amount: ethers.utils.parseUnits(props.data.nftprice.toString(), 6),
     tierID:props.data.tierID,
     address:address
   };
 
-//   const requestOptions = {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify(payment)
-// };
-// fetch('https://c23f-2406-7400-54-a33a-6451-6422-97b0-1c35.in.ngrok.io/api/v1/org/nft/purchase', requestOptions)
-//     .then(response => response.json())
-//     .then(data => console.log("signature:",data.purchaseSignature));
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payment)
+};
+fetch('https://1791-2406-7400-54-d1a-10c7-dc3f-153e-a5bc.ngrok-free.app', requestOptions)
+    .then(response => response.json())
+    .then(data => console.log("signature:",data.purchaseSignature));
 
-//     console.log("signature:",signature);
+    console.log("signature:",signature);
 
 
   const { data: registerdata, write: registerBusinesswrite } = useContractWrite(
@@ -357,7 +377,9 @@ const uploadmetadata = async () => {
                       />
                     </div>
 
-                    <Button className="btn" onClick={uploafdToIpfs} variant="contained">
+                    <Button className="btn" onClick={()=>{uploafdToIpfs();
+                    uploadmetadata();
+                    }} variant="contained">
                       upload
                     </Button>
                   </div>
@@ -369,31 +391,31 @@ const uploadmetadata = async () => {
                   </div>
 
                   <div style={{width:"100%",display:"flex",gap:"15px",justifyContent:"center"}}>
-                    <button
+                    <Button
                        style={{padding:"5px 10px",border:"none"}}
                       onClick={() => {
-                        if (Number(allowance) === 0) approve?.();
+                        if (Number(allowance) === 0 ||ethers.BigNumber.from(allowance)<ethers.utils.parseUnits(props.data.nftprice.toString(), 6) ) approve?.();
                       }}
-                      
+                      variant="contained"
                     >
                       Approve
-                    </button>
+                    </Button>
 
-                    <button
+                    <Button
 
-                     
+variant="contained"
                       onClick={() => registerBusinesswrite?.()}
                       style={{padding:"5px 10px",border:"none"}}
                     >
                       Mint
-                    </button>
-                    <button
+                    </Button>
+                    {/* <button
                      
                       onClick={() => uploadmetadata?.()}
                       style={{padding:"5px 10px",border:"none"}}
                     >
                       metadata
-                    </button>
+                    </button> */}
                   </div>
                 </Box>
               </Box>

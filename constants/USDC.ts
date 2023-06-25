@@ -1,4 +1,4 @@
-export const USDC_POLYGON_ADDRESS: `0x${string}` | undefined ="0xB3D73A5b58DdCa4338e3dEB418d384D5d3dEeBa8";
+export const USDC_POLYGON_ADDRESS: `0x${string}` | undefined ="0x8b220889D008939da6aeBc3FA23a82a6e5E2b230";
 export const USDC_abi = [
   {
     anonymous: false,
