@@ -25,6 +25,9 @@ import {polygonMumbai,filecoinCalibration,goerli } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import { ChainId, ThirdwebProvider, ThirdwebSDKProvider } from '@thirdweb-dev/react'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
+
 
 
 const { chains, publicClient } = configureChains(
@@ -76,9 +79,11 @@ function GratieDApp({ Component, pageProps }: AppProps) {
     activeChain="mumbai"
   >
     <SnackbarProvider autoHideDuration={10000}>
+      <ToastContainer/>
       <App>
         <Component {...pageProps} />
       </App>
+      
     </SnackbarProvider>
     </ThirdwebProvider>
     </RainbowKitProvider>

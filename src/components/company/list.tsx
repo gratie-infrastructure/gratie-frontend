@@ -19,10 +19,11 @@ import {
 import { GRATIE_CONTRACT_ADDRESS, GRATIE_ABI } from "../../../constants/Gratie";
 import { SIGNATURE } from "@/constants/Signature";
 import { ethers } from "ethers";
-import { Toast, useToast } from "@chakra-ui/toast";
+
 import { Payment } from "@mui/icons-material";
+import { toast } from "react-toastify";
 export default function List(props: any) {
-  const toast = useToast()
+ 
   const [openMsg, setOpenMsg] = React.useState(false);
   const [openLoading, setOpenLoading] = React.useState(false);
   const [modalTitle, setModalTitle] = React.useState("");
@@ -47,12 +48,16 @@ export default function List(props: any) {
     });
     setTokenUrl(uploadurl);
     if(uploadurl){
-    return  toast({
-        title: "successfully uploaded!",
-        status:'success',
-        position: 'bottom-right',
-        isClosable: true,
-      })
+      toast.success('🦄 Wow so easy!', {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
     }
     
     console.log("Upload Url:", uploadurl);
@@ -74,12 +79,16 @@ const uploadmetadata = async () => {
     });
     setMetadataUrl(uploadurl);
     if(uploadurl){
-     return toast({
-        title: "metadata recieved!",
-        status:'success',
-        position: 'bottom-right',
-        isClosable: true,
-      })
+      toast.success('🦄 Wow so easy!', {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
     }
     console.log("metadata Url:", uploadurl);
   };
@@ -120,22 +129,12 @@ const uploadmetadata = async () => {
   // console.log(aprovedata?.hash);
   if (aprroveSuccess) {
     console.log("successfully Approved !");
-   return toast({
-      title: "successfully Approved!",
-      status:'success',
-      position: 'bottom-right',
-      isClosable: true,
-    })
+  
   }
   if (approveError) {
     console.log("error occured",approveError.message);
    
-   return toast({
-      title: "There was an error!",
-      status:'error',
-      position: 'bottom-right',
-      isClosable: true,
-    })
+  
   }
 
   
@@ -154,16 +153,16 @@ const uploadmetadata = async () => {
     address:address
   };
 
-  const requestOptions = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payment)
-};
-fetch('https://c23f-2406-7400-54-a33a-6451-6422-97b0-1c35.in.ngrok.io/api/v1/org/nft/purchase', requestOptions)
-    .then(response => response.json())
-    .then(data => console.log("signature:",data.purchaseSignature));
+//   const requestOptions = {
+//     method: 'POST',
+//     headers: { 'Content-Type': 'application/json' },
+//     body: JSON.stringify(payment)
+// };
+// fetch('https://c23f-2406-7400-54-a33a-6451-6422-97b0-1c35.in.ngrok.io/api/v1/org/nft/purchase', requestOptions)
+//     .then(response => response.json())
+//     .then(data => console.log("signature:",data.purchaseSignature));
 
-    console.log("signature:",signature);
+//     console.log("signature:",signature);
 
 
   const { data: registerdata, write: registerBusinesswrite } = useContractWrite(
@@ -180,21 +179,11 @@ fetch('https://c23f-2406-7400-54-a33a-6451-6422-97b0-1c35.in.ngrok.io/api/v1/org
   console.log("Registering the business hash", registerdata?.hash);
   if (registerSucces) {
     console.log("successfully Registered!");
-   return toast({
-      title: "Successfully Registered!",
-      status:'success',
-      position: 'bottom-right',
-      isClosable: true,
-    })
+  
   }
   if (registerError) {
     console.log("error occured",registerError.message);
-   return toast({
-      title: "There was an error!",
-      status:'error',
-      position: 'bottom-right',
-      isClosable: true,
-    })
+  
   }
   const handleUpload = () => {
     fileInputRef.current.click();
@@ -368,7 +357,7 @@ fetch('https://c23f-2406-7400-54-a33a-6451-6422-97b0-1c35.in.ngrok.io/api/v1/org
                       />
                     </div>
 
-                    <Button onClick={uploafdToIpfs} variant="contained">
+                    <Button className="btn" onClick={uploafdToIpfs} variant="contained">
                       upload
                     </Button>
                   </div>
@@ -379,30 +368,32 @@ fetch('https://c23f-2406-7400-54-a33a-6451-6422-97b0-1c35.in.ngrok.io/api/v1/org
                     </Typography>
                   </div>
 
-                  <div style={{display:"flex",gap:"15px"}}>
-                    <Button
+                  <div style={{width:"100%",display:"flex",gap:"15px",justifyContent:"center"}}>
+                    <button
+                       style={{padding:"5px 10px",border:"none"}}
                       onClick={() => {
                         if (Number(allowance) === 0) approve?.();
                       }}
-                      variant="contained"
+                      
                     >
                       Approve
-                    </Button>
+                    </button>
 
-                    <Button
-                      className="pl-5"
+                    <button
+
+                     
                       onClick={() => registerBusinesswrite?.()}
-                      variant="contained"
+                      style={{padding:"5px 10px",border:"none"}}
                     >
                       Mint
-                    </Button>
-                    <Button
-                      className="pl-5"
+                    </button>
+                    <button
+                     
                       onClick={() => uploadmetadata?.()}
-                      variant="contained"
+                      style={{padding:"5px 10px",border:"none"}}
                     >
                       metadata
-                    </Button>
+                    </button>
                   </div>
                 </Box>
               </Box>
