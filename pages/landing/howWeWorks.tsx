@@ -55,7 +55,8 @@ export default function Working() {
       >
         {roadmap}
         <div
-          onClick={handleElement1Click}
+          onMouseEnter={handleElement1Click}
+          onMouseLeave={() => setIsModal1Open(false)}
           style={{ position: "absolute", top: "390px", left: "340px" }}
         >
           {q1}
@@ -90,9 +91,7 @@ export default function Working() {
               <br />
               •Participating in hackathon and grants 
             </p>{" "}
-            <div className="closeButton" onClick={() => setIsModal1Open(false)}>
-              <CloseIcon></CloseIcon>
-            </div>
+          
           </div>
         )}
         {isModal1Open && <div className="overlay"></div>}

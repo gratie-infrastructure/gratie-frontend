@@ -16,11 +16,11 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <NavBarWallet />
-      <React.Fragment>
-        <Container component="main" maxWidth="md">
+      
+        
           <HomeContent />
-        </Container>
-      </React.Fragment>
+        
+      
     </>
   );
 }

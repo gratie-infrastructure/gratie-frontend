@@ -47,7 +47,7 @@ export default function List(props: any) {
     });
     setTokenUrl(uploadurl);
     if(uploadurl){
-      toast({
+    return  toast({
         title: "successfully uploaded!",
         status:'success',
         position: 'bottom-right',
@@ -74,7 +74,7 @@ const uploadmetadata = async () => {
     });
     setMetadataUrl(uploadurl);
     if(uploadurl){
-      toast({
+     return toast({
         title: "metadata recieved!",
         status:'success',
         position: 'bottom-right',
@@ -120,7 +120,7 @@ const uploadmetadata = async () => {
   // console.log(aprovedata?.hash);
   if (aprroveSuccess) {
     console.log("successfully Approved !");
-    toast({
+   return toast({
       title: "successfully Approved!",
       status:'success',
       position: 'bottom-right',
@@ -130,7 +130,7 @@ const uploadmetadata = async () => {
   if (approveError) {
     console.log("error occured",approveError.message);
    
-    toast({
+   return toast({
       title: "There was an error!",
       status:'error',
       position: 'bottom-right',
@@ -180,7 +180,7 @@ fetch('https://c23f-2406-7400-54-a33a-6451-6422-97b0-1c35.in.ngrok.io/api/v1/org
   console.log("Registering the business hash", registerdata?.hash);
   if (registerSucces) {
     console.log("successfully Registered!");
-    toast({
+   return toast({
       title: "Successfully Registered!",
       status:'success',
       position: 'bottom-right',
@@ -189,7 +189,7 @@ fetch('https://c23f-2406-7400-54-a33a-6451-6422-97b0-1c35.in.ngrok.io/api/v1/org
   }
   if (registerError) {
     console.log("error occured",registerError.message);
-    toast({
+   return toast({
       title: "There was an error!",
       status:'error',
       position: 'bottom-right',

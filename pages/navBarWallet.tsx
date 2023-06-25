@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import AccountInfo from "@/src/components/AccountInfo";
+
 
 import type { NextPage } from 'next';
 import { styled } from '@mui/material/styles';
@@ -23,16 +23,16 @@ const Home: NextPage = () => {
     return (
         <>
               <AppBar className="navbar"> 
+             
                 <Toolbar>
                   <Box sx={{ display:'flex', margin:'auto'}}>
                     <Link style={{ display:'flex'}} href='/'>
                       <img width={70} height={70} alt='logo' src='/images/Favicon.png' className='logo-icon'/>
-                      <img width={105} height={95} alt='logo' src='/images/Logo.png' />
+                      <img width={105} height={105} alt='logo' src='/images/Logo.png' />
                     </Link>
                   </Box>
-                  <div className='flex w-full justify-end'>
-                 
-                  </div>
+                </Toolbar>
+                <div className='flex w-full justify-end' style={{display:"flex", width:"",justifyContent:"end",position:"absolute",top:"20px",right:0,}}>
                   <ConnectButton.Custom>
             {({
               account,
@@ -127,6 +127,7 @@ const Home: NextPage = () => {
                     }
 
                     return (
+                      
                       <div style={{ display: "flex", gap: 12 }}>
                         <button
                           onClick={openChainModal}
@@ -240,7 +241,7 @@ const Home: NextPage = () => {
               );
             }}
           </ConnectButton.Custom>
-                </Toolbar>
+                  </div>
             </AppBar>
             {/* <Offset /> */}
         </>
