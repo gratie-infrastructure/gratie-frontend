@@ -352,3 +352,21 @@ p{
   width:"100%" !important;
   height: "100%" !important;
 }
+
+.css-2wi2mn > .MuiGrid-item {
+  padding-left: 8px !important;
+  display: flex !important;
+  gap: 17em !important;
+}
+
+@media (min-width: 1536px)
+{
+.css-ht032f {
+    margin-left: -60px !important;
+}
+}
+
+.container-2{
+  width:1000px !important;
+  height:800px !important;
+}

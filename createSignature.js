@@ -3,24 +3,29 @@ require("dotenv").config();
 
 async function main() {
     try {
-        const signer = new ethers.Wallet("c848768aaf97c4c80203441396cd4aee3503baaf744a3cd1e10316e50f42d016");//change
+        const signer = new ethers.Wallet("947005511673d1fd60c6cc941bd552ead7d871318f7e994bfe8a836d34e8d99c");//change
         const domain = {
             name: "Gratie",
             version: "V1",
-            chainId: 80001, //change
-            verifyingContract: "0xBb30A4009115EAD9D2262b56272467E92ABE750c"//change mumbai gratie address
+            chainId: 4002, //change
+            verifyingContract: "0xCB3C34647f6788c702bddd0c1dBC37cbFa034Aac"//change mumbai gratie address
         };
 
         const types = {
             Payment: [
-                { name: 'method', type: 'address' },
-                { name: 'amount', type: 'uint256' }
-            ]
-        };
+              {name: 'method', type: 'address'},
+              {name: 'amount', type: 'uint256'},
+              {name: 'tierID', type: 'uint256'},
+              {name: 'buyer', type: 'address'},
+            ],
+          };
+      
 
         const data = {
-            method: "0xB3D73A5b58DdCa4338e3dEB418d384D5d3dEeBa8", //payment address eg usdc
-            amount: ethers.utils.parseUnits("1", 6)
+            method: "0x8b220889D008939da6aeBc3FA23a82a6e5E2b230", //payment address eg usdc
+            amount: ethers.utils.parseUnits("19", 6),
+            tierID: 2,
+            buyer: "0x79730Ada93242A2e6e76B828Da3cC05C20FBDA1B",
         };
 
         const  sig = await signer._signTypedData(domain, types, data);

@@ -20,13 +20,15 @@
     "@mui/icons-material": "^5.11.11",
     "@mui/material": "^5.11.12",
     "@mui/styled-engine-sc": "^5.11.11",
-    "@rainbow-me/rainbowkit": "^1.0.1",
+    "@rainbow-me/rainbowkit": "^1",
     "@thirdweb-dev/react": "^3.13.1",
     "@thirdweb-dev/sdk": "^3.10.21",
     "@thirdweb-dev/storage": "^1.1.4",
     "@types/node": "18.14.6",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
+    "@wagmi/core": "^1.0.5",
+    "axios": "^1.4.0",
     "dotenv": "^16.1.4",
     "eslint": "8.35.0",
     "eslint-config-next": "13.2.3",
@@ -41,8 +43,8 @@
     "strip-hex-prefix": "^1.0.0",
     "styled-components": "^5.3.8",
     "typescript": "4.9.5",
-    "viem": "^0.3.50",
-    "wagmi": "^1.0.9"
+    "viem": "^0.3.26",
+    "wagmi": "^1"
   },
   "devDependencies": {
     "assert": "^2.0.0",

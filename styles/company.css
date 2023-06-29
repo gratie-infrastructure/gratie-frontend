@@ -443,3 +443,15 @@ label.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedP
 .btn{
     padding:5px 10px;
 }
+
+.form-box-2{
+    box-shadow: inset 4px 4px 10px rgba(255, 255, 255, 0.25) !important;
+    border: none !important ;
+    border-radius: 50px;
+}
+
+.btn-1{
+    padding:8px 15px !important;
+    background: #269a26 !important;
+    margin-right: -80px !important;
+}

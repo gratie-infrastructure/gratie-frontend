@@ -9,12 +9,12 @@ import { Alert, CardContent } from "@mui/material";
 import { USDC_POLYGON_ADDRESS, USDC_abi } from "../../../constants/USDC";
 import ModalBox from "../Modal";
 import Loading from "../Loading";
-import { useStorageUpload } from "@thirdweb-dev/react";
+import { useContract, useStorageUpload } from "@thirdweb-dev/react";
 import {
   useAccount,
   useContractRead,
   useContractWrite,
-  useWaitForTransaction
+  useWaitForTransaction,
 } from "wagmi";
 import { GRATIE_CONTRACT_ADDRESS, GRATIE_ABI } from "../../../constants/Gratie";
 import { SIGNATURE } from "@/constants/Signature";
@@ -22,8 +22,9 @@ import { BigNumber, ethers } from "ethers";
 
 import { Payment } from "@mui/icons-material";
 import { toast } from "react-toastify";
+import axios from "axios";
 export default function List(props: any) {
- 
+  const { setProfileTab } = props;
   const [openMsg, setOpenMsg] = React.useState(false);
   const [openLoading, setOpenLoading] = React.useState(false);
   const [modalTitle, setModalTitle] = React.useState("");
@@ -33,12 +34,14 @@ export default function List(props: any) {
   const [file, setFile] = React.useState<any>();
   const [tokenUrl, setTokenUrl] = React.useState<any>();
   const [metadataurl, setMetadataUrl] = React.useState<any>();
-  const [signature,setSignature]=React.useState<any>("")
+  const [signature, setSignature] = React.useState<any>("");
   const fileInputRef: any = React.useRef(null);
-  const [metadataupload ,setmetadataUpload]=React.useState<any>(false);
-  const { mutateAsync: upload } = useStorageUpload();
+  const [metadataupload, setmetadataUpload] = React.useState<any>(false);
+  const { mutateAsync: upload ,isLoading:ipfsLoading} = useStorageUpload();
 
+  //Uploading to IPFS--->
   const uploafdToIpfs = async () => {
+    handleLoaderToggle(true);
     const uploadurl = await upload({
       data: [file],
       options: {
@@ -47,8 +50,10 @@ export default function List(props: any) {
       },
     });
     setTokenUrl(uploadurl);
-    if(uploadurl){
-      toast.success('🦄 Uploaded to IPFS', {
+    
+    if (uploadurl) {
+      handleLoaderToggle(false);
+      toast.success("🦄 Uploaded to IPFS", {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -57,20 +62,23 @@ export default function List(props: any) {
         draggable: true,
         progress: undefined,
         theme: "light",
-        });
-        setmetadataUpload(true);
+      });
+      setmetadataUpload(true);
     }
-    
     console.log("Upload Url:", uploadurl);
   };
-  const metadata:any={
-    "tierID":props.data.tierID,
-    "name": name,
-    "email":email,
-  "image": tokenUrl
-  }
+  
 
-const uploadmetadata = async () => {
+  //Uploading the Metdata to IPFS --->
+  const metadata: any = {
+    tierID: props.data.tierID,
+    name: name,
+    email: email,
+    image: tokenUrl,
+  };
+  console.log("Metadata", metadata);
+  const uploadmetadata = async () => {
+    handleLoaderToggle(true);
     const uploadurl = await upload({
       data: [metadata],
       options: {
@@ -79,8 +87,10 @@ const uploadmetadata = async () => {
       },
     });
     setMetadataUrl(uploadurl);
-    if(uploadurl){
-      toast.success('🦄 Recieved metadata URL', {
+ 
+    if (uploadurl) {
+      handleLoaderToggle(false);
+      toast.success("🦄 Recieved metadata URL", {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -89,11 +99,13 @@ const uploadmetadata = async () => {
         draggable: true,
         progress: undefined,
         theme: "light",
-        });
+      });
     }
     console.log("metadata Url:", uploadurl);
   };
-  console.log("tier data:",props.data.tierID)
+  console.log("tier data:", props.data.tierID);
+
+  //Updating the data form the form--->
   const nameHandler = (e: any) => {
     setName(e.target.value);
   };
@@ -108,16 +120,33 @@ const uploadmetadata = async () => {
   const handleLoaderToggle = (status: boolean) => {
     setOpenLoading(status);
   };
+
+  // Getting the address from the account--->
   const { address, isConnected, isDisconnected } = useAccount();
   console.log("user address:", address);
-  const { data: allowance } = useContractRead({
+  //  let allowance:any;
+  //Checking the allowance--->
+  const { data: allowance,error:allowanceError,isSuccess:allowanceSuccess,status:allowanceStatus } = useContractRead({
+  //   const response = useContractRead({
     address: USDC_POLYGON_ADDRESS,
     abi: USDC_abi,
     functionName: "allowance",
     args: [address, GRATIE_CONTRACT_ADDRESS],
   });
-  console.log("allowance data:", Number(allowance));
 
+  // const {data:ReadName}=useContractRead({
+  //   address: USDC_POLYGON_ADDRESS,
+  //       abi: USDC_abi,
+  //       functionName: "name",
+  //       onSettled(data, error) {
+  //         console.log("Inside ReadName:",data,error);
+  //       },
+  // })
+
+  // console.log("Name:",ReadName);
+  console.log("allowance data:",Number(allowance));
+  // console.log("allowance error",response);
+  //Approving the data --->
   const { data: aprovedata, write: approve } = useContractWrite({
     address: USDC_POLYGON_ADDRESS,
     abi: USDC_abi,
@@ -127,10 +156,11 @@ const uploadmetadata = async () => {
   const { isLoading, isSuccess: aprroveSuccess,error:approveError } = useWaitForTransaction({
     hash: aprovedata?.hash,
   });
+  
   // console.log(aprovedata?.hash);
   if (aprroveSuccess) {
     console.log("successfully Approved !");
-    toast.success('🦄 successfully Approved', {
+    toast.success("🦄 successfully Approved", {
       position: "bottom-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -139,12 +169,11 @@ const uploadmetadata = async () => {
       draggable: true,
       progress: undefined,
       theme: "light",
-      });
-      
+    });
   }
   if (approveError) {
-    console.log("error occured",approveError.message);
-    toast.error('There was an error in approval!', {
+    console.log("error occured", approveError.message);
+    toast.error("There was an error in approval!", {
       position: "bottom-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -153,12 +182,11 @@ const uploadmetadata = async () => {
       draggable: true,
       progress: undefined,
       theme: "light",
-      });
-  
+    });
   }
 
-  
-  console.log(name, email, tokenUrl);
+  console.log(name, email, metadataurl);
+
   const businessData = {
     name: name,
     email: email,
@@ -166,31 +194,50 @@ const uploadmetadata = async () => {
     businessNftTier: props.data.tierID,
   };
 
-  const payment = {
+  const paymentforApi = {
+    paymentMethod: USDC_POLYGON_ADDRESS,
+    paymentAmount: ethers.utils.parseUnits(props.data.nftprice.toString(), 6),
+    tierID: props.data.tierID,
+    buyer: address,
+  };
+  const paymentforContract = {
     method: USDC_POLYGON_ADDRESS,
     amount: ethers.utils.parseUnits(props.data.nftprice.toString(), 6),
-    tierID:props.data.tierID,
-    address:address
+    
   };
+  console.log("On Clicking Mint",USDC_POLYGON_ADDRESS,GRATIE_CONTRACT_ADDRESS,address);
+  // fetching the signature--->
+  React.useEffect(() => {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(paymentforApi),
+    };
 
-  const requestOptions = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payment)
-};
-fetch('https://1791-2406-7400-54-d1a-10c7-dc3f-153e-a5bc.ngrok-free.app', requestOptions)
-    .then(response => response.json())
-    .then(data => console.log("signature:",data.purchaseSignature));
+    const fetchData = async () => {
+      try {
+        const response = await axios.post(
+          "http://dev.api.gratie.xyz/api/v1/org/nft/purchase",
+          requestOptions.body,
+          { headers: requestOptions.headers }
+        );
+        console.log("signature:", response.data.purchaseSignature);
+        setSignature(response.data.purchaseSignature);
+      } catch (error) {
+        console.error("Error occurred:", error);
+      }
+    };
 
-    console.log("signature:",signature);
-
-
+    fetchData();
+  }, []);
+  console.log("Payment Object",USDC_POLYGON_ADDRESS,GRATIE_CONTRACT_ADDRESS,address,paymentforContract)
+  //Register business and mint functionality--->
   const { data: registerdata, write: registerBusinesswrite } = useContractWrite(
     {
-      address: GRATIE_CONTRACT_ADDRESS,
+      address:GRATIE_CONTRACT_ADDRESS,
       abi: GRATIE_ABI,
       functionName: "registerBusiness",
-      args: [businessData, ["Service Provider"], [metadataurl], payment, signature],
+      args: [businessData, ["Service Provider"], metadataurl, paymentforContract, signature],
     }
   );
   const { isSuccess: registerSucces,error:registerError } = useWaitForTransaction({
@@ -199,11 +246,30 @@ fetch('https://1791-2406-7400-54-d1a-10c7-dc3f-153e-a5bc.ngrok-free.app', reques
   console.log("Registering the business hash", registerdata?.hash);
   if (registerSucces) {
     console.log("successfully Registered!");
-  
+    toast.success("🦄 successfully Registered Business!", {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    setProfileTab(1);
   }
   if (registerError) {
-    console.log("error occured",registerError.message);
-  
+    console.log("error occured", registerError.message);
+    toast.error("There was an error in minting!", {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
   }
   const handleUpload = () => {
     fileInputRef.current.click();
@@ -377,9 +443,14 @@ fetch('https://1791-2406-7400-54-d1a-10c7-dc3f-153e-a5bc.ngrok-free.app', reques
                       />
                     </div>
 
-                    <Button className="btn" onClick={()=>{uploafdToIpfs();
-                    uploadmetadata();
-                    }} variant="contained">
+                    <Button
+                      className="btn"
+                      onClick={() => {
+                        uploafdToIpfs();
+                        uploadmetadata();
+                      }}
+                      variant="contained"
+                    >
                       upload
                     </Button>
                   </div>
@@ -390,47 +461,51 @@ fetch('https://1791-2406-7400-54-d1a-10c7-dc3f-153e-a5bc.ngrok-free.app', reques
                     </Typography>
                   </div>
 
-                  <div style={{width:"100%",display:"flex",gap:"15px",justifyContent:"center"}}>
+                  
+                </Box>
+              </Box>
+            </CardContent>
+            {(Number(allowance) === 0 
+            ||
+                    ethers.BigNumber.from(allowance) <
+                      ethers.utils.parseUnits(
+                        props.data.nftprice.toString(),
+                        6
+                      )
+                      ) && (
                     <Button
-                       style={{padding:"5px 10px",border:"none"}}
-                      onClick={() => {
-                        if (Number(allowance) === 0 ||ethers.BigNumber.from(allowance)<ethers.utils.parseUnits(props.data.nftprice.toString(), 6) ) approve?.();
-                      }}
-                      variant="contained"
+                    variant="contained"
+                      style={{ padding: "5px 10px", border: "none" }}
+                      onClick={() => approve?.()}
                     >
                       Approve
                     </Button>
+                   )} 
 
-                    <Button
+                  <Button
 
-variant="contained"
+             variant="contained"
                       onClick={() => registerBusinesswrite?.()}
                       style={{padding:"5px 10px",border:"none"}}
                     >
                       Mint
-                    </Button>
-                    {/* <button
-                     
-                      onClick={() => uploadmetadata?.()}
-                      style={{padding:"5px 10px",border:"none"}}
-                    >
-                      metadata
-                    </button> */}
-                  </div>
-                </Box>
-              </Box>
-            </CardContent>
+                    </Button> 
+                  
           </Box>
+         
         </Container>
 
-        <Loading open={openLoading} handleClose={handleLoaderToggle} />
+        {/* <Loading open={openLoading} handleClose={handleLoaderToggle} />
         <ModalBox
           open={openMsg}
           handleClose={handleModalClose}
           heading={modalTitle}
           description={modalDesc}
-        />
+        /> */}
       </React.Fragment>
+     
+                  <Loading open={openLoading} handleClose={handleLoaderToggle} />
     </div>
+    
   );
 }
