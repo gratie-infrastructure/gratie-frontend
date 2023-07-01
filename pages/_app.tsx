@@ -21,9 +21,8 @@ import {
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
-import {polygonMumbai,goerli,fantomTestnet } from 'wagmi/chains';
-import { alchemyProvider } from 'wagmi/providers/alchemy';
-import { publicProvider } from 'wagmi/providers/public';
+import {goerli,fantomTestnet } from 'wagmi/chains';
+import { publicProvider } from '@wagmi/core/providers/public'
 import { ChainId, ThirdwebProvider, ThirdwebSDKProvider } from '@thirdweb-dev/react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';

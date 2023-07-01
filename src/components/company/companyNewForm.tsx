@@ -39,6 +39,9 @@ export default function FormPage(props: any) {
   const [companyEmail, setCompanyEmail]=React.useState<any>("")
   const [distribution,setDistribution]=React.useState<number>()
   const [valuation,setValuation]=React.useState<number>()
+  const [companyDetails,setCompanyDetails]=React.useState<any>(true)
+  const [tokenDetails,setTokenDetails]=React.useState<any>(false)
+
   const [CID,setCID]=React.useState<any>("");
   React.useEffect(() => {
     handleLoaderToggle(true)
@@ -262,6 +265,8 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
                   className="R-btn"
                   style={{ marginBottom: "20px", width: "100%" }}
                   variant="contained"
+                  onClick={()=>{setTokenDetails(false);setCompanyDetails(true);
+                  }}
                 >
                   Company Details
                 </Button>
@@ -271,14 +276,16 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
                   className="R-btn"
                   style={{ width: "100%" }}
                   variant="contained"
-                  disabled={companyObject.data.status === "PENDING"}
+                  disabled={companyObject.data.status === "MINTED"}
+                  onClick={()=>{setCompanyDetails(false);setTokenDetails(true);
+                  }}
                 >
                   Token Details
                 </Button>
               </div>
             </div>
           </Grid>
-          <Grid className="" xs={9} >
+          {companyObject.data.status === "MINTED" && <Grid className="" xs={9} >
             <Box
               className="form-box-2"
               style={{ marginBottom: "0px", textAlign: "start"}}
@@ -514,7 +521,289 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
                 </Box>
               </CardContent>
             </Box>
-          </Grid>
+          </Grid>}
+          {companyObject.data.status === "PENDING"&& companyDetails && <Grid className="" xs={9} >
+            <Box
+              className="form-box-2"
+              style={{ marginBottom: "0px", textAlign: "start"}}
+            >
+              <CardContent>
+                <Box
+                  component="form"
+                  noValidate
+                  sx={{ mt: 6 }}
+                >
+                  
+                  <Grid container spacing={1} sx={{ mt: 5, mb: 5 }}>
+                    <Grid item xs={12} md={6}>
+                      <Typography
+                        style={{ textAlign: "start", marginLeft: "60px" }}
+                        noWrap
+                        variant="h6"
+                        className="form-label"
+                      >
+                        Company Name
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <Typography  style={{ fontSize:"18px",textAlign: "start", marginLeft: "60px" }}>{companyObject.data.name}</Typography>
+                    </Grid>
+                  </Grid>
+
+                  <Grid container spacing={1} sx={{ mb: 5 }}>
+                    <Grid item xs={12} md={6}>
+                      <Typography
+                        style={{ textAlign: "start", marginLeft: "60px" }}
+                        noWrap
+                        variant="h6"
+                        className="form-label"
+                      >
+                        Company Email
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                    <Typography style={{ fontSize:"18px",textAlign: "start", marginLeft: "60px" }}>{companyObject.data.email}</Typography>
+                    </Grid>
+                    <Grid item xs={12} md={2}></Grid>
+                  </Grid>
+
+                  <Grid container spacing={1} sx={{ mb: 5 }} style={{}}>
+                    <Grid item xs={12} md={6}>
+                      <Typography
+                        style={{ textAlign: "start", marginLeft: "60px" }}
+                        noWrap
+                        variant="h6"
+                        className="form-label"
+                      >
+                        Company Valuation
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={4} >
+                    <Typography  style={{ fontSize:"18px",textAlign: "start", marginLeft: "60px" }}>{companyObject.data.valuation.$numberDecimal}</Typography>
+                        
+                    </Grid>
+          
+                  </Grid>
+
+                  <Grid container spacing={1} sx={{ mb: 5 }}>
+                    <Grid item xs={12} md={6}>
+                      <Typography
+                        style={{ textAlign: "start", marginLeft: "60px" }}
+                        noWrap
+                        variant="h6"
+                        className="form-label"
+                      >
+                        % locked for distribution
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                    <Typography  style={{ fontSize:"18px",textAlign: "start", marginLeft: "60px" }}>{companyObject.data.distribution.$numberDecimal}%</Typography>
+                        
+                    </Grid>
+                  </Grid>
+                  
+                </Box>
+              </CardContent>
+            </Box>
+          </Grid>}
+
+          {companyObject.data.status === "PENDING" && tokenDetails && <Grid className="" xs={9} >
+            <Box
+              className="form-box-2"
+              style={{ marginBottom: "0px", textAlign: "start"}}
+            >
+              <CardContent>
+                <Box
+                  component="form"
+                  noValidate
+                  sx={{ mt: 6 }}
+                >
+                  
+                  
+
+                  <Grid container spacing={1} sx={{ mb: 5 }} style={{}}>
+                    <Grid item xs={12} md={6}>
+                      <Typography
+                        style={{ textAlign: "start", marginLeft: "60px" }}
+                        noWrap
+                        variant="h6"
+                        className="form-label"
+                      >
+                        Token Name
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={4} >
+                    <TextField
+                        style={{ width: "240px" }}
+                        fullWidth
+                        type="text"
+                        id="evaluation"
+                        autoComplete="off"
+                        required
+
+                        className="form-textfield"
+                        focused
+                        sx={{ input: { color: "#fff", fontSize: "20px" } }}
+                      />  
+                    </Grid>
+          
+                  </Grid>
+
+                  <Grid container spacing={1} sx={{ mb: 5 }}>
+                    <Grid item xs={12} md={6}>
+                      <Typography
+                        style={{ textAlign: "start", marginLeft: "60px" }}
+                        noWrap
+                        variant="h6"
+                        className="form-label"
+                      >
+                        Token Symbol
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                    <TextField
+                        style={{ width: "240px" }}
+                        fullWidth
+                        type="text"
+                        id="evaluation"
+                        autoComplete="off"
+                        required
+                        onChange={handleValuation}
+                        value={valuation}
+                        className="form-textfield"
+                        focused
+                        sx={{ input: { color: "#fff", fontSize: "20px" } }}
+                      />   
+                    </Grid>
+                  </Grid>
+                  <Grid container spacing={1} sx={{ mb: 5 }}>
+                    <Grid item xs={12} md={6}>
+                      <Typography
+                        style={{ textAlign: "start", marginLeft: "60px" }}
+                        noWrap
+                        variant="h6"
+                        className="form-label"
+                      >
+                        Token Logo
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <div onClick={handleUpload}>
+                      <svg
+                        width="77"
+                        height="77"
+                        viewBox="0 0 77 77"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <g filter="url(#filter0_i_596_745)">
+                          <rect
+                            width="76.2857"
+                            height="76.2857"
+                            rx="38.1429"
+                            fill="#030302"
+                            fill-opacity="0.2"
+                          />
+                          <path
+                            d="M27 44.1429V45.8572C27 46.7665 27.3612 47.6386 28.0042 48.2815C28.6472 48.9245 29.5193 49.2857 30.4286 49.2857H45.8571C46.7665 49.2857 47.6385 48.9245 48.2815 48.2815C48.9245 47.6386 49.2857 46.7665 49.2857 45.8572V44.1429"
+                            stroke="#15D648"
+                            stroke-width="1.71429"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M33 33L38.1429 27L43.2857 33"
+                            stroke="#15D648"
+                            stroke-width="1.71429"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M38.1428 27V42.4286"
+                            stroke="#15D648"
+                            stroke-width="1.71429"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <rect
+                            x="0.5"
+                            y="0.5"
+                            width="75.2857"
+                            height="75.2857"
+                            rx="37.6429"
+                            stroke="#00FF01"
+                          />
+                        </g>
+                        <defs>
+                          <filter
+                            id="filter0_i_596_745"
+                            x="0"
+                            y="0"
+                            width="78.2856"
+                            height="80.2857"
+                            filterUnits="userSpaceOnUse"
+                            color-interpolation-filters="sRGB"
+                          >
+                            <feFlood
+                              flood-opacity="0"
+                              result="BackgroundImageFix"
+                            />
+                            <feBlend
+                              mode="normal"
+                              in="SourceGraphic"
+                              in2="BackgroundImageFix"
+                              result="shape"
+                            />
+                            <feColorMatrix
+                              in="SourceAlpha"
+                              type="matrix"
+                              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                              result="hardAlpha"
+                            />
+                            <feOffset dx="2" dy="4" />
+                            <feGaussianBlur stdDeviation="5" />
+                            <feComposite
+                              in2="hardAlpha"
+                              operator="arithmetic"
+                              k2="-1"
+                              k3="1"
+                            />
+                            <feColorMatrix
+                              type="matrix"
+                              values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0"
+                            />
+                            <feBlend
+                              mode="normal"
+                              in2="shape"
+                              result="effect1_innerShadow_596_745"
+                            />
+                          </filter>
+                        </defs>
+                      </svg>
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        className="w-20 text-black"
+                        onChange={uploadFile}
+                      />
+                    </div>
+                    <Button
+                      className="btn-1"
+                      onClick={() => {
+                        uploafdToIpfs();
+                        uploadmetadata();
+                      }}
+                      variant="contained"
+                    >
+                      upload
+                    </Button>
+                    </Grid>
+                  </Grid>
+                    
+                </Box>
+              </CardContent>
+            </Box>
+          </Grid>}
         </Grid>
         <div style={{ marginBottom: "50px" }}></div>
       </Container>}

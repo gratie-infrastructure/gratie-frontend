@@ -5,12 +5,15 @@ import React from 'react'
   import Typography from "@mui/material/Typography";
   import Box from "@mui/material/Box";
   import Container from "@mui/material/Container";
-  
-  // import { connectToGratieSolanaContract } from '@/src/gratie_solana_contract/gratie_solana_contract';
-  // import { getAllVerifiedLicenses, getAllPendingLicenses } from "@/src/gratie_solana_contract/gratie_solana_company";
   import { useEffect } from "react";
   import ListUserTable from "./table";
   import TierCreation from "./tier";
+import { useAccount, useConnect, useContractRead } from 'wagmi';
+import { GRATIE_ABI, GRATIE_CONTRACT_ADDRESS } from '@/constants/Gratie';
+import Loading from '../Loading';
+import ModalBox from '../Modal';
+import axios from 'axios';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
   
   interface TabPanelProps {
     children?: React.ReactNode;
@@ -19,8 +22,9 @@ import React from 'react'
   }
 
 function TabPanel(props: TabPanelProps) {
+
       const { children, value, index, ...other } = props;
-    
+      
       return (
         <div
           role="tabpanel"
@@ -49,32 +53,50 @@ function TabPanel(props: TabPanelProps) {
       const [value, setValue] = React.useState(0);
       const [pendingLicenses, setPendingLicenses] = React.useState(null);
       const [approvedLicenses, setApprovedLicenses] = React.useState(null);
-    
+      const [companyData, setCompanyData]=React.useState<any>();
+      const [openMsg, setOpenMsg] = React.useState(false);
+  const [openLoading, setOpenLoading] = React.useState(false);
+  const [modalTitle, setModalTitle] = React.useState("");
+  const [modalDesc, setModalDesc] = React.useState("");
+    const { address, isConnected, isDisconnected } = useAccount();
+
+    const handleLoaderToggle = (status: boolean) => {
+      setOpenLoading(status);
+    };
+  
+      const { data: adminData } = useContractRead({
+          address: GRATIE_CONTRACT_ADDRESS,
+          abi: GRATIE_ABI,
+          functionName: "hasRole",
+          args: ["0x1e5ca7d599fb35041afe8c30005054e07b396952ed6970c661389db329398daf", address],
+          onError(error) {
+            console.log('Error', error)
+          },
+        });
+    console.log("Admin data:",adminData );
+
+  
+  
       const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
       };
-    
-      // const getAllPendingCompanies = async () => {
-      //   const program = await connectToGratieSolanaContract();
-      //   const pendingLics:any = await getAllPendingLicenses(program);
-      //   setPendingLicenses(pendingLics);
-      //   await approveCompanyLicense();
-      //   return pendingLics;
-      // }
-    
-      // const approveCompanyLicense = async () => {
-      //   const program = await connectToGratieSolanaContract();
-      //   const verifiedLics:any = await getAllVerifiedLicenses(program);
-      //   setApprovedLicenses(verifiedLics);
-      //   return verifiedLics;
-      // }
-    
-      //   const createTier = async () => {
-      //     console.log("createTier", createTier)
-      //   }
-    
-      useEffect(() => {
-        // getAllPendingCompanies();
+      React.useEffect(() => {
+      
+        const fetchData = async () => {
+          try {
+            const response = await axios.get(
+              "http://dev.api.gratie.xyz/api/v1/org/list?status=PENDING"
+            );
+            console.log("Pending company Data:", response.data);
+           setCompanyData(response.data);
+           console.log("Company Data:", companyData.data[0].name);
+          } catch (error) {
+            console.error("Error occurred:", error);
+          }
+          
+        };
+      
+        fetchData();
       }, []);
     
       return (
@@ -96,29 +118,38 @@ function TabPanel(props: TabPanelProps) {
                   label="Verified Company"
                   {...a11yProps(1)}
                 />
-                <Tab
-                  className={value == 2 ? "selected-tab" : "non-selected-tab"}
-                  label="Add Subscription"
-                  {...a11yProps(2)}
-                />
+
               </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
-              {pendingLicenses && (
-                <ListUserTable
-                  data={pendingLicenses}
-                //   getAllPendingCompanies={getAllPendingCompanies}
-                />
+              {companyData && (
+                <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Name</TableCell>
+                      <TableCell>Valuation</TableCell>
+                      <TableCell>Distribution</TableCell>
+                      <TableCell>Email</TableCell>
+                      <TableCell>Wallet Address</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                  {companyData?.data.map((i:any) => (<ListUserTable data={i}/>))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
               )}
             </TabPanel>
             <TabPanel value={value} index={1}>
-              {approvedLicenses && <ListUserTable data={approvedLicenses} />}
+              {approvedLicenses && <ListUserTable data={companyData.data} />}
             </TabPanel>
             <TabPanel value={value} index={2}>
               {<TierCreation />}
             </TabPanel>
           </Box>
         </Container>
+        
       );
     }
 

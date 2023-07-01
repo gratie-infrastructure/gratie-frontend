@@ -9,7 +9,7 @@ import { Alert, CardContent } from "@mui/material";
 import { USDC_POLYGON_ADDRESS, USDC_abi } from "../../../constants/USDC";
 import ModalBox from "../Modal";
 import Loading from "../Loading";
-import { useContract, useStorageUpload } from "@thirdweb-dev/react";
+import { useContract, useOwnedNFTs, useStorageUpload } from "@thirdweb-dev/react";
 import {
   useAccount,
   useContractRead,
@@ -23,6 +23,7 @@ import { BigNumber, ethers } from "ethers";
 import { Payment } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { readContract } from "wagmi/actions";
 export default function List(props: any) {
   const { setProfileTab } = props;
   const [openMsg, setOpenMsg] = React.useState(false);
@@ -126,25 +127,37 @@ export default function List(props: any) {
   console.log("user address:", address);
   //  let allowance:any;
   //Checking the allowance--->
-  const { data: allowance,error:allowanceError,isSuccess:allowanceSuccess,status:allowanceStatus } = useContractRead({
-  //   const response = useContractRead({
-    address: USDC_POLYGON_ADDRESS,
-    abi: USDC_abi,
-    functionName: "allowance",
-    args: [address, GRATIE_CONTRACT_ADDRESS],
-  });
-
-  // const {data:ReadName}=useContractRead({
+  // const { data: allowance,error:allowanceError,isSuccess:allowanceSuccess,status:allowanceStatus } = useContractRead({
+  // //   const response = useContractRead({
   //   address: USDC_POLYGON_ADDRESS,
-  //       abi: USDC_abi,
-  //       functionName: "name",
-  //       onSettled(data, error) {
-  //         console.log("Inside ReadName:",data,error);
-  //       },
-  // })
+  //   abi: USDC_abi,
+  //   functionName: "allowance",
+  //   args: [address, GRATIE_CONTRACT_ADDRESS],
+  //   onError(error) {
+  //     console.log('Error', error)
+  //   },
+  // });
+  const handleReadAllowance=async()=>{
+    const data = await readContract({
+      address: USDC_POLYGON_ADDRESS,
+      abi:  USDC_abi,
+      functionName: 'allowance',
+      args: [address, GRATIE_CONTRACT_ADDRESS],
+    });
+      console.log("allowance",Number(data));
+    
+  }
+ 
+ 
+  // const { data, error:ownedNFT } = useOwnedNFTs(
+  //   "0xb7E8c6B586c1C263D318eFC7Da45948115Eb6562",
+  //   address,
+  // );
+  
 
-  // console.log("Name:",ReadName);
-  console.log("allowance data:",Number(allowance));
+
+  // // console.log("Name:",ReadName);
+  // console.log("allowance data:",Number(allowance));
   // console.log("allowance error",response);
   //Approving the data --->
   const { data: aprovedata, write: approve } = useContractWrite({
@@ -229,6 +242,7 @@ export default function List(props: any) {
     };
 
     fetchData();
+    handleReadAllowance();
   }, []);
   console.log("Payment Object",USDC_POLYGON_ADDRESS,GRATIE_CONTRACT_ADDRESS,address,paymentforContract)
   //Register business and mint functionality--->
@@ -465,14 +479,15 @@ export default function List(props: any) {
                 </Box>
               </Box>
             </CardContent>
-            {(Number(allowance) === 0 
+            {/* {(Number(allowance) === 0 
             ||
                     ethers.BigNumber.from(allowance) <
                       ethers.utils.parseUnits(
                         props.data.nftprice.toString(),
                         6
                       )
-                      ) && (
+                      ) 
+                      && ( */}
                     <Button
                     variant="contained"
                       style={{ padding: "5px 10px", border: "none" }}
@@ -480,7 +495,7 @@ export default function List(props: any) {
                     >
                       Approve
                     </Button>
-                   )} 
+                   {/* )}  */}
 
                   <Button
 
