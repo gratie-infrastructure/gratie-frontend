@@ -26,7 +26,7 @@ const Home: NextPage = () => {
              
                 <Toolbar>
                   <Box sx={{ display:'flex', margin:'auto'}}>
-                    <Link style={{ display:'flex'}} href='/'>
+                    <Link style={{ display:'flex'}} href='https://gratie.xyz/'>
                       <img width={70} height={70} alt='logo' src='/images/Favicon.png' className='logo-icon'/>
                       <img width={105} height={105} alt='logo' src='/images/Logo.png' />
                     </Link>
