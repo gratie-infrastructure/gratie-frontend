@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import Container from '@mui/material/Container';
+import ListOfRequests from './List';
 
-import List from './list';
 
 // todo:
 // Add tier ID button
@@ -13,7 +13,7 @@ export default function Admin() {
     <div className=''>
       <React.Fragment>
         <Container className='' component="main" maxWidth="md">
-           <List/>
+           <ListOfRequests/>
         </Container>
       </React.Fragment>
     </div>

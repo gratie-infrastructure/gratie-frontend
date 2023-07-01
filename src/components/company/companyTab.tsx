@@ -74,7 +74,7 @@ export default function CompanyTab(props: any) {
           <Tabs
             style={{ justifyContent: "center" }}
             value={value}
-            onChange={handleChange}
+             onChange={handleChange}
             aria-label="basic tabs example"
           >
             <Tab
@@ -124,7 +124,7 @@ export default function CompanyTab(props: any) {
         </Grid>
         <Grid item xs={12}>
           <TabPanel value={value} index={4}>
-            {<ListUsers data={data} />}
+            {<ListUsers data={data} setProfileTab={setValue} />}
           </TabPanel>
         </Grid>
       </Box>

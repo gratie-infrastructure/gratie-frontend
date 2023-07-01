@@ -1,3 +1,7 @@
+.homeMainBox Box{
+  background-color: #030302 !important;
+}
+
 
 .homeMainBox Button {
   box-sizing: border-box;
@@ -8,4 +12,8 @@
   border: 1px solid #00FF01;
   border-radius: 100px;
   color: #FDFDFD;
+}
+
+.homeMainBox Button:hover {
+ background-color: #046603;
 }

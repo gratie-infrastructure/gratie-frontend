@@ -5,6 +5,7 @@
   align-items: center;
   padding: 6rem;
   min-height: 100vh;
+  
 }
 
 .description {
@@ -275,4 +276,8 @@
   to {
     transform: rotate(0deg);
   }
+}
+
+.gradient{
+  background: linear-gradient(146deg, rgba(0, 255, 1, 0.20) 2.31%, rgba(10, 34, 10, 0.20) 100%), #030302 !important;
 }

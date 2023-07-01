@@ -24,9 +24,11 @@ export default function Pricing() {
         style={{
           backgroundImage: `url("/images/community-arch.png")`,
           height: "400px",
+          width:"100%",
           marginTop: "0px",
         }}
       >
+
         <Grid item xs={12} md={6}>
           <div className="community-text">
             <div className="lt-side">

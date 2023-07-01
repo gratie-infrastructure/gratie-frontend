@@ -23,17 +23,18 @@ export default function Home() {
 
   return (
     <>
-      <React.Fragment>
-        <Container component="main" maxWidth="md">
+      
+     
           <Box
             className={styles.homeMainBox}
             component="form"
             noValidate
-            sx={{ mt: 12 }}
+            sx={{ mt: 12,width:"100%",height:"100vh",backgroundColor:'#030302' }}
           >
+            
             <Grid container spacing={2}>
-              <p className="company-welcome-text">
-                Welcome to next generation crypto reward management system !
+              <p className="company-welcome-text" style={{zIndex:4,marginTop:"130px",marginLeft:"370px"}}>
+                Welcome to next generation crypto reward <br /> management system !
               </p>
               <Grid
                 className="company-main-content"
@@ -53,14 +54,14 @@ export default function Home() {
               </Grid>
             </Grid>
           </Box>
-        </Container>
+        
         <ModalBox
           open={openMsg}
           handleClose={handleModalClose}
           heading={modalTitle}
           description={modalDesc}
         />
-      </React.Fragment>
+     
     </>
   );
 }

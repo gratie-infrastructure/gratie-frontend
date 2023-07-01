@@ -9,19 +9,23 @@ import { Alert, CardContent } from "@mui/material";
 import { USDC_POLYGON_ADDRESS, USDC_abi } from "../../../constants/USDC";
 import ModalBox from "../Modal";
 import Loading from "../Loading";
-import { useStorageUpload } from "@thirdweb-dev/react";
+import { useContract, useOwnedNFTs, useStorageUpload } from "@thirdweb-dev/react";
 import {
   useAccount,
   useContractRead,
   useContractWrite,
-  useWaitForTransaction
+  useWaitForTransaction,
 } from "wagmi";
 import { GRATIE_CONTRACT_ADDRESS, GRATIE_ABI } from "../../../constants/Gratie";
 import { SIGNATURE } from "@/constants/Signature";
-import { ethers } from "ethers";
-import { Toast, useToast } from "@chakra-ui/toast";
+import { BigNumber, ethers } from "ethers";
+
+import { Payment } from "@mui/icons-material";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { readContract } from "wagmi/actions";
 export default function List(props: any) {
-  const toast = useToast()
+  const { setProfileTab } = props;
   const [openMsg, setOpenMsg] = React.useState(false);
   const [openLoading, setOpenLoading] = React.useState(false);
   const [modalTitle, setModalTitle] = React.useState("");
@@ -31,11 +35,14 @@ export default function List(props: any) {
   const [file, setFile] = React.useState<any>();
   const [tokenUrl, setTokenUrl] = React.useState<any>();
   const [metadataurl, setMetadataUrl] = React.useState<any>();
+  const [signature, setSignature] = React.useState<any>("");
   const fileInputRef: any = React.useRef(null);
+  const [metadataupload, setmetadataUpload] = React.useState<any>(false);
+  const { mutateAsync: upload ,isLoading:ipfsLoading} = useStorageUpload();
 
-  const { mutateAsync: upload } = useStorageUpload();
-
+  //Uploading to IPFS--->
   const uploafdToIpfs = async () => {
+    handleLoaderToggle(true);
     const uploadurl = await upload({
       data: [file],
       options: {
@@ -44,16 +51,35 @@ export default function List(props: any) {
       },
     });
     setTokenUrl(uploadurl);
+    
+    if (uploadurl) {
+      handleLoaderToggle(false);
+      toast.success("🦄 Uploaded to IPFS", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setmetadataUpload(true);
+    }
     console.log("Upload Url:", uploadurl);
   };
-  const metadata:any={
-    "tierID":props.data.tierID,
-    "name": name,
-    "email":email,
-  "image": tokenUrl
-  }
+  
 
-const uploadmetadata = async () => {
+  //Uploading the Metdata to IPFS --->
+  const metadata: any = {
+    tierID: props.data.tierID,
+    name: name,
+    email: email,
+    image: tokenUrl,
+  };
+  console.log("Metadata", metadata);
+  const uploadmetadata = async () => {
+    handleLoaderToggle(true);
     const uploadurl = await upload({
       data: [metadata],
       options: {
@@ -62,9 +88,25 @@ const uploadmetadata = async () => {
       },
     });
     setMetadataUrl(uploadurl);
+ 
+    if (uploadurl) {
+      handleLoaderToggle(false);
+      toast.success("🦄 Recieved metadata URL", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
     console.log("metadata Url:", uploadurl);
   };
-  console.log("tier data:",props.data.tierID)
+  console.log("tier data:", props.data.tierID);
+
+  //Updating the data form the form--->
   const nameHandler = (e: any) => {
     setName(e.target.value);
   };
@@ -79,46 +121,85 @@ const uploadmetadata = async () => {
   const handleLoaderToggle = (status: boolean) => {
     setOpenLoading(status);
   };
+
+  // Getting the address from the account--->
   const { address, isConnected, isDisconnected } = useAccount();
   console.log("user address:", address);
-  const { data: allowance } = useContractRead({
-    address: USDC_POLYGON_ADDRESS,
-    abi: USDC_abi,
-    functionName: "allowance",
-    args: [address, GRATIE_CONTRACT_ADDRESS],
-  });
-  console.log("allowance data:", Number(allowance));
+  //  let allowance:any;
+  //Checking the allowance--->
+  // const { data: allowance,error:allowanceError,isSuccess:allowanceSuccess,status:allowanceStatus } = useContractRead({
+  // //   const response = useContractRead({
+  //   address: USDC_POLYGON_ADDRESS,
+  //   abi: USDC_abi,
+  //   functionName: "allowance",
+  //   args: [address, GRATIE_CONTRACT_ADDRESS],
+  //   onError(error) {
+  //     console.log('Error', error)
+  //   },
+  // });
+  const handleReadAllowance=async()=>{
+    const data = await readContract({
+      address: USDC_POLYGON_ADDRESS,
+      abi:  USDC_abi,
+      functionName: 'allowance',
+      args: [address, GRATIE_CONTRACT_ADDRESS],
+    });
+      console.log("allowance",Number(data));
+    
+  }
+ 
+ 
+  // const { data, error:ownedNFT } = useOwnedNFTs(
+  //   "0xb7E8c6B586c1C263D318eFC7Da45948115Eb6562",
+  //   address,
+  // );
+  
 
+
+  // // console.log("Name:",ReadName);
+  // console.log("allowance data:",Number(allowance));
+  // console.log("allowance error",response);
+  //Approving the data --->
   const { data: aprovedata, write: approve } = useContractWrite({
     address: USDC_POLYGON_ADDRESS,
     abi: USDC_abi,
     functionName: "approve",
-    args: [GRATIE_CONTRACT_ADDRESS, ethers.utils.parseUnits(props.data.nftprice.toString(), 18)],
+    args: [GRATIE_CONTRACT_ADDRESS, ethers.utils.parseUnits(props.data.nftprice.toString(), 6)],
   });
   const { isLoading, isSuccess: aprroveSuccess,error:approveError } = useWaitForTransaction({
     hash: aprovedata?.hash,
   });
+  
   // console.log(aprovedata?.hash);
   if (aprroveSuccess) {
     console.log("successfully Approved !");
-    toast({
-      title: "successfully Approved!",
-      status:'success',
-      isClosable: true,
-    })
+    toast.success("🦄 successfully Approved", {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
   }
   if (approveError) {
-    console.log("error occured",approveError.message);
-   
-    toast({
-      title: "There was an error!",
-      status:'error',
-      isClosable: true,
-    })
+    console.log("error occured", approveError.message);
+    toast.error("There was an error in approval!", {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
   }
 
-  
-  console.log(name, email, tokenUrl);
+  console.log(name, email, metadataurl);
+
   const businessData = {
     name: name,
     email: email,
@@ -126,21 +207,51 @@ const uploadmetadata = async () => {
     businessNftTier: props.data.tierID,
   };
 
-  const payment = {
-    method: USDC_POLYGON_ADDRESS,
-    amount: ethers.utils.parseUnits(props.data.nftprice.toString(), 18),
-    tierID:props.data.tierID,
-    address:address
+  const paymentforApi = {
+    paymentMethod: USDC_POLYGON_ADDRESS,
+    paymentAmount: ethers.utils.parseUnits(props.data.nftprice.toString(), 6),
+    tierID: props.data.tierID,
+    buyer: address,
   };
+  const paymentforContract = {
+    method: USDC_POLYGON_ADDRESS,
+    amount: ethers.utils.parseUnits(props.data.nftprice.toString(), 6),
+    
+  };
+  console.log("On Clicking Mint",USDC_POLYGON_ADDRESS,GRATIE_CONTRACT_ADDRESS,address);
+  // fetching the signature--->
+  React.useEffect(() => {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(paymentforApi),
+    };
 
-  const signature = SIGNATURE;
+    const fetchData = async () => {
+      try {
+        const response = await axios.post(
+          "http://dev.api.gratie.xyz/api/v1/org/nft/purchase",
+          requestOptions.body,
+          { headers: requestOptions.headers }
+        );
+        console.log("signature:", response.data.purchaseSignature);
+        setSignature(response.data.purchaseSignature);
+      } catch (error) {
+        console.error("Error occurred:", error);
+      }
+    };
 
+    fetchData();
+    handleReadAllowance();
+  }, []);
+  console.log("Payment Object",USDC_POLYGON_ADDRESS,GRATIE_CONTRACT_ADDRESS,address,paymentforContract)
+  //Register business and mint functionality--->
   const { data: registerdata, write: registerBusinesswrite } = useContractWrite(
     {
-      address: GRATIE_CONTRACT_ADDRESS,
+      address:GRATIE_CONTRACT_ADDRESS,
       abi: GRATIE_ABI,
       functionName: "registerBusiness",
-      args: [businessData, ["Service Provider"], ["abc"], payment, signature],
+      args: [businessData, ["Service Provider"], metadataurl, paymentforContract, signature],
     }
   );
   const { isSuccess: registerSucces,error:registerError } = useWaitForTransaction({
@@ -149,19 +260,30 @@ const uploadmetadata = async () => {
   console.log("Registering the business hash", registerdata?.hash);
   if (registerSucces) {
     console.log("successfully Registered!");
-    toast({
-      title: "Successfully Registered!",
-      status:'success',
-      isClosable: true,
-    })
+    toast.success("🦄 successfully Registered Business!", {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    setProfileTab(1);
   }
   if (registerError) {
-    console.log("error occured",registerError.message);
-    toast({
-      title: "There was an error!",
-      status:'error',
-      isClosable: true,
-    })
+    console.log("error occured", registerError.message);
+    toast.error("There was an error in minting!", {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
   }
   const handleUpload = () => {
     fileInputRef.current.click();
@@ -335,7 +457,14 @@ const uploadmetadata = async () => {
                       />
                     </div>
 
-                    <Button onClick={uploafdToIpfs} variant="contained">
+                    <Button
+                      className="btn"
+                      onClick={() => {
+                        uploafdToIpfs();
+                        uploadmetadata();
+                      }}
+                      variant="contained"
+                    >
                       upload
                     </Button>
                   </div>
@@ -346,45 +475,52 @@ const uploadmetadata = async () => {
                     </Typography>
                   </div>
 
-                  <div className="center-btn ">
-                    <Button
-                      onClick={() => {
-                        if (Number(allowance) === 0) approve?.();
-                      }}
-                      variant="contained"
-                    >
-                      Approve
-                    </Button>
-
-                    <Button
-                      className="pl-5"
-                      onClick={() => registerBusinesswrite?.()}
-                      variant="contained"
-                    >
-                      Mint
-                    </Button>
-                    <Button
-                      className="pl-5"
-                      onClick={() => uploadmetadata?.()}
-                      variant="contained"
-                    >
-                      metadata
-                    </Button>
-                  </div>
+                  
                 </Box>
               </Box>
             </CardContent>
+            {/* {(Number(allowance) === 0 
+            ||
+                    ethers.BigNumber.from(allowance) <
+                      ethers.utils.parseUnits(
+                        props.data.nftprice.toString(),
+                        6
+                      )
+                      ) 
+                      && ( */}
+                    <Button
+                    variant="contained"
+                      style={{ padding: "5px 10px", border: "none" }}
+                      onClick={() => approve?.()}
+                    >
+                      Approve
+                    </Button>
+                   {/* )}  */}
+
+                  <Button
+
+             variant="contained"
+                      onClick={() => registerBusinesswrite?.()}
+                      style={{padding:"5px 10px",border:"none"}}
+                    >
+                      Mint
+                    </Button> 
+                  
           </Box>
+         
         </Container>
 
-        <Loading open={openLoading} handleClose={handleLoaderToggle} />
+        {/* <Loading open={openLoading} handleClose={handleLoaderToggle} />
         <ModalBox
           open={openMsg}
           handleClose={handleModalClose}
           heading={modalTitle}
           description={modalDesc}
-        />
+        /> */}
       </React.Fragment>
+     
+                  <Loading open={openLoading} handleClose={handleLoaderToggle} />
     </div>
+    
   );
 }

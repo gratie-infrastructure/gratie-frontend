@@ -83,9 +83,12 @@ body {
     rgb(var(--background-start-rgb));
     ; */
 
-    background: #0E1803;
+    background: #030302;
 }
-
+.gradient{
+  background: linear-gradient(146deg, rgba(0, 255, 1, 0.20) 10%, rgba(10, 34, 10, 0.20) 70%), #030302 !important;
+  filter: blur(8px);
+}
 h1 {
   font-size: 60px;
   color: #fff;
@@ -342,4 +345,28 @@ p{
   background-repeat: no-repeat;
   background-size: cover;
   background-position: top center;
+}
+
+.container{
+  background-color: #030302 !important;
+  width:"100%" !important;
+  height: "100%" !important;
+}
+
+.css-2wi2mn > .MuiGrid-item {
+  padding-left: 8px !important;
+  display: flex !important;
+  gap: 17em !important;
+}
+
+@media (min-width: 1536px)
+{
+.css-ht032f {
+    margin-left: -60px !important;
+}
+}
+
+.container-2{
+  width:1000px !important;
+  height:800px !important;
 }
