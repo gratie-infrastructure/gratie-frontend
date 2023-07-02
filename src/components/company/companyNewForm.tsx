@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 
 import CardContent from "@mui/material/CardContent";
@@ -13,13 +13,15 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-
+import {readContract} from "wagmi/actions"
 import Loading from "../Loading";
 import ModalBox from "../Modal";
 import { toast } from "react-toastify";
-import { useStorageUpload } from "@thirdweb-dev/react";
+import { Token, useStorageUpload } from "@thirdweb-dev/react";
 import axios from "axios";
-import { useAccount } from "wagmi";
+import { useAccount, useContractWrite, useWaitForTransaction } from "wagmi";
+import { GRATIE_ABI, GRATIE_CONTRACT_ADDRESS } from "@/constants/Gratie";
+import { BigNumber, ethers } from "ethers";
 export default function FormPage(props: any) {
  
   const {address:walletAddress}=useAccount();
@@ -41,8 +43,32 @@ export default function FormPage(props: any) {
   const [valuation,setValuation]=React.useState<number>()
   const [companyDetails,setCompanyDetails]=React.useState<any>(true)
   const [tokenDetails,setTokenDetails]=React.useState<any>(false)
-
+  const [tokenName,setTokenName]=React.useState<any>("")
+  const [tokenSymbol,setTokenSymbol]=React.useState<any>("")
+  const [rewardTokenMintsData,setRewardTokenMintsData]=React.useState<Number>(0)
   const [CID,setCID]=React.useState<any>("");
+  // const [tokenID,settokenID]=React.useState<any>()
+  let tokenID:any=companyObject?.data.tokenId;
+  const handleRewardMintTokenData=async()=>{
+    // settokenID(companyObject?.data.tokenId);
+    console.log("Inside handleRewardTokenMints",tokenID);
+    const dataforRewardToken = await readContract({
+      address: GRATIE_CONTRACT_ADDRESS,
+      abi:  GRATIE_ABI,
+      functionName: 'rewardTokenMints',
+      args: [tokenID],
+    });
+   setRewardTokenMintsData(Number(dataforRewardToken)+1);
+      console.log("Reward token data",rewardTokenMintsData);
+    
+  }
+
+ useEffect(()=>{
+  if(tokenID)
+  {handleRewardMintTokenData();}
+
+ },[tokenID])
+
   React.useEffect(() => {
     handleLoaderToggle(true)
     const fetchData = async () => {
@@ -52,6 +78,7 @@ export default function FormPage(props: any) {
         );
         console.log("Company Data:", response.data);
        setCompanyObject(response.data);
+
        setCompanyName(response.data.name);
        setCompanyEmail(response.data.email);
       } catch (error) {
@@ -60,7 +87,7 @@ export default function FormPage(props: any) {
         setModalTitle("Register Business");
         setModalDesc("Please Register you business first")
       }
-      handleLoaderToggle(false);
+      handleLoaderToggle(false)
     };
   
     fetchData();
@@ -97,7 +124,7 @@ const uploafdToIpfs = async () => {
   setTokenUrl(uploadurl);
   
   if (uploadurl) {
-    handleLoaderToggle(false);
+    
     toast.success("🦄 Uploaded to IPFS", {
       position: "bottom-right",
       autoClose: 5000,
@@ -118,19 +145,18 @@ const uploafdToIpfs = async () => {
 let metadata:any={
   name:"",
   email:"",
-  image:[""]
+  image:""
 };
 if(companyObject){
   metadata={
     name: companyObject.data.name,
   email: companyObject.data.email,
-  image: tokenUrl,
+  image: tokenUrl?.[0],
   }
 }
 
 console.log("Metadata", metadata);
 const uploadmetadata = async () => {
-  handleLoaderToggle(true);
   const uploadurl = await upload({
     data: [metadata],
     options: {
@@ -173,9 +199,11 @@ let formObject:any={
   valuation: 0,
   distribution: 0,
   walletAddr: "",
+  tokenName:"",
+  tokenSymbol:"",
   fileLocationHash:"",
 }
-if(companyObject){
+if(companyObject?.data.status=="MINTED"){
  formObject={
   name: companyObject.data.name,
   email: companyObject.data.email,
@@ -184,8 +212,19 @@ if(companyObject){
   walletAddr: walletAddress,
   fileLocationHash:CID, 
 };
-console.log(formObject);
+console.log("FORM OBJECT FOR MINTED:",formObject);
 }
+if(companyObject?.data.status=="APPROVED"){
+  formObject={
+   name: companyObject.data.name,
+   email: companyObject.data.email,
+   tokenName:tokenName,
+  tokenSymbol:tokenSymbol,
+   walletAddr: walletAddress,
+   
+ };
+ console.log("FORM OBJECT OF APPROVED",formObject);
+ }
 console.log(formObject);
 const handleCompanyUpdate = async (event: React.FormEvent) => {
   event.preventDefault();
@@ -244,9 +283,45 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
   const handleLoaderToggle = (status: boolean) => {
     setOpenLoading(status);
   };
-
+  const valuationData = companyObject?.data.valuation?.$numberDecimal?.toString() || "0";
+  console.log("Token Update",[ [Number(companyObject?.data.tokenId),(Number(ethers.utils.parseUnits(valuationData, 18))), Number(companyObject?.data.distribution.$numberDecimal)*100, Number(rewardTokenMintsData) ], companyObject?.data.rewardSignatureHash, tokenName, tokenSymbol, metadataurl?.[0] ]);
+  const { data: generateRewardsData, write: generateRewards } = useContractWrite({
+    address: GRATIE_CONTRACT_ADDRESS,
+    abi: GRATIE_ABI,
+    functionName: "generateRewardTokens",
+    args:  [ [Number(companyObject?.data.tokenId),(Number(ethers.utils.parseUnits(valuationData, 18))), Number(companyObject?.data.distribution.$numberDecimal)*100, Number(rewardTokenMintsData) ], companyObject?.data.rewardSignatureHash, tokenName, tokenSymbol, metadataurl?.[0] ],
+  });
+  const { isLoading, isSuccess: generateReqrdsSuccess,error:generateRewardError } = useWaitForTransaction({
+    hash: generateRewardsData?.hash,
+  });
   
-  
+  // console.log(aprovedata?.hash);
+  if (generateReqrdsSuccess) {
+    console.log("successfully Approved !");
+    toast.success("🦄 successfully Approved", {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  }
+  if (generateRewardError) {
+    console.log("error occured", generateRewardError.message);
+    toast.error("There was an error in approval!", {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  }
   return (
     <React.Fragment>
      {companyObject && <Container>
@@ -522,7 +597,7 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
               </CardContent>
             </Box>
           </Grid>}
-          {companyObject.data.status === "PENDING"&& companyDetails && <Grid className="" xs={9} >
+          {companyObject.data.status === "APPROVED"&& companyDetails && <Grid className="" xs={9} >
             <Box
               className="form-box-2"
               style={{ marginBottom: "0px", textAlign: "start"}}
@@ -607,7 +682,7 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
             </Box>
           </Grid>}
 
-          {companyObject.data.status === "PENDING" && tokenDetails && <Grid className="" xs={9} >
+          {companyObject.data.status === "APPROVED" && tokenDetails && <Grid className="" xs={9} >
             <Box
               className="form-box-2"
               style={{ marginBottom: "0px", textAlign: "start"}}
@@ -640,7 +715,8 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
                         id="evaluation"
                         autoComplete="off"
                         required
-
+                        value={tokenName}
+                        onChange={(e)=>{setTokenName(e.target.value)}}
                         className="form-textfield"
                         focused
                         sx={{ input: { color: "#fff", fontSize: "20px" } }}
@@ -668,8 +744,8 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
                         id="evaluation"
                         autoComplete="off"
                         required
-                        onChange={handleValuation}
-                        value={valuation}
+                        onChange={(e)=>{setTokenSymbol(e.target.value)}}
+                        value={tokenSymbol}
                         className="form-textfield"
                         focused
                         sx={{ input: { color: "#fff", fontSize: "20px" } }}
@@ -799,7 +875,13 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
                     </Button>
                     </Grid>
                   </Grid>
-                    
+                  <Button
+                      className="btn-1"
+                      onClick={handleCompanyUpdate}
+                      variant="contained"
+                    >
+                      Generate Tokens
+                    </Button>
                 </Box>
               </CardContent>
             </Box>

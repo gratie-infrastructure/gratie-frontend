@@ -6,33 +6,53 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-// import { checkAdmin, connectToGratieSolanaContract } from '@/src/gratie_solana_contract/gratie_solana_contract';
-// import { verifyCompanyLicense } from '@/src/gratie_solana_contract/gratie_solana_company';
-// import { useWallet } from '@solana/wallet-adapter-react';
 import Link from "next/link";
 import { Button } from "@mui/material";
 import {  useAccount, useConnect, useContractRead, useNetwork, useSignTypedData } from "wagmi";
 import {readContract} from "wagmi/actions";
 import { GRATIE_ABI, GRATIE_CONTRACT_ADDRESS } from "@/constants/Gratie";
 import { ethers } from "ethers";
+import axios from "axios";
+import Loading from "../Loading";
+import ModalBox from "../Modal";
+import { toast } from "react-toastify";
+
 
 export default function ListUserTable(props:any) {
+  const [openMsg, setOpenMsg] = React.useState(false);
+  const [openLoading, setOpenLoading] = React.useState(false);
+  const [modalTitle, setModalTitle] = React.useState("");
+  const [modalDesc, setModalDesc] = React.useState("");
+  const [rewardTokenMintsData,setRewardTokenMintsData]=React.useState<Number>(0)
   const { chain, chains } = useNetwork()
   const chainId=chain?.id;
+  const {address} = useAccount();
+  console.log("Address from table",address);
   console.log(chainId);
-
   const CompanyDetails: any[] =props.data;
-  console.log("Company data from Table", CompanyDetails)
-  const { data: rewardTokenMintsData } = useContractRead({
-    address: GRATIE_CONTRACT_ADDRESS,
-    abi: GRATIE_ABI,
-    functionName: "rewardTokenMints",
-    args: [props.data.tokenId],
-    onError(error) {
-      console.log('Error', error)
-    },
-  });
-console.log("RewardTokenMints data:",Number(rewardTokenMintsData) );
+  console.log("Company data from Table", CompanyDetails);
+
+  const handleLoaderToggle = (status: boolean) => {
+    setOpenLoading(status);
+  };
+  const handleRewardMintTokenData=async()=>{
+
+    const data = await readContract({
+      address: GRATIE_CONTRACT_ADDRESS,
+      abi:  GRATIE_ABI,
+      functionName: 'rewardTokenMints',
+      args: [props.data.tokenId],
+    });
+   setRewardTokenMintsData(Number(data)+1);
+      console.log("Reward token data",rewardTokenMintsData);
+    
+  }
+
+  React.useEffect(()=>{
+  handleRewardMintTokenData();
+  },[])
+ 
+
   console.log(props.data.tokenId,Number(props.data.distribution.$numberDecimal)*100,chainId);
     const domain = {
     name: "Gratie",
@@ -50,12 +70,98 @@ const types = {
     ],
 } as const;
 
-// const data = {
-//     businessId: props.data.tokenId,
-//     amount: ethers.utils.parseUnits("REWARD TOKEN SUPPLY", 18),
-//     lockInPercentage: Number(props.data.distribution.$numberDecimal)*100,
-//     mintNonce: Number(rewardTokenMintsData)+1,
-// };
+
+ const message = {
+    businessId: BigInt(Number(props.data.tokenId)),
+    amount: BigInt(Number(ethers.utils.parseUnits(props.data.valuation.$numberDecimal, 18))),
+    lockInPercentage: BigInt(Number(props.data.distribution.$numberDecimal)*100),
+    mintNonce: BigInt(Number(rewardTokenMintsData)),
+} as const;
+
+const { data:Signature, isError, isLoading:signatureLoading, isSuccess, signTypedData } =
+useSignTypedData({
+  domain,
+  message,
+  primaryType: 'Payment',
+  types,
+})
+if(isSuccess){console.log("Signature",Signature);
+toast.success("🦄 Signature Succesfull", {
+  position: "bottom-right",
+  autoClose: 5000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  theme: "light",
+})
+}
+if(isError){
+toast.error("Error in Signature", {
+  position: "bottom-right",
+  autoClose: 5000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  theme: "light",
+})
+}
+
+const AprrovalObject:any={
+  transactionType: "APPROVED",
+  walletAddr: address,
+  companyId: props.data._id,
+  rewardSignatureHash:Signature
+}
+console.log("Approval Object",JSON.stringify(AprrovalObject))
+
+const requestOptions = {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(AprrovalObject),
+};
+
+const handleAdminApproval = async () => {
+  handleLoaderToggle(true);
+  try {
+    const response = await axios.post(
+      "http://dev.api.gratie.xyz/api/v1/admin/approve",
+      requestOptions.body,
+      { headers: requestOptions.headers }
+    );
+    console.log("Response from DB after Approval:", response.data);
+    handleLoaderToggle(false);
+    toast.success("🦄Approved!", {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  } catch (error) {
+    handleLoaderToggle(false);
+    console.error("Error occurred:", error);
+    toast.error("Error Occurred while Approving the Company!", {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  }
+};
+
+// fetchData();
+
   // const handleApprove = (businessId: string, lockInPercentage: Number) => {
   //   // console.log("Approving:", businessId, lockInPercentage);
   //   useSignAndSetData(businessId, lockInPercentage,chainId);
@@ -72,14 +178,25 @@ const types = {
       <Button
         variant="contained"
         style={{ padding: "5px 10px", border: "none" }}
-        // onClick={() =>
-        //   handleApprove(i.tokenId, Number(i.distribution.$numberDecimal)*100)
-        // }
+        onClick={() => {signTypedData();} }
+      >
+        Sign
+      </Button>
+      <Button
+        variant="contained"
+        style={{ padding: "5px 10px", border: "none" }}
+        onClick={() => {
+     handleAdminApproval()} }
       >
         Approve
       </Button>
     </TableRow>
-
+    <Loading open={openLoading} handleClose={handleLoaderToggle} />
+      {openMsg&&<ModalBox
+        open={openMsg}
+        modalTitle={modalTitle}
+        description={modalDesc}
+      />}
     </>
   );
 }

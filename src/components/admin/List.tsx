@@ -8,7 +8,8 @@ import React from 'react'
   import { useEffect } from "react";
   import ListUserTable from "./table";
   import TierCreation from "./tier";
-import { useAccount, useConnect, useContractRead } from 'wagmi';
+import { useAccount, useConnect } from 'wagmi';
+import {readContract} from "wagmi/actions"
 import { GRATIE_ABI, GRATIE_CONTRACT_ADDRESS } from '@/constants/Gratie';
 import Loading from '../Loading';
 import ModalBox from '../Modal';
@@ -54,6 +55,7 @@ function TabPanel(props: TabPanelProps) {
       const [pendingLicenses, setPendingLicenses] = React.useState(null);
       const [approvedLicenses, setApprovedLicenses] = React.useState(null);
       const [companyData, setCompanyData]=React.useState<any>();
+      const [companyApprovedData, setCompanyApprovedData]=React.useState<any>();
       const [openMsg, setOpenMsg] = React.useState(false);
   const [openLoading, setOpenLoading] = React.useState(false);
   const [modalTitle, setModalTitle] = React.useState("");
@@ -64,23 +66,33 @@ function TabPanel(props: TabPanelProps) {
       setOpenLoading(status);
     };
   
-      const { data: adminData } = useContractRead({
-          address: GRATIE_CONTRACT_ADDRESS,
-          abi: GRATIE_ABI,
-          functionName: "hasRole",
-          args: ["0x1e5ca7d599fb35041afe8c30005054e07b396952ed6970c661389db329398daf", address],
-          onError(error) {
-            console.log('Error', error)
-          },
-        });
-    console.log("Admin data:",adminData );
-
+  
   
   
       const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
       };
       React.useEffect(() => {
+        const fetchisAdmin=async()=>{
+          try{
+            const  data = await readContract({
+              address: GRATIE_CONTRACT_ADDRESS,
+              abi: GRATIE_ABI,
+              functionName: "hasRole",
+              args: ["0x1e5ca7d599fb35041afe8c30005054e07b396952ed6970c661389db329398daf", address],
+              
+            });
+            console.log("Admin data:",data );
+            if(data===false){
+              setOpenMsg(true)
+                    setModalTitle("Only Admin has access to this page");
+                    setModalDesc("Please Check your wallet address!")
+            }
+          }catch(error){
+            console.log(error);
+          }
+        }
+        
       
         const fetchData = async () => {
           try {
@@ -95,11 +107,26 @@ function TabPanel(props: TabPanelProps) {
           }
           
         };
-      
+        const fetchApprovedData = async () => {
+          try {
+            const response = await axios.get(
+              "http://dev.api.gratie.xyz/api/v1/org/list?status=APPROVED"
+            );
+            console.log("Pending company Data:", response.data);
+           setCompanyApprovedData(response.data);
+           console.log("Company Data:", companyData.data[0].name);
+          } catch (error) {
+            console.error("Error occurred:", error);
+          }
+          
+        };
+      fetchisAdmin();
         fetchData();
+        fetchApprovedData();
       }, []);
     
       return (
+        <>
         <Container className="admin-list" component="main" maxWidth="md">
           <Box sx={{ width: "100%" }}>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -142,14 +169,20 @@ function TabPanel(props: TabPanelProps) {
               )}
             </TabPanel>
             <TabPanel value={value} index={1}>
-              {approvedLicenses && <ListUserTable data={companyData.data} />}
+              {/* {companyApprovedData && <ListUserTable data={companyApprovedData.data} />} */}
             </TabPanel>
             <TabPanel value={value} index={2}>
               {<TierCreation />}
             </TabPanel>
           </Box>
         </Container>
-        
+        <Loading open={openLoading} handleClose={handleLoaderToggle} />
+        {openMsg&&<ModalBox
+          open={openMsg}
+          modalTitle={modalTitle}
+          description={modalDesc}
+        />}
+        </>
       );
     }
 
