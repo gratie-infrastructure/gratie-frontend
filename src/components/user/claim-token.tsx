@@ -2,8 +2,91 @@ import * as React from "react";
 
 import Container from "@mui/material/Container";
 import { Box, Button, Grid, Typography } from "@mui/material";
+import { useAccount, useContractWrite, useWaitForTransaction } from "wagmi";
+
+import { SERVICE_PROVIDER_ADDRESS } from "@/constants/Serviceprovider";
+import axios from "axios";
+import { GRATIE_ABI, GRATIE_CONTRACT_ADDRESS } from "@/constants/Gratie";
+import { toast } from "react-toastify";
 
 export default function ClaimToken(props: any) {
+  const { setProfileTab } = props;
+  const [openMsg, setOpenMsg] = React.useState(false);
+  const [openLoading, setOpenLoading] = React.useState(false);
+  const [modalTitle, setModalTitle] = React.useState("");
+  const [modalDesc, setModalDesc] = React.useState("");
+  const [companyObject,setCompanyObject]=React.useState<any>();
+
+  const {address:walletAddress}=useAccount();
+  const handleLoaderToggle = (status: boolean) => {
+    setOpenLoading(status);
+  };
+  React.useEffect(() => {
+    handleLoaderToggle(true)
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://dev.api.gratie.xyz/api/v1/org/user/companies?walletAddr=${walletAddress}`
+        );
+        console.log("Company Data for Claim:", response.data);
+       setCompanyObject(response.data);
+
+      } catch (error) {
+        console.error("Error occurred:", error);
+        setOpenMsg(true)
+        setModalTitle("You are not Aprroved by the company!");
+        setModalDesc("Please make a request!")
+      }
+      handleLoaderToggle(false)
+    };
+  
+    fetchData();
+  }, []);
+  let tokenId:any;
+  if(companyObject){
+     tokenId=(companyObject?.data[0].companies[0].tokenId);
+  }
+
+  console.log("Token Id",tokenId);
+  const { data: claimData, write: claimRewards } = useContractWrite({
+    address: GRATIE_CONTRACT_ADDRESS,
+    abi: GRATIE_ABI,
+    functionName: "claimRewardTokens",
+    args: [tokenId, 1],
+  });
+  const { isLoading, isSuccess: aprroveSuccess,error:approveError,isError } = useWaitForTransaction({
+    hash: claimData?.hash,
+  });
+  
+  // console.log(aprovedata?.hash);
+  if (aprroveSuccess) {
+    console.log("successfully Claimed !");
+    toast.success("🦄 successfully Claimed", {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    setProfileTab(3);
+  }
+  if (isError) {
+    console.log("error occured", isError);
+    toast.error("There was an error in approval!", {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  }
+
   return (
     <Container sx={{ mt: 3 }} className="create-user-container">
       <Box className="form-box" style={{ width: "600px", margin: "0px auto" }}>
@@ -21,7 +104,7 @@ export default function ClaimToken(props: any) {
           variant="h6"
           component="h6"
         >
-          XXX REWARD
+          {companyObject?.data[0].companies.length} REWARD
         </Typography>
         <Grid
           container
@@ -31,7 +114,7 @@ export default function ClaimToken(props: any) {
         >
           <Grid item xs={12} md={5}>
             <Typography noWrap variant="h6" className="form-label">
-              xxx Token
+            {companyObject?.data[0].companies.length} Token to Claim
             </Typography>
           </Grid>
           <Grid item xs={12} md={5} className="user-grid">
@@ -45,6 +128,7 @@ export default function ClaimToken(props: any) {
                 background: "transparent",
                 border: "1px solid #00FF01",
               }}
+              onClick={()=>claimRewards()}
             >
               Claim
             </Button>

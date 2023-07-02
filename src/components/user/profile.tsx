@@ -11,6 +11,8 @@ import CardContent from "@mui/material/CardContent";
 
 import Loading from "../Loading";
 import ModalBox from "../Modal";
+import axios from "axios";
+import { useAccount } from "wagmi";
 
 export default function Profile(props: any) {
   const [formObject, setFormObject] = useState({
@@ -23,7 +25,7 @@ export default function Profile(props: any) {
   const [openLoading, setOpenLoading] = React.useState(false);
   const [modalTitle, setModalTitle] = React.useState("");
   const [modalDesc, setModalDesc] = React.useState("");
-
+  const [companyObject,setCompanyObject]=React.useState<any>();
   const handleModalClose = () => {
     setOpenMsg(false);
     setModalTitle("");
@@ -33,7 +35,7 @@ export default function Profile(props: any) {
   const handleLoaderToggle = (status: boolean) => {
     setOpenLoading(status);
   };
-
+ const {address:walletAddress}=useAccount()
   const onValChange = (event: any) => {
     const value = (res: any) => ({
       ...res,
@@ -42,147 +44,108 @@ export default function Profile(props: any) {
     setFormObject(value);
   };
 
+  React.useEffect(() => {
+    handleLoaderToggle(true)
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://dev.api.gratie.xyz/api/v1/org/user/companies?walletAddr=${walletAddress}`
+        );
+        console.log("Company Data for profile:", response.data.data[0]);
+       setCompanyObject(response.data);
+
+      } catch (error) {
+        console.error("Error occurred:", error);
+        setOpenMsg(true)
+        setModalTitle("You are not Aprroved by the company!");
+        setModalDesc("Please make a request!")
+      }
+      handleLoaderToggle(false)
+    };
+  
+    fetchData();
+  }, []);
+  const companies = companyObject?.data[0].companies;
+  const companyNames:any = companies?.map((company: { name: any; }) => company.name);
+  const companyNamesText = companyNames?.join(", ");
   return (
     <React.Fragment>
-      <Container sx={{ mt: 4 }}>
-        <Box className="form-box">
-          <CardContent>
+      <Grid className="" xs={9} >
             <Box
-              component="form"
-              noValidate
-              sx={{ mt: 6 }}
-              style={{ width: "928px", margin: "0px auto" }}
+              className="form-box-2"
+              style={{ marginBottom: "0px", textAlign: "start"}}
             >
-              <Typography
-                id="modal-modal-title"
-                style={{
-                  color: "#00FF01",
-                  fontWeight: "400",
-                  fontFamily: "Book Antiqua",
-                  marginBottom: "50px",
-                  fontSize: "28px",
-                  textAlign: "center",
-                }}
-                variant="h6"
-                component="h6"
-              >
-                Available supply : #value
-              </Typography>
-              <Grid
-                container
-                spacing={1}
-                sx={{ mt: 5, mb: 5 }}
-                style={{
-                  justifyContent: "center",
-                  margin: "30px 0px",
-                  alignItems: "center",
-                }}
-              >
-                <Grid item xs={12} md={4}>
-                  <Typography
-                    noWrap
-                    variant="h6"
-                    style={{ textAlign: "start" }}
-                    className="form-label"
-                  >
-                    Distribution Percentage
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} md={3}>
-                  <TextField
-                    fullWidth
-                    id="name"
-                    type="text"
-                    autoComplete="off"
-                    required
-                    onChange={onValChange}
-                    value={formObject.name}
-                    className="form-textfield"
-                    focused
-                    sx={{ input: { color: "#fff", fontSize: "20px" } }}
-                  />
-                </Grid>
-                <Grid item xs={12} md={3}>
-                  <Typography
-                    noWrap
-                    variant="h6"
-                    style={{
-                      color: "rgba(245, 245, 245, 0.5)",
-                      textAlign: "start",
-                      marginLeft: "20px",
-                    }}
-                    className="form-label"
-                  >
-                    #value
-                  </Typography>
-                </Grid>
-              </Grid>
+              <CardContent>
+                <Box
+                  component="form"
+                  noValidate
+                  sx={{ mt: 6 }}
+                >
+                  
+                  <Grid container spacing={1} sx={{ mt: 5, mb: 5 }}>
+                    <Grid item xs={12} md={6}>
+                      <Typography
+                        style={{ textAlign: "start", marginLeft: "60px" }}
+                        noWrap
+                        variant="h6"
+                        className="form-label"
+                      >
+                        Company Name
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <Typography  style={{ fontSize:"18px",textAlign: "start", marginLeft: "60px" }}>{companyObject?.data[0]?.name}</Typography>
+                    </Grid>
+                  </Grid>
 
-              <Grid
-                container
-                spacing={1}
-                sx={{ mb: 5 }}
-                style={{
-                  justifyContent: "center",
-                  margin: "30px 0px",
-                  alignItems: "center",
-                }}
-              >
-                <Grid item xs={12} md={4}>
-                  <Typography
-                    noWrap
-                    variant="h6"
-                    style={{ textAlign: "start" }}
-                    className="form-label"
-                  >
-                    Existing Users
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} md={3}>
-                  <Typography
-                    noWrap
-                    variant="h6"
-                    style={{ textAlign: "start" }}
-                    className="form-label"
-                  >
-                    #Nos
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} md={3}></Grid>
-              </Grid>
-              <Grid
-                container
-                spacing={1}
-                sx={{ mb: 5 }}
-                style={{ justifyContent: "end", margin: "30px 0px" }}
-              >
-                <Grid item xs={12} md={5}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    className="create-token-btn"
-                    style={{ margin: "0px 30px 0px 0px" }}
-                  >
-                    Generate Rewards
-                  </Button>
-                </Grid>
-              </Grid>
+                  <Grid container spacing={1} sx={{ mb: 5 }}>
+                    <Grid item xs={12} md={6}>
+                      <Typography
+                        style={{ textAlign: "start", marginLeft: "60px" }}
+                        noWrap
+                        variant="h6"
+                        className="form-label"
+                      >
+                        List of Company
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                    <Typography style={{ fontSize:"18px",textAlign: "start", marginLeft: "60px" }}>{companyNamesText}</Typography>
+                    </Grid>
+                    <Grid item xs={12} md={2}></Grid>
+                  </Grid>
+
+                  <Grid container spacing={1} sx={{ mb: 5 }} style={{}}>
+                    <Grid item xs={12} md={6}>
+                      <Typography
+                        style={{ textAlign: "start", marginLeft: "60px" }}
+                        noWrap
+                        variant="h6"
+                        className="form-label"
+                      >
+                        Earned NFTS
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={4} >
+                    {companies.map((company:any) => (
+        <div key={company._id}>
+         
+          <img src={company.tokenIconUrl} alt={company.tokenName} style={{ width: 100 }} />
+          <p>Token Name: {company.tokenName}</p>
+          
+        </div>
+      ))}
+                        
+                    </Grid>
+          
+                  </Grid>
+
+                
+                  
+                </Box>
+              </CardContent>
             </Box>
-          </CardContent>
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <Typography noWrap variant="h6" sx={{ color: "#fff" }}>
-                Total Tokens generated :
-              </Typography>
-              <Typography
-                noWrap
-                variant="h6"
-                sx={{ color: "#fff" }}
-                className="profile-label"
-              >
-              </Typography>
-            </div>
-        </Box>
-      </Container>
+          </Grid>
       <Loading open={openLoading} handleClose={handleLoaderToggle} />
       <ModalBox
         open={openMsg}

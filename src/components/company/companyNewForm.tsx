@@ -109,64 +109,59 @@ export default function FormPage(props: any) {
   const handleValuation=(e:any)=>{
     setValuation(e.target.value);
   }
-
+  const uploafdTokentoipfs = async () => {
+    handleLoaderToggle(true);
+    const uploadurl = await upload({
+      data: [file],
+      options: {
+        uploadWithGatewayUrl: true,
+        uploadWithoutDirectory: true,
+      },
+    });
+    setTokenUrl(uploadurl);
+    if (uploadurl) {
+      handleLoaderToggle(false);
+      toast.success("🦄 uploaded to ipfs!", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });}
+  }
 
 //Uploading to IPFS--->
 const uploafdToIpfs = async () => {
-  handleLoaderToggle(true)
+  handleLoaderToggle(true);
   const uploadurl = await upload({
     data: [file],
     options: {
       uploadWithGatewayUrl: true,
       uploadWithoutDirectory: true,
     },
-  });
+  }
+  );
   setTokenUrl(uploadurl);
-  
-  if (uploadurl) {
-    
-    toast.success("🦄 Uploaded to IPFS", {
-      position: "bottom-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-    setmetadataUpload(true);
-  }
-  console.log("Upload Url:", uploadurl);
-};
-
-
-//Uploading the Metdata to IPFS --->
-let metadata:any={
-  name:"",
-  email:"",
-  image:""
-};
-if(companyObject){
-  metadata={
+ if(companyObject){
+  const metadata:any = {
     name: companyObject.data.name,
-  email: companyObject.data.email,
-  image: tokenUrl?.[0],
-  }
-}
-
-console.log("Metadata", metadata);
-const uploadmetadata = async () => {
-  const uploadurl = await upload({
+    email: companyObject.data.email,
+    image: uploadurl,
+  };
+  handleLoaderToggle(true);
+  const uploadurlofMetadata = await upload({
     data: [metadata],
     options: {
       uploadWithGatewayUrl: true,
       uploadWithoutDirectory: true,
     },
   });
-  setMetadataUrl(uploadurl);
+  setMetadataUrl(uploadurlofMetadata);
 
-  if (uploadurl) {
+  if (uploadurlofMetadata) {
     handleLoaderToggle(false);
     toast.success("🦄 Recieved metadata URL", {
       position: "bottom-right",
@@ -177,22 +172,23 @@ const uploadmetadata = async () => {
       draggable: true,
       progress: undefined,
       theme: "light",
-    });
+    });}
   }
-  console.log("metadata Url:", uploadurl);
-  const url: string = uploadurl[0];
-  const urlParts: string[] = url.split('/');
-  const ipfsIndex: number = urlParts.indexOf('ipfs');
-  if (ipfsIndex !== -1 && ipfsIndex + 1 < urlParts.length) {
-    
-    const cid: string = urlParts[ipfsIndex + 1];
-    setCID(cid);
-    console.log(cid); // Output: QmZ4u9Gj6BPDJnuQD996xZtb5e3Aj9ajANAALH9rv9vcQo
-  } else {
-    console.log('CID not found in the URL.');
-  }
- 
+  console.log("metadata Url:", metadataurl);
 };
+
+// const url: string = metadataurl?.[0];
+//   const urlParts: string[] = url.split('/');
+//   const ipfsIndex: number = urlParts.indexOf('ipfs');
+//   if (ipfsIndex !== -1 && ipfsIndex + 1 < urlParts.length) {
+    
+//     const cid: string = urlParts[ipfsIndex + 1];
+//     setCID(cid);
+//     console.log(cid); // Output: QmZ4u9Gj6BPDJnuQD996xZtb5e3Aj9ajANAALH9rv9vcQo
+//   } else {
+//     console.log('CID not found in the URL.');
+//   }
+
 let formObject:any={
   name: "",
   email: "",
@@ -214,17 +210,6 @@ if(companyObject?.data.status=="MINTED"){
 };
 console.log("FORM OBJECT FOR MINTED:",formObject);
 }
-if(companyObject?.data.status=="APPROVED"){
-  formObject={
-   name: companyObject.data.name,
-   email: companyObject.data.email,
-   tokenName:tokenName,
-  tokenSymbol:tokenSymbol,
-   walletAddr: walletAddress,
-   
- };
- console.log("FORM OBJECT OF APPROVED",formObject);
- }
 console.log(formObject);
 const handleCompanyUpdate = async (event: React.FormEvent) => {
   event.preventDefault();
@@ -284,12 +269,12 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
     setOpenLoading(status);
   };
   const valuationData = companyObject?.data.valuation?.$numberDecimal?.toString() || "0";
-  console.log("Token Update",[ [Number(companyObject?.data.tokenId),(Number(ethers.utils.parseUnits(valuationData, 18))), Number(companyObject?.data.distribution.$numberDecimal)*100, Number(rewardTokenMintsData) ], companyObject?.data.rewardSignatureHash, tokenName, tokenSymbol, metadataurl?.[0] ]);
+  console.log("Token Update",[ [Number(companyObject?.data.tokenId),(Number(ethers.utils.parseUnits(valuationData, 18))), Number(companyObject?.data.distribution.$numberDecimal)*100, Number(rewardTokenMintsData) ], companyObject?.data.rewardSignatureHash, tokenName, tokenSymbol, tokenUrl?.[0] ]);
   const { data: generateRewardsData, write: generateRewards } = useContractWrite({
     address: GRATIE_CONTRACT_ADDRESS,
     abi: GRATIE_ABI,
     functionName: "generateRewardTokens",
-    args:  [ [Number(companyObject?.data.tokenId),(Number(ethers.utils.parseUnits(valuationData, 18))), Number(companyObject?.data.distribution.$numberDecimal)*100, Number(rewardTokenMintsData) ], companyObject?.data.rewardSignatureHash, tokenName, tokenSymbol, metadataurl?.[0] ],
+    args:  [ [Number(companyObject?.data.tokenId),(Number(ethers.utils.parseUnits(valuationData, 18))), Number(companyObject?.data.distribution.$numberDecimal)*100, Number(rewardTokenMintsData) ], companyObject?.data.rewardSignatureHash, tokenName, tokenSymbol, tokenUrl?.[0] ],
   });
   const { isLoading, isSuccess: generateReqrdsSuccess,error:generateRewardError } = useWaitForTransaction({
     hash: generateRewardsData?.hash,
@@ -297,8 +282,8 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
   
   // console.log(aprovedata?.hash);
   if (generateReqrdsSuccess) {
-    console.log("successfully Approved !");
-    toast.success("🦄 successfully Approved", {
+    console.log("Tokens Gnerated !");
+    toast.success("🦄 Token Generated!", {
       position: "bottom-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -540,8 +525,7 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
                     <Button
                       className="btn-1"
                       onClick={() => {
-                        uploafdToIpfs();
-                        uploadmetadata();
+                        uploafdToIpfs()
                       }}
                       variant="contained"
                     >
@@ -597,7 +581,7 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
               </CardContent>
             </Box>
           </Grid>}
-          {companyObject.data.status === "APPROVED"&& companyDetails && <Grid className="" xs={9} >
+          {(companyObject.data.status === "ADMIN_APPROVED"||companyObject.data.status === "APPROVED")&& companyDetails && <Grid className="" xs={9} >
             <Box
               className="form-box-2"
               style={{ marginBottom: "0px", textAlign: "start"}}
@@ -682,7 +666,7 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
             </Box>
           </Grid>}
 
-          {companyObject.data.status === "APPROVED" && tokenDetails && <Grid className="" xs={9} >
+          {companyObject.data.status === "ADMIN_APPROVED" && tokenDetails && <Grid className="" xs={9} >
             <Box
               className="form-box-2"
               style={{ marginBottom: "0px", textAlign: "start"}}
@@ -866,8 +850,8 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
                     <Button
                       className="btn-1"
                       onClick={() => {
-                        uploafdToIpfs();
-                        uploadmetadata();
+                        uploafdTokentoipfs()
+                        
                       }}
                       variant="contained"
                     >
@@ -877,7 +861,7 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
                   </Grid>
                   <Button
                       className="btn-1"
-                      onClick={handleCompanyUpdate}
+                      onClick={()=>generateRewards()}
                       variant="contained"
                     >
                       Generate Tokens

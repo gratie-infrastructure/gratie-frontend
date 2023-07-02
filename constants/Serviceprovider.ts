@@ -1,0 +1,2 @@
+export const SERVICE_PROVIDER_ADDRESS: `0x${string}` =
+  "0x3B812b48A07fE8149C80C2c843b0a2953cd4Dda7";

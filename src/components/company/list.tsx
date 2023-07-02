@@ -51,45 +51,23 @@ export default function List(props: any) {
       },
     });
     setTokenUrl(uploadurl);
-    
-    if (uploadurl) {
-      handleLoaderToggle(false);
-      toast.success("🦄 Uploaded to IPFS", {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-      setmetadataUpload(true);
-    }
-    console.log("Upload Url:", uploadurl);
-  };
-  
-
-  //Uploading the Metdata to IPFS --->
-  const metadata: any = {
-    tierID: props.data.tierID,
-    name: name,
-    email: email,
-    image: tokenUrl,
-  };
-  console.log("Metadata", metadata);
-  const uploadmetadata = async () => {
+    const metadata:any = {
+      tierID: props.data.tierID,
+      name: name,
+      email: email,
+      image: uploadurl,
+    };
     handleLoaderToggle(true);
-    const uploadurl = await upload({
+    const uploadurlofMetadata = await upload({
       data: [metadata],
       options: {
         uploadWithGatewayUrl: true,
         uploadWithoutDirectory: true,
       },
     });
-    setMetadataUrl(uploadurl);
+    setMetadataUrl(uploadurlofMetadata);
  
-    if (uploadurl) {
+    if (uploadurlofMetadata) {
       handleLoaderToggle(false);
       toast.success("🦄 Recieved metadata URL", {
         position: "bottom-right",
@@ -102,8 +80,42 @@ export default function List(props: any) {
         theme: "light",
       });
     }
-    console.log("metadata Url:", uploadurl);
+    console.log("metadata Url:", metadataurl);
   };
+  
+// console.log("TokenURL before adding to metadata:",tokenUrl)
+  //Uploading the Metdata to IPFS --->
+  
+  
+// console.log("Metadata", metadata);
+
+  // const uploadmetadata = async () => {
+
+  //   handleLoaderToggle(true);
+  //   const uploadurl = await upload({
+  //     data: [metadata],
+  //     options: {
+  //       uploadWithGatewayUrl: true,
+  //       uploadWithoutDirectory: true,
+  //     },
+  //   });
+  //   setMetadataUrl(uploadurl);
+ 
+  //   if (uploadurl) {
+  //     handleLoaderToggle(false);
+  //     toast.success("🦄 Recieved metadata URL", {
+  //       position: "bottom-right",
+  //       autoClose: 5000,
+  //       hideProgressBar: false,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //       theme: "light",
+  //     });
+  //   }
+  //   console.log("metadata Url:", uploadurl?.[0]);
+  // };
   console.log("tier data:", props.data.tierID);
 
   //Updating the data form the form--->
@@ -198,12 +210,12 @@ export default function List(props: any) {
     });
   }
 
-  console.log(name, email, metadataurl);
+  console.log(name, email, metadataurl?.[0]);
 
   const businessData = {
     name: name,
     email: email,
-    nftMetadataURI: metadataurl,
+    nftMetadataURI: metadataurl?.[0],
     businessNftTier: props.data.tierID,
   };
 
@@ -287,12 +299,14 @@ export default function List(props: any) {
   }
   const handleUpload = () => {
     fileInputRef.current.click();
+   
   };
 
   const uploadFile = (e: any) => {
     if (e.target.files) {
       setFile(e.target.files[0]);
     }
+    
   };
 
   return (
@@ -460,8 +474,8 @@ export default function List(props: any) {
                     <Button
                       className="btn"
                       onClick={() => {
+                        
                         uploafdToIpfs();
-                        uploadmetadata();
                       }}
                       variant="contained"
                     >

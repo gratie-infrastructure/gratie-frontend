@@ -11,18 +11,128 @@ import CardContent from "@mui/material/CardContent";
 
 import Loading from "../Loading";
 import ModalBox from "../Modal";
-
+import axios from "axios";
+import { useAccount, useContractWrite, useWaitForTransaction } from "wagmi";
+import { GRATIE_ABI, GRATIE_CONTRACT_ADDRESS } from "@/constants/Gratie";
+import {readContract} from "wagmi/actions";
+import { ethers } from "ethers";
+import { USDC_abi } from "@/constants/USDC";
+import { toast } from "react-toastify";
 export default function CreateToken(props: any) {
   const [formObject, setFormObject] = useState({
     name: "",
     symbol: "",
     description: "",
   });
-
   const [openMsg, setOpenMsg] = React.useState(false);
   const [openLoading, setOpenLoading] = React.useState(false);
   const [modalTitle, setModalTitle] = React.useState("");
   const [modalDesc, setModalDesc] = React.useState("");
+  const [companyObject,setCompanyObject]=React.useState<any>();
+  const [rewardTokensAvailable,setRewardTokensAvailable]=React.useState<any>();
+  const [totalSupply,setTotalSupply]=React.useState<any>();
+  const [distribution,setDistribution]=React.useState<any>();
+  const {address:walletAddress}=useAccount();
+
+  let tokenAddress:any=companyObject?.data?.tokenAddr;
+  let tokenID:any=companyObject?.data?.tokenId;
+  const handleReadrewardTokensAvailable=async()=>{
+    handleLoaderToggle(true)
+    console.log("token id from company data:",tokenID);
+    const data:any = await readContract({
+      address: GRATIE_CONTRACT_ADDRESS,
+      abi:  GRATIE_ABI,
+      functionName: 'rewardTokensAvailable',
+      args: [tokenID],
+    });
+    if(data){ handleLoaderToggle(false)};
+    setRewardTokensAvailable(Number(ethers.utils.formatEther(data.toString())));
+      console.log("REWARD TOKENS AVAILABLE:",Number(ethers.utils.formatEther(data.toString())));
+    
+  }
+
+  const handleTotalSupply=async()=>{
+    handleLoaderToggle(true)
+    console.log("token Address from company data:",tokenAddress);
+    const data:any = await readContract({
+      address: tokenAddress,
+      abi:  USDC_abi,
+      functionName: 'totalSupply',
+    });
+    if(data){ handleLoaderToggle(false)};
+    setTotalSupply(Number(ethers.utils.formatEther(data.toString())));
+    console.log("TOTAL SUPPLY:",Number(ethers.utils.formatEther(data.toString())));
+  };
+  React.useEffect(()=>{
+    if(tokenID)
+    {handleReadrewardTokensAvailable();}
+    if(tokenAddress){
+      handleTotalSupply();
+    }
+  
+   },[tokenID,tokenAddress]);
+  React.useEffect(() => {
+    handleLoaderToggle(true)
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://dev.api.gratie.xyz/api/v1/org?walletAddr=${walletAddress}`
+        );
+        console.log("Company Data:", response.data);
+       setCompanyObject(response.data);
+
+      } catch (error) {
+        console.error("Error occurred:", error);
+        setOpenMsg(true)
+        setModalTitle("Register Business");
+        setModalDesc("Please Register you business first")
+      }
+      handleLoaderToggle(false)
+    };
+  
+    fetchData();
+    handleReadrewardTokensAvailable();
+  }, []);
+   console.log("Distribution:",distribution*100);
+  const { data: generateRewardsData, write: generateRewards } = useContractWrite({
+    address: GRATIE_CONTRACT_ADDRESS,
+    abi: GRATIE_ABI,
+    functionName: "startRewardDistribution",
+    args: [tokenID,distribution*100],
+  });
+  const { isLoading, isSuccess: generateRewardsSuccess,error:generateRewardsError } = useWaitForTransaction({
+    hash: generateRewardsData?.hash,
+  });
+  
+  // console.log(aprovedata?.hash);
+  if (generateRewardsSuccess) {
+    console.log("Generated Rewards !");
+   
+    toast.success("🦄 Generated Rewards", {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  }
+  if (generateRewardsError) {
+    console.log("error occured", generateRewardsError.message);
+    toast.error("There was an error in generating rewards!", {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  }
+  
 
   const handleModalClose = () => {
     setOpenMsg(false);
@@ -65,7 +175,7 @@ export default function CreateToken(props: any) {
                 variant="h6"
                 component="h6"
               >
-                Available supply : #value
+                Available supply : {rewardTokensAvailable}
               </Typography>
               <Grid
                 container
@@ -94,26 +204,15 @@ export default function CreateToken(props: any) {
                     type="text"
                     autoComplete="off"
                     required
-                    onChange={onValChange}
-                    value={formObject.name}
+                    onChange={(e)=>{setDistribution(Number(e.target.value))}}
+                    value={distribution}
                     className="form-textfield"
                     focused
                     sx={{ input: { color: "#fff", fontSize: "20px" } }}
                   />
                 </Grid>
                 <Grid item xs={12} md={3}>
-                  <Typography
-                    noWrap
-                    variant="h6"
-                    style={{
-                      color: "rgba(245, 245, 245, 0.5)",
-                      textAlign: "start",
-                      marginLeft: "20px",
-                    }}
-                    className="form-label"
-                  >
-                    #value
-                  </Typography>
+                  
                 </Grid>
               </Grid>
 
@@ -144,7 +243,7 @@ export default function CreateToken(props: any) {
                     style={{ textAlign: "start" }}
                     className="form-label"
                   >
-                    #Nos
+                    {companyObject?.data.users.length}
                   </Typography>
                 </Grid>
                 <Grid item xs={12} md={3}></Grid>
@@ -157,7 +256,7 @@ export default function CreateToken(props: any) {
               >
                 <Grid item xs={12} md={5}>
                   <Button
-                    type="submit"
+                    onClick={()=>generateRewards()}
                     variant="contained"
                     className="create-token-btn"
                     style={{ margin: "0px 30px 0px 0px" }}
@@ -170,7 +269,7 @@ export default function CreateToken(props: any) {
           </CardContent>
           <div style={{ display: "flex", justifyContent: "center" }}>
             <Typography noWrap variant="h6" sx={{ color: "#fff" }}>
-              Total Tokens generated :
+              Total Tokens generated : {totalSupply}
             </Typography>
             <Typography
               noWrap

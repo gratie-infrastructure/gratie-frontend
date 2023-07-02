@@ -63,7 +63,7 @@ let formObject={
 if(name&&email&&companyId&&walletAddress){
   formObject.name = name;
     formObject.email = email;
-    formObject.status = "APPROVE";
+    formObject.status = "PENDING";
     formObject.walletAddr = walletAddress;
     formObject.companyId = companyId;
 }

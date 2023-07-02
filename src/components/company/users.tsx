@@ -15,12 +15,49 @@ import SearchIcon from "@mui/icons-material/Search";
 
 import Loading from "../Loading";
 import ModalBox from "../Modal";
+import { useAccount, useContractWrite, useWaitForTransaction } from "wagmi";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { GRATIE_ABI, GRATIE_CONTRACT_ADDRESS } from "@/constants/Gratie";
 
 export default function CreateUsers(props: any) {
   const [openMsg, setOpenMsg] = React.useState(false);
   const [openLoading, setOpenLoading] = React.useState(false);
   const [modalTitle, setModalTitle] = React.useState("");
   const [modalDesc, setModalDesc] = React.useState("");
+  const [companyObject,setCompanyObject]=React.useState<any>();
+  const [selectedAddresses, setSelectedAddresses] = React.useState<string[]>([]);
+
+  const {address:walletAddress}=useAccount();
+  console.log(walletAddress)
+  React.useEffect(() => {
+    handleLoaderToggle(true)
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://dev.api.gratie.xyz/api/v1/org/user/list?status=PENDING&walletAddr=${walletAddress}`
+        );
+        console.log("Company Data:", response.data);
+        if (response.data?.data.length === 0 ) {
+          setOpenMsg(true)
+        setModalTitle("You are not yet approved!");
+        setModalDesc("Nothing to show here")
+        } else {
+          setCompanyObject(response.data);
+        }
+
+  
+      } catch (error) {
+        console.error("Error occurred:", error);
+        setOpenMsg(true)
+        setModalTitle("You are not yet approved!");
+        setModalDesc("Please wait till we approve!")
+      }
+      handleLoaderToggle(false)
+    };
+  
+    fetchData();
+  }, []);
 
   const handleModalClose = () => {
     setOpenMsg(false);
@@ -30,6 +67,50 @@ export default function CreateUsers(props: any) {
   const handleLoaderToggle = (status: boolean) => {
     setOpenLoading(status);
   };
+
+  console.log("Selected Addresses:", selectedAddresses);
+  const { data: aprovedata, write: approve } = useContractWrite({
+    address: GRATIE_CONTRACT_ADDRESS,
+    abi: GRATIE_ABI,
+    functionName: "registerServiceProviders",
+    args: [companyObject?.data[0]?.tokenId, 1, selectedAddresses],
+  });
+  const { isLoading, isSuccess: aprroveSuccess,error:approveError } = useWaitForTransaction({
+    hash: aprovedata?.hash,
+  });
+  console.log("Approval Data:",[companyObject?.data[0]?.tokenId, 1, selectedAddresses]);
+  console.log("Approval Success:", aprroveSuccess);
+  
+  // console.log(aprovedata?.hash);
+  if (aprroveSuccess) {
+    console.log("successfully Approved !");
+    toast.success("🦄 successfully Approved users", {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  }
+  if (approveError) {
+    console.log("error occured", approveError.message);
+    toast.error("There was an error in approval!", {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  }
+ 
+  
+ 
 
   const label = { inputProps: { "aria-label": "Select" } };
 
@@ -41,21 +122,7 @@ export default function CreateUsers(props: any) {
       </div>
       <Box className="form-box">
         <CardContent>
-          <div className="card-search-wrap">
-            <TextField
-              className="search_bar"
-              variant="outlined"
-              value=""
-              placeholder="Search the user"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </div>
+          
           <div className="table-wrap">
             <TableContainer>
               <Table aria-label="My Table">
@@ -70,42 +137,42 @@ export default function CreateUsers(props: any) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  <TableRow>
-                    <TableCell>abc</TableCell>
-                    <TableCell>abc@gmail.com</TableCell>
-                    <TableCell>0X...4532</TableCell>
+                  {companyObject?.data[0]?.users.map((i:any)=><TableRow>
+                    <TableCell>{i.name}</TableCell>
+                    <TableCell>{i.email}</TableCell>
+                    <TableCell>{i.walletAddr.substring(0, 6) +
+                      "..." +
+                      i.walletAddr.substring(
+                        i.walletAddr.length - 4,
+                        i.walletAddr.length
+                      )}</TableCell>
                     <TableCell>
-                      <Checkbox {...label} />
+                    <Checkbox
+  {...label}
+  checked={selectedAddresses.includes(i.walletAddr)}
+  onChange={(e) => {
+    const checked = e.target.checked;
+    if (checked) {
+      setSelectedAddresses((prevAddresses) => [...prevAddresses, i.walletAddr]);
+    } else {
+      setSelectedAddresses((prevAddresses) =>
+        prevAddresses.filter((address) => address !== i.walletAddr)
+      );
+    }
+  }}
+/>
+
                     </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>abc</TableCell>
-                    <TableCell>abc@gmail.com</TableCell>
-                    <TableCell>0X...4532</TableCell>
-                    <TableCell>
-                      <Checkbox {...label} defaultChecked />
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>abc</TableCell>
-                    <TableCell>abc@gmail.com</TableCell>
-                    <TableCell>0X...4532</TableCell>
-                    <TableCell>
-                      <Checkbox {...label} defaultChecked />
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>abc</TableCell>
-                    <TableCell>abc@gmail.com</TableCell>
-                    <TableCell>0X...4532</TableCell>
-                    <TableCell>
-                      <Checkbox {...label} defaultChecked />
-                    </TableCell>
-                  </TableRow>
+                  </TableRow>)}
+                  
                 </TableBody>
               </Table>
               <div className="del-btn-wrap">
-                <Button variant="text">
+              <Button className="btn-1" variant="contained" onClick={()=>approve()
+              }>
+  Approve
+</Button>
+                {/* <Button variant="text">
                   <svg
                     width="65"
                     height="65"
@@ -148,7 +215,7 @@ export default function CreateUsers(props: any) {
                       stroke-linejoin="round"
                     />
                   </svg>
-                </Button>
+                </Button> */}
               </div>
             </TableContainer>
           </div>
@@ -157,7 +224,6 @@ export default function CreateUsers(props: any) {
       <Loading open={openLoading} handleClose={handleLoaderToggle} />
       <ModalBox
         open={openMsg}
-        handleClose={handleModalClose}
         heading={modalTitle}
         description={modalDesc}
       />

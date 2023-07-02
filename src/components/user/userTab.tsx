@@ -94,7 +94,7 @@ export default function userTab(props: any) {
         </Grid>
         <Grid item xs={12}>
           <TabPanel value={value} index={1}>
-            {<ClaimToken/>}
+            {<ClaimToken setProfileTab={setValue}/>}
           </TabPanel>
         </Grid>
         <Grid item xs={12}>

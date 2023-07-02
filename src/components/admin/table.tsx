@@ -62,7 +62,7 @@ export default function ListUserTable(props:any) {
 } as const;
 
 const types = {
-    Payment: [
+      RewardTokenMint: [
         {name: 'businessId', type: 'uint256'},
         {name: 'amount', type: 'uint256'},
         {name: 'lockInPercentage', type: 'uint256'},
@@ -82,7 +82,7 @@ const { data:Signature, isError, isLoading:signatureLoading, isSuccess, signType
 useSignTypedData({
   domain,
   message,
-  primaryType: 'Payment',
+  primaryType: 'RewardTokenMint',
   types,
 })
 if(isSuccess){console.log("Signature",Signature);
