@@ -420,11 +420,7 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
                         className="form-textfield"
                         focused
                         sx={{ input: { color: "#fff", fontSize: "20px" } }}
-                      />
-                        
-                   
-                        
-
+                      />   
                     <div onClick={handleUpload}>
                       <svg
                         width="77"
@@ -524,12 +520,12 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
                         onChange={uploadFile}
                       />
                     </div>
-
+                    </Grid>
                     
                   
-                    </Grid>
+                 
                     <Button
-                      className="btn-1"
+                      className="btn-2"
                       onClick={() => {
                         uploafdToIpfs()
                       }}
@@ -577,7 +573,7 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
                     <Button
                       type="submit"
                       variant="contained"
-                      className="form-wallet-button"
+                      className="btn-3"
                       onClick={handleCompanyUpdate}
                     >
                       Submit

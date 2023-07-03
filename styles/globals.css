@@ -370,3 +370,12 @@ p{
   width:1000px !important;
   height:800px !important;
 }
+.btn-2 {
+  background: #008000 !important;
+  margin-left: -120px !important;
+
+  height: 35px !important;
+  margin-top: 80px !important;
+}
+.btn-3 {
+  background: #008000 !important;}
