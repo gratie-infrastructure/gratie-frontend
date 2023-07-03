@@ -25,6 +25,7 @@ export default function CreateUsers(props: any) {
   const [openLoading, setOpenLoading] = React.useState(false);
   const [modalTitle, setModalTitle] = React.useState("");
   const [modalDesc, setModalDesc] = React.useState("");
+  const [approvedUsers,setApprovedUsers]=React.useState<any>()
   const [companyObject,setCompanyObject]=React.useState<any>();
   const [selectedAddresses, setSelectedAddresses] = React.useState<string[]>([]);
 
@@ -55,8 +56,31 @@ export default function CreateUsers(props: any) {
       }
       handleLoaderToggle(false)
     };
+    const fetchApprovedData = async () => {
+      try {
+        const response = await axios.get(
+          `https://devapi.gratie.xyz/api/v1/org/user/list?status=PENDING&walletAddr=${walletAddress}`
+        );
+        console.log("Company Data:", response.data);
+        if (response.data?.data.length === 0 ) {
+          setOpenMsg(true)
+        setModalTitle("You are not yet approved!");
+        setModalDesc("Nothing to show here")
+        } else {
+          setApprovedUsers(response.data);
+        }
+
   
+      } catch (error) {
+        console.error("Error occurred:", error);
+        setOpenMsg(true)
+        setModalTitle("You are not yet approved!");
+        setModalDesc("Please wait till we approve!")
+      }
+      handleLoaderToggle(false)
+    };
     fetchData();
+    fetchApprovedData();
   }, []);
 
   const handleModalClose = () => {

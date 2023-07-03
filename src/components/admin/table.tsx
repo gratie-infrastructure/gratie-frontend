@@ -16,9 +16,11 @@ import axios from "axios";
 import Loading from "../Loading";
 import ModalBox from "../Modal";
 import { toast } from "react-toastify";
+import { Router, useRouter } from "next/router";
 
 
 export default function ListUserTable(props:any) {
+  const router = useRouter();
   const [openMsg, setOpenMsg] = React.useState(false);
   const [openLoading, setOpenLoading] = React.useState(false);
   const [modalTitle, setModalTitle] = React.useState("");
@@ -85,7 +87,8 @@ useSignTypedData({
   primaryType: 'RewardTokenMint',
   types,
 })
-if(isSuccess){console.log("Signature",Signature);
+React.useEffect(() => {
+  if(isSuccess){console.log("Signature",Signature);
 toast.success("🦄 Signature Succesfull", {
   position: "bottom-right",
   autoClose: 5000,
@@ -96,19 +99,21 @@ toast.success("🦄 Signature Succesfull", {
   progress: undefined,
   theme: "light",
 })
-}
-if(isError){
-toast.error("Error in Signature", {
-  position: "bottom-right",
-  autoClose: 5000,
-  hideProgressBar: false,
-  closeOnClick: true,
-  pauseOnHover: true,
-  draggable: true,
-  progress: undefined,
-  theme: "light",
-})
-}
+} else if (isError){
+  toast.error("Error in Signature", {
+    position: "bottom-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+  })
+  }
+}, [isSuccess, isError]);
+
+
 
 const AprrovalObject:any={
   transactionType: "APPROVED",
@@ -128,7 +133,7 @@ const handleAdminApproval = async () => {
   handleLoaderToggle(true);
   try {
     const response = await axios.post(
-      "http://dev.api.gratie.xyz/api/v1/admin/approve",
+      "https://devapi.gratie.xyz/api/v1/admin/approve",
       requestOptions.body,
       { headers: requestOptions.headers }
     );
@@ -144,6 +149,8 @@ const handleAdminApproval = async () => {
       progress: undefined,
       theme: "light",
     });
+    setOpenMsg(true);
+    setModalTitle("Approved the company!");
   } catch (error) {
     handleLoaderToggle(false);
     console.error("Error occurred:", error);
@@ -160,6 +167,14 @@ const handleAdminApproval = async () => {
   }
 };
 
+const handleModalClose = () => {
+    
+  setOpenMsg(false);
+  setModalTitle("");
+  setModalDesc("");
+  router.reload();
+};
+
 // fetchData();
 
   // const handleApprove = (businessId: string, lockInPercentage: Number) => {
@@ -169,13 +184,18 @@ const handleAdminApproval = async () => {
   return (
     <>
       
-    <TableRow >
+    <TableRow style={{width:"1000px"}} >
       <TableCell>{props.data.name}</TableCell>
       <TableCell>{props.data.valuation.$numberDecimal}</TableCell>
       <TableCell>{props.data.distribution.$numberDecimal}</TableCell>
       <TableCell>{props.data.email}</TableCell>
-      <TableCell>{props.data.walletAddr}</TableCell>
-      <Button
+      <TableCell>{props.data.walletAddr.substring(0, 6) +
+                      "..." +
+                      props.data.walletAddr.substring(
+                        props.data.walletAddr.length - 4,
+                        props.data.walletAddr.length
+                      )}</TableCell>
+     <Button
         variant="contained"
         style={{ padding: "5px 10px", border: "none" }}
         onClick={() => {signTypedData();} }
@@ -184,7 +204,8 @@ const handleAdminApproval = async () => {
       </Button>
       <Button
         variant="contained"
-        style={{ padding: "5px 10px", border: "none" }}
+      
+        style={{ padding: "5px 10px", border: "none"}}
         onClick={() => {
      handleAdminApproval()} }
       >
@@ -192,11 +213,12 @@ const handleAdminApproval = async () => {
       </Button>
     </TableRow>
     <Loading open={openLoading} handleClose={handleLoaderToggle} />
-      {openMsg&&<ModalBox
+    {openMsg&&<div onClick={handleModalClose}><ModalBox
         open={openMsg}
+       
         modalTitle={modalTitle}
         description={modalDesc}
-      />}
+      /></div>}
     </>
   );
 }

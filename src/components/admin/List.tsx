@@ -111,9 +111,9 @@ function TabPanel(props: TabPanelProps) {
         const fetchApprovedData = async () => {
           try {
             const response = await axios.get(
-              "http://dev.api.gratie.xyz/api/v1/org/list?status=APPROVED"
+              "https://devapi.gratie.xyz/api/v1/org/list?status=APPROVED"
             );
-            console.log("Pending company Data:", response.data);
+            console.log("Approved company Data:", response.data);
            setCompanyApprovedData(response.data);
            console.log("Company Data:", companyData.data[0].name);
           } catch (error) {
@@ -151,7 +151,27 @@ function TabPanel(props: TabPanelProps) {
             </Box>
             <TabPanel value={value} index={0}>
               {companyData && (
-                <TableContainer>
+                <TableContainer style={{width:"1000px"}} >
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Name</TableCell>
+                      <TableCell>Valuation</TableCell>
+                      <TableCell>Distribution</TableCell>
+                      <TableCell>Email</TableCell>
+                      <TableCell>Wallet Address</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody style={{width:"1000px"}} >
+                  {companyData?.data.map((i:any) => (<ListUserTable data={i}/>))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              )}
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+            
+    <TableContainer>
                 <Table>
                   <TableHead>
                     <TableRow>
@@ -163,13 +183,22 @@ function TabPanel(props: TabPanelProps) {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                  {companyData?.data.map((i:any) => (<ListUserTable data={i}/>))}
+                  {companyApprovedData?.data.map((i:any) =>(<TableRow >
+      <TableCell>{i.name}</TableCell>
+      <TableCell>{i.valuation.$numberDecimal}</TableCell>
+      <TableCell>{i.distribution.$numberDecimal}</TableCell>
+      <TableCell>{i.email}</TableCell>
+      <TableCell>{i.walletAddr.substring(0, 6) +
+                      "..." +
+                      i.walletAddr.substring(
+                        i.walletAddr.length - 4,
+                        i.walletAddr.length
+                      )}</TableCell>
+      
+    </TableRow>))}
                   </TableBody>
                 </Table>
               </TableContainer>
-              )}
-            </TabPanel>
-            <TabPanel value={value} index={1}>
               {/* {companyApprovedData && <ListUserTable data={companyApprovedData.data} />} */}
             </TabPanel>
             <TabPanel value={value} index={2}>

@@ -117,7 +117,7 @@ export default function List(props: any) {
   //   console.log("metadata Url:", uploadurl?.[0]);
   // };
   console.log("tier data:", props.data.tierID);
-  console.log("API URL:",API_URL,process.env);
+  console.log("API URL:",API_URL);
   //Updating the data form the form--->
   const nameHandler = (e: any) => {
     setName(e.target.value);
