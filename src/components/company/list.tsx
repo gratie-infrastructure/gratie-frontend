@@ -19,7 +19,7 @@ import {
 import { GRATIE_CONTRACT_ADDRESS, GRATIE_ABI } from "../../../constants/Gratie";
 import { SIGNATURE } from "@/constants/Signature";
 import { BigNumber, ethers } from "ethers";
-
+import { API_URL } from "@/src/config";
 import { Payment } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -117,7 +117,7 @@ export default function List(props: any) {
   //   console.log("metadata Url:", uploadurl?.[0]);
   // };
   console.log("tier data:", props.data.tierID);
-
+  console.log("API URL:",API_URL,process.env);
   //Updating the data form the form--->
   const nameHandler = (e: any) => {
     setName(e.target.value);
@@ -243,7 +243,7 @@ export default function List(props: any) {
     const fetchData = async () => {
       try {
         const response = await axios.post(
-          "http://dev.api.gratie.xyz/api/v1/org/nft/purchase",
+          `${API_URL}/api/v1/org/nft/purchase`,
           requestOptions.body,
           { headers: requestOptions.headers }
         );

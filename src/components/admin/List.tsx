@@ -15,6 +15,7 @@ import Loading from '../Loading';
 import ModalBox from '../Modal';
 import axios from 'axios';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { API_URL } from '@/src/config';
   
   interface TabPanelProps {
     children?: React.ReactNode;
@@ -97,7 +98,7 @@ function TabPanel(props: TabPanelProps) {
         const fetchData = async () => {
           try {
             const response = await axios.get(
-              "http://dev.api.gratie.xyz/api/v1/org/list?status=PENDING"
+              `${API_URL}/api/v1/org/list?status=PENDING`
             );
             console.log("Pending company Data:", response.data);
            setCompanyData(response.data);
