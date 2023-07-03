@@ -22,8 +22,9 @@ import axios from "axios";
 import { useAccount, useContractWrite, useWaitForTransaction } from "wagmi";
 import { GRATIE_ABI, GRATIE_CONTRACT_ADDRESS } from "@/constants/Gratie";
 import { BigNumber, ethers } from "ethers";
+import { useRouter } from "next/router";
 export default function FormPage(props: any) {
- 
+  const router = useRouter();
   const {address:walletAddress}=useAccount();
   const [openMsg, setOpenMsg] = React.useState(false);
   const [openLoading, setOpenLoading] = React.useState(false);
@@ -68,13 +69,16 @@ export default function FormPage(props: any) {
   {handleRewardMintTokenData();}
 
  },[tokenID])
+ const handleCloseModal = () => {
+  router.push('/company'); // Navigate to the new page
+};
 
   React.useEffect(() => {
     handleLoaderToggle(true)
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://dev.api.gratie.xyz/api/v1/org?walletAddr=${walletAddress}`
+          `https://devapi.gratie.xyz/api/v1/org?walletAddr=${walletAddress}`
         );
         console.log("Company Data:", response.data);
        setCompanyObject(response.data);
@@ -222,7 +226,7 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
   try {
     
     const response = await axios.put(
-    'http://dev.api.gratie.xyz/api/v1/org/update',
+    'https://devapi.gratie.xyz/api/v1/org/update',
     requestOptions.body,
     { headers: requestOptions.headers }
   );
@@ -261,9 +265,11 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
 
 
   const handleModalClose = () => {
+    
     setOpenMsg(false);
     setModalTitle("");
     setModalDesc("");
+    router.reload();
   };
   const handleLoaderToggle = (status: boolean) => {
     setOpenLoading(status);
@@ -336,7 +342,7 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
                   className="R-btn"
                   style={{ width: "100%" }}
                   variant="contained"
-                  disabled={companyObject.data.status === "MINTED"}
+                  disabled={companyObject.data.status === "MINTED"||companyObject.data.status === "PENDING"}
                   onClick={()=>{setCompanyDetails(false);setTokenDetails(true);
                   }}
                 >
@@ -581,7 +587,7 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
               </CardContent>
             </Box>
           </Grid>}
-          {(companyObject.data.status === "ADMIN_APPROVED"||companyObject.data.status === "APPROVED")&& companyDetails && <Grid className="" xs={9} >
+          {(companyObject.data.status === "ADMIN_APPROVED"||companyObject.data.status === "APPROVED"||companyObject.data.status === "PENDING")&& companyDetails && <Grid className="" xs={9} >
             <Box
               className="form-box-2"
               style={{ marginBottom: "0px", textAlign: "start"}}
@@ -874,11 +880,12 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
         <div style={{ marginBottom: "50px" }}></div>
       </Container>}
       <Loading open={openLoading} handleClose={handleLoaderToggle} />
-      {openMsg&&<ModalBox
+      {openMsg&&<div onClick={handleModalClose}><ModalBox
         open={openMsg}
+       
         modalTitle={modalTitle}
         description={modalDesc}
-      />}
+      /></div>}
     </React.Fragment>
   );
 }

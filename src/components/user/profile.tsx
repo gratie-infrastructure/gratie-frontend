@@ -49,7 +49,7 @@ export default function Profile(props: any) {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://dev.api.gratie.xyz/api/v1/org/user/companies?walletAddr=${walletAddress}`
+          `https://devapi.gratie.xyz/api/v1/org/user/companies?walletAddr=${walletAddress}`
         );
         console.log("Company Data for profile:", response.data.data[0]);
        setCompanyObject(response.data);

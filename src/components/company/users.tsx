@@ -35,7 +35,7 @@ export default function CreateUsers(props: any) {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://dev.api.gratie.xyz/api/v1/org/user/list?status=PENDING&walletAddr=${walletAddress}`
+          `https://devapi.gratie.xyz/api/v1/org/user/list?status=PENDING&walletAddr=${walletAddress}`
         );
         console.log("Company Data:", response.data);
         if (response.data?.data.length === 0 ) {

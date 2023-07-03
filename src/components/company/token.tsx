@@ -76,7 +76,7 @@ export default function CreateToken(props: any) {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://dev.api.gratie.xyz/api/v1/org?walletAddr=${walletAddress}`
+          `https://devapi.gratie.xyz/api/v1/org?walletAddr=${walletAddress}`
         );
         console.log("Company Data:", response.data);
        setCompanyObject(response.data);

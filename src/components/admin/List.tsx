@@ -98,7 +98,7 @@ function TabPanel(props: TabPanelProps) {
         const fetchData = async () => {
           try {
             const response = await axios.get(
-              `${API_URL}/api/v1/org/list?status=PENDING`
+              `https://devapi.gratie.xyz/api/v1/org/list?status=PENDING`
             );
             console.log("Pending company Data:", response.data);
            setCompanyData(response.data);

@@ -243,7 +243,7 @@ export default function List(props: any) {
     const fetchData = async () => {
       try {
         const response = await axios.post(
-          `${API_URL}/api/v1/org/nft/purchase`,
+          "https://devapi.gratie.xyz/api/v1/org/nft/purchase",
           requestOptions.body,
           { headers: requestOptions.headers }
         );
@@ -273,7 +273,7 @@ export default function List(props: any) {
   });
   console.log("Registering the business hash", registerdata?.hash);
 
-  React.useEffect(() => {
+
     if (registerSucces) {
       console.log("successfully Registered!");
       toast.success("🦄 successfully Registered Business!", {
@@ -301,7 +301,7 @@ export default function List(props: any) {
         theme: "light",
       });
     }
-  }, [aprroveSuccess, approveError]);
+ 
   
   const handleUpload = () => {
     fileInputRef.current.click();

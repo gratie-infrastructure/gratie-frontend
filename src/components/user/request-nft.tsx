@@ -39,7 +39,7 @@ const handleSelectChange = (event:any) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://dev.api.gratie.xyz/api/v1/org/list?status=APPROVED"
+          "https://devapi.gratie.xyz/api/v1/org/list?status=APPROVED"
         );
         console.log("Company Data:", response.data);
        setCompanyObject(response.data);
@@ -82,7 +82,7 @@ if(name&&email&&companyId&&walletAddress){
     try {
       
       const response = await axios.post(
-      'http://dev.api.gratie.xyz/api/v1/org/user',
+      'https://devapi.gratie.xyz/api/v1/org/user',
       requestOptions.body,
       { headers: requestOptions.headers }
     );
