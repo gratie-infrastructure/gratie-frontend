@@ -233,7 +233,7 @@ if(name&&email&&companyId&&walletAddress){
               type="submit"
               variant="contained"
               className="create-token-btn"
-              style={{ margin: "0px 30px 0px 0px" }}
+              style={{ margin: "0px 30px 0px 0px", width: "200px" }}
               onClick={handleRequestNFT}
             >
               NFT Request
