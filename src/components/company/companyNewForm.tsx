@@ -420,7 +420,19 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
                         className="form-textfield"
                         focused
                         sx={{ input: { color: "#fff", fontSize: "20px" } }}
-                      />   
+                      />
+                      </Grid>
+                      <Grid item xs={12} md={6}>
+                      <Typography
+                        style={{ textAlign: "start", marginLeft: "60px" }}
+                        noWrap
+                        variant="h6"
+                        className="form-label"
+                      >
+                        Supported Valuation Document
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={4} >
                     <div onClick={handleUpload}>
                       <svg
                         width="77"
