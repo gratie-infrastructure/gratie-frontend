@@ -4,5 +4,7 @@
 // this line automatically detects if yarn build && yarn start is used!
 export const PRODUCTION = process.env.NODE_ENV === 'production';
 
+export const API_URL = process.env.API_URL;
+
 // for development purposes to use production in yarn dev
 // export const PRODUCTION = true;
