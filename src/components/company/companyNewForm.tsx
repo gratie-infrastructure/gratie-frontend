@@ -525,7 +525,7 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
                   
                  
                     <Button
-                      className="btn-2"
+                      className="btn-4"
                       onClick={() => {
                         uploafdToIpfs()
                       }}

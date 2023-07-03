@@ -55,7 +55,7 @@ export default function ListUserTable(props:any) {
   },[])
  
 
-  console.log(props.data.tokenId,Number(props.data.distribution.$numberDecimal)*100,chainId);
+  console.log(props.data.tokenId,Number(props.data.distribution?.$numberDecimal)*100,chainId);
     const domain = {
     name: "Gratie",
     version: "V1",
@@ -75,8 +75,8 @@ const types = {
 
  const message = {
     businessId: BigInt(Number(props.data.tokenId)),
-    amount: BigInt(Number(ethers.utils.parseUnits(props.data.valuation.$numberDecimal, 18))),
-    lockInPercentage: BigInt(Number(props.data.distribution.$numberDecimal)*100),
+    amount: BigInt(Number(ethers.utils.parseUnits(props.data?.valuation?.$numberDecimal.toString(), 18))),
+    lockInPercentage: BigInt(Number(props.data?.distribution?.$numberDecimal)*100),
     mintNonce: BigInt(Number(rewardTokenMintsData)),
 } as const;
 
@@ -186,8 +186,8 @@ const handleModalClose = () => {
       
     <TableRow style={{width:"1000px"}} >
       <TableCell>{props.data.name}</TableCell>
-      <TableCell>{props.data.valuation.$numberDecimal}</TableCell>
-      <TableCell>{props.data.distribution.$numberDecimal}</TableCell>
+      <TableCell>{props.data.valuation?.$numberDecimal}</TableCell>
+      <TableCell>{props.data.distribution?.$numberDecimal}</TableCell>
       <TableCell>{props.data.email}</TableCell>
       <TableCell>{props.data.walletAddr.substring(0, 6) +
                       "..." +
