@@ -183,32 +183,33 @@ export default function List(props: any) {
   });
   
   // console.log(aprovedata?.hash);
-  if (aprroveSuccess) {
-    console.log("successfully Approved !");
-    toast.success("🦄 successfully Approved", {
-      position: "bottom-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-  }
-  if (approveError) {
-    console.log("error occured", approveError.message);
-    toast.error("There was an error in approval!", {
-      position: "bottom-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-  }
+  React.useEffect(() => {
+    if (aprroveSuccess) {
+      console.log('successfully Approved !');
+      toast.success('🦄 successfully Approved', {
+        position: 'bottom-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+    } else if (approveError) {
+      console.log('error occurred', approveError.message);
+      toast.error('There was an error in approval!', {
+        position: 'bottom-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+    }
+  }, [aprroveSuccess, approveError]);
 
   console.log(name, email, metadataurl?.[0]);
 
@@ -246,7 +247,7 @@ export default function List(props: any) {
           requestOptions.body,
           { headers: requestOptions.headers }
         );
-        console.log("signature:", response.data.purchaseSignature);
+        console.log("SIGNATURE:", response.data.purchaseSignature);
         setSignature(response.data.purchaseSignature);
       } catch (error) {
         console.error("Error occurred:", error);
@@ -256,7 +257,8 @@ export default function List(props: any) {
     fetchData();
     handleReadAllowance();
   }, []);
-  console.log("Payment Object",USDC_POLYGON_ADDRESS,GRATIE_CONTRACT_ADDRESS,address,paymentforContract)
+  console.log("Payment Object",USDC_POLYGON_ADDRESS,GRATIE_CONTRACT_ADDRESS,address,paymentforContract,signature)
+  console.log("Before Write:",[businessData, ["Service Provider"], metadataurl, paymentforContract, signature])
   //Register business and mint functionality--->
   const { data: registerdata, write: registerBusinesswrite } = useContractWrite(
     {
@@ -270,33 +272,37 @@ export default function List(props: any) {
     hash: registerdata?.hash,
   });
   console.log("Registering the business hash", registerdata?.hash);
-  if (registerSucces) {
-    console.log("successfully Registered!");
-    toast.success("🦄 successfully Registered Business!", {
-      position: "bottom-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-    setProfileTab(1);
-  }
-  if (registerError) {
-    console.log("error occured", registerError.message);
-    toast.error("There was an error in minting!", {
-      position: "bottom-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-  }
+
+  React.useEffect(() => {
+    if (registerSucces) {
+      console.log("successfully Registered!");
+      toast.success("🦄 successfully Registered Business!", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setProfileTab(1);
+    }
+    else if (registerError) {
+      console.log("error occured", registerError.message);
+      toast.error("There was an error in minting!", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  }, [aprroveSuccess, approveError]);
+  
   const handleUpload = () => {
     fileInputRef.current.click();
    
