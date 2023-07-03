@@ -520,8 +520,8 @@ export default function List(props: any) {
                   <Button
 
              variant="contained"
-                      onClick={() => registerBusinesswrite?.()}
-                      style={{padding:"5px 10px",border:"none"}}
+                      onClick={() => {registerBusinesswrite?.();}}
+                      style={{padding:"5px 10px",border:"none",marginLeft:"20px"}}
                     >
                       Mint
                     </Button> 

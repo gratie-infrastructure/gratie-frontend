@@ -127,7 +127,7 @@ export default function Profile(props: any) {
                       </Typography>
                     </Grid>
                     <Grid item xs={12} md={4} >
-                    {companies.map((company:any) => (
+                    {companies?.map((company:any) => (
         <div key={company._id}>
          
           <img src={company.tokenIconUrl} alt={company.tokenName} style={{ width: 100 }} />

@@ -26,11 +26,16 @@ export default function ClaimToken(props: any) {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://dev.api.gratie.xyz/api/v1/org/user/companies?walletAddr=${walletAddress}`
+          `https://devapi.gratie.xyz/api/v1/org/user/companies?walletAddr=${walletAddress}`
         );
         console.log("Company Data for Claim:", response.data);
+        if(response.data==0){
+          setOpenMsg(true)
+          setModalTitle("You cant claim!");
+          setModalDesc("You will be able to claim your NFT after the company approves")
+        }
        setCompanyObject(response.data);
-
+       
       } catch (error) {
         console.error("Error occurred:", error);
         setOpenMsg(true)

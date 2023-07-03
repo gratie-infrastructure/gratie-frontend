@@ -73,9 +73,7 @@ export default function CreateUsers(props: any) {
   
       } catch (error) {
         console.error("Error occurred:", error);
-        setOpenMsg(true)
-        setModalTitle("You are not yet approved!");
-        setModalDesc("Please wait till we approve!")
+        
       }
       handleLoaderToggle(false)
     };
@@ -139,12 +137,12 @@ export default function CreateUsers(props: any) {
   const label = { inputProps: { "aria-label": "Select" } };
 
   return (
-    <Container sx={{ mt: 3 }} className="create-user-container">
+    <Container sx={{ mt: 3, }} className="create-user-container">
       <div className="btn-group">
         <Button variant="outlined">User Request</Button>
         <Button variant="outlined">Existing Users </Button>
       </div>
-      <Box className="form-box">
+      <Box className="form-box" width={900}>
         <CardContent>
           
           <div className="table-wrap">
@@ -192,7 +190,11 @@ export default function CreateUsers(props: any) {
                 </TableBody>
               </Table>
               <div className="del-btn-wrap">
-              <Button className="btn-1" variant="contained" onClick={()=>approve()
+              <Button className="btn-1" variant="contained" onClick={()=>{approve();
+              setOpenMsg(true)
+              setModalTitle("Approved Successfully!");
+
+              }
               }>
   Approve
 </Button>
