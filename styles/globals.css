@@ -398,3 +398,9 @@ p{
   width: 55px !important;
   margin-left: -400px !important;
 }
+@media (min-width: 600px){
+.css-1gbjj9c {
+    padding-left: 205px !important;
+
+}
+}

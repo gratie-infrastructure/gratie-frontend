@@ -8,8 +8,11 @@ import { SERVICE_PROVIDER_ADDRESS } from "@/constants/Serviceprovider";
 import axios from "axios";
 import { GRATIE_ABI, GRATIE_CONTRACT_ADDRESS } from "@/constants/Gratie";
 import { toast } from "react-toastify";
+import ModalBox from "../Modal";
+import { useRouter } from "next/router";
 
 export default function ClaimToken(props: any) {
+  const router = useRouter();
   const { setProfileTab } = props;
   const [openMsg, setOpenMsg] = React.useState(false);
   const [openLoading, setOpenLoading] = React.useState(false);
@@ -29,10 +32,14 @@ export default function ClaimToken(props: any) {
           `https://devapi.gratie.xyz/api/v1/org/user/companies?walletAddr=${walletAddress}`
         );
         console.log("Company Data for Claim:", response.data);
-        if(response.data==0){
-          setOpenMsg(true)
-          setModalTitle("You cant claim!");
-          setModalDesc("You will be able to claim your NFT after the company approves")
+        if (response.data.data.length === 0) {
+          setOpenMsg(true);
+          setModalTitle("You can't claim!");
+          setModalDesc("You will be able to claim your NFT after the company approves");
+          // Reload the page after showing the modal
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 3000);
         }
        setCompanyObject(response.data);
        
@@ -48,7 +55,7 @@ export default function ClaimToken(props: any) {
     fetchData();
   }, []);
   let tokenId:any;
-  if(companyObject){
+  if(companyObject?.data.length!==0){
      tokenId=(companyObject?.data[0].companies[0].tokenId);
   }
 
@@ -92,9 +99,18 @@ export default function ClaimToken(props: any) {
     });
   }
 
-  return (
+  
+  const handleModalClose = () => {
+    
+    setOpenMsg(false);
+    setModalTitle("");
+    setModalDesc("");
+    router.reload();
+  };
+  
+  return (<>
     <Container sx={{ mt: 3 }} className="create-user-container">
-      <Box className="form-box" style={{ width: "600px", margin: "0px auto" }}>
+      {companyObject?.data.length!==0 &&<Box className="form-box" style={{ width: "600px", margin: "0px auto" }}>
         <Typography
           id="modal-modal-title"
           style={{
@@ -140,7 +156,14 @@ export default function ClaimToken(props: any) {
             </Button>
           </Grid>
         </Grid>
-      </Box>
+      </Box>}
     </Container>
+    {openMsg&&<div onClick={handleModalClose}><ModalBox
+    open={openMsg}
+   
+    modalTitle={modalTitle}
+    description={modalDesc}
+  /></div>}
+  </>
   );
 }

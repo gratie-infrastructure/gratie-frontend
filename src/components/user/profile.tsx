@@ -13,8 +13,10 @@ import Loading from "../Loading";
 import ModalBox from "../Modal";
 import axios from "axios";
 import { useAccount } from "wagmi";
+import { useRouter } from "next/router";
 
 export default function Profile(props: any) {
+  const router = useRouter();
   const [formObject, setFormObject] = useState({
     name: "",
     symbol: "",
@@ -30,6 +32,7 @@ export default function Profile(props: any) {
     setOpenMsg(false);
     setModalTitle("");
     setModalDesc("");
+    router.reload();
   };
 
   const handleLoaderToggle = (status: boolean) => {
@@ -52,6 +55,12 @@ export default function Profile(props: any) {
           `https://devapi.gratie.xyz/api/v1/org/user/companies?walletAddr=${walletAddress}`
         );
         console.log("Company Data for profile:", response.data.data[0]);
+        if (response.data.data.length === 0) {
+          setOpenMsg(true);
+          setModalTitle("You are not registered");
+          setModalDesc("Please request an nft and register with a company!");
+         
+        }
        setCompanyObject(response.data);
 
       } catch (error) {
@@ -65,12 +74,17 @@ export default function Profile(props: any) {
   
     fetchData();
   }, []);
-  const companies = companyObject?.data[0].companies;
-  const companyNames:any = companies?.map((company: { name: any; }) => company.name);
-  const companyNamesText = companyNames?.join(", ");
+  let companies:any;
+  let companyNames:any
+  let companyNamesText
+  if(companyObject?.data.length!==0){
+  companies = companyObject?.data[0].companies;
+  companyNames = companies?.map((company: { name: any; }) => company.name);
+  companyNamesText = companyNames?.join(", ");
+  }
   return (
-    <React.Fragment>
-      <Grid className="" xs={9} >
+    <>
+      {companyObject?.data.length!==0&&<Grid className="" xs={9} >
             <Box
               className="form-box-2"
               style={{ marginBottom: "0px", textAlign: "start"}}
@@ -145,14 +159,14 @@ export default function Profile(props: any) {
                 </Box>
               </CardContent>
             </Box>
-          </Grid>
+          </Grid>}
       <Loading open={openLoading} handleClose={handleLoaderToggle} />
-      <ModalBox
-        open={openMsg}
-        handleClose={handleModalClose}
-        heading={modalTitle}
-        description={modalDesc}
-      />
-    </React.Fragment>
+      {openMsg&&<div onClick={handleModalClose}><ModalBox
+    open={openMsg}
+   
+    modalTitle={modalTitle}
+    description={modalDesc}
+  /></div>}
+    </>
   );
 }

@@ -56,7 +56,7 @@ export default function userTab(props: any) {
   return (
     <Grid
       className="admin-list"
-      style={{ maxWidth: "2200px" }}
+      
       component="main"
       container
     >
