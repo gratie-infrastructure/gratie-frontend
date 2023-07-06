@@ -541,6 +541,7 @@ const handleCompanyUpdate = async (event: React.FormEvent) => {
                       onClick={() => {
                         uploafdToIpfs()
                       }}
+                      style={{marginTop:"90px"}}
                       variant="contained"
                     >
                       upload

@@ -191,8 +191,7 @@ export default function CreateUsers(props: any) {
               </Table>
               <div className="del-btn-wrap">
               <Button className="btn-1" variant="contained" onClick={()=>{approve();
-              setOpenMsg(true)
-              setModalTitle("Approved Successfully!");
+
 
               }
               }>

@@ -128,10 +128,11 @@ export default function ClaimToken(props: any) {
               variant="contained"
               className="create-token-btn"
               style={{
-                margin: "0px 30px 0px 0px",
-                width: "150px",
+                margin: "0px 0px 0px 0px",
+                width: "60px",
                 background: "transparent",
                 border: "1px solid #00FF01",
+                marginLeft:"-640px"
               }}
               onClick={()=>claimRewards()}
             >

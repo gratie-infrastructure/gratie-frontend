@@ -171,7 +171,9 @@ export default function CreateToken(props: any) {
                   marginBottom: "50px",
                   fontSize: "28px",
                   textAlign: "center",
+                  marginLeft:"-290px"
                 }}
+              
                 variant="h6"
                 component="h6"
               >
@@ -191,7 +193,7 @@ export default function CreateToken(props: any) {
                   <Typography
                     noWrap
                     variant="h6"
-                    style={{ textAlign: "start" }}
+                    style={{ textAlign: "start",marginLeft:"-50px" }}
                     className="form-label"
                   >
                     Distribution Percentage
@@ -208,7 +210,7 @@ export default function CreateToken(props: any) {
                     value={distribution}
                     className="form-textfield"
                     focused
-                    sx={{ input: { color: "#fff", fontSize: "20px" } }}
+                    sx={{ input: { color: "#fff", fontSize: "20px", } }}
                   />
                 </Grid>
                 <Grid item xs={12} md={3}>
@@ -254,12 +256,12 @@ export default function CreateToken(props: any) {
                 sx={{ mb: 5 }}
                 style={{ justifyContent: "end", margin: "30px 0px" }}
               >
-                <Grid item xs={12} md={5}>
+                <Grid item xs={12} md={5} style={{marginRight:"760px"}}>
                   <Button
                     onClick={()=>generateRewards()}
                     variant="contained"
                     className="create-token-btn"
-                    style={{ margin: "0px 30px 0px 0px" }}
+                    style={{ margin: "0px -190px 0px 0px", }}
                   >
                     Generate Rewards
                   </Button>
