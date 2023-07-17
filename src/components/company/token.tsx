@@ -18,7 +18,9 @@ import {readContract} from "wagmi/actions";
 import { ethers } from "ethers";
 import { USDC_abi } from "@/constants/USDC";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 export default function CreateToken(props: any) {
+  const router = useRouter();
   const [formObject, setFormObject] = useState({
     name: "",
     symbol: "",
@@ -138,6 +140,7 @@ export default function CreateToken(props: any) {
     setOpenMsg(false);
     setModalTitle("");
     setModalDesc("");
+    router.reload();
   };
   const handleLoaderToggle = (status: boolean) => {
     setOpenLoading(status);
@@ -283,12 +286,12 @@ export default function CreateToken(props: any) {
         </Box>
       </Container>
       <Loading open={openLoading} handleClose={handleLoaderToggle} />
-      <ModalBox
+      {openMsg&&<div onClick={handleModalClose}><ModalBox
         open={openMsg}
-        handleClose={handleModalClose}
-        heading={modalTitle}
+       
+        modalTitle={modalTitle}
         description={modalDesc}
-      />
+      /></div>}
     </React.Fragment>
   );
 }

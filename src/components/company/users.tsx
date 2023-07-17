@@ -19,8 +19,10 @@ import { useAccount, useContractWrite, useWaitForTransaction } from "wagmi";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { GRATIE_ABI, GRATIE_CONTRACT_ADDRESS } from "@/constants/Gratie";
+import { useRouter } from "next/router";
 
 export default function CreateUsers(props: any) {
+  const router = useRouter();
   const [openMsg, setOpenMsg] = React.useState(false);
   const [openLoading, setOpenLoading] = React.useState(false);
   const [modalTitle, setModalTitle] = React.useState("");
@@ -85,6 +87,7 @@ export default function CreateUsers(props: any) {
     setOpenMsg(false);
     setModalTitle("");
     setModalDesc("");
+    router.reload();
   };
   const handleLoaderToggle = (status: boolean) => {
     setOpenLoading(status);
@@ -136,7 +139,7 @@ export default function CreateUsers(props: any) {
 
   const label = { inputProps: { "aria-label": "Select" } };
 
-  return (
+  return (<>
     <Container sx={{ mt: 3, }} className="create-user-container">
       <div className="btn-group">
         <Button variant="outlined">User Request</Button>
@@ -253,5 +256,13 @@ export default function CreateUsers(props: any) {
         description={modalDesc}
       />
     </Container>
+    <Loading open={openLoading} handleClose={handleLoaderToggle} />
+      {openMsg&&<div onClick={handleModalClose}><ModalBox
+        open={openMsg}
+       
+        modalTitle={modalTitle}
+        description={modalDesc}
+      /></div>}
+    </>
   );
 }
